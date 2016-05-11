@@ -63,7 +63,7 @@ google_ad_slot           :
 # Site Author
 author:
   name             : "Cisco Web Team"
-  avatar           : "telemetry-icon.png"
+  avatar           : "telemetry-team.png"
   bio              : "A Team of coders and network engineers determined to build the best network operating system for Web-Scale Service Providers" 
   location         : "San jose, California"
   email            : 
