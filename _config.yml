@@ -325,7 +325,7 @@ prose:
       - name: "permalink"
         field: 
             element: "text"
-            label: "permalink"
+            label: "Relative URL"
             help: "provide a url relative to site url, for eg. /blogs/blog1"
       - name: "author"
         field: 
@@ -366,7 +366,7 @@ prose:
       - name: "permalink"
         field: 
             element: "text"
-            label: "permalink"
+            label: "Relative URL"
             help: "provide a url relative to site url, for eg. /techdocs/doc1/home"
       - name: "excerpt"
         field: 
@@ -376,6 +376,7 @@ prose:
       - name: "position"
         field:
             element: "text"
+            label: "Techdoc Page Position"
             help: "Set this to 'top' only for the first page of the techdoc"
       - name: "tags"
         field:
@@ -412,7 +413,7 @@ prose:
       - name: "permalink"
         field: 
             element: "text"
-            label: "permalink"
+            label: "Relative URL"
             help: "provide a url relative to site url, for eg. /tutorials/tutorial1"
       - name: "author"
         field: 
