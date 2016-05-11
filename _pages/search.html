@@ -1,0 +1,25 @@
+---
+layout: archive
+permalink: /search
+author: "Cisco Web Team"
+feature_row1:
+  - image_path: search.jpg
+    alt: "fully responsive"
+---
+{% include base_path %}
+{% include feature_row id="feature_row1" type="center" %}
+
+<div value="{{ base_path }}" id="base_url" >
+<form action="get" id="site_search">
+<center>
+  <input style="font-size:20px;" class="searchForm" type="text" id="search_box" placeholder="....">
+  <button type="submit" value=" Send" class="btn btn--x-large" id="submit"/></i> Search</button>
+</center>
+</form>
+<br/>&nbsp;
+</div>
+<ul class="fa-ul" id="search_results"></ul>
+
+<script src="{{ base_path }}/assets/js/lunr.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="{{ base_path }}/assets/js/search.js"></script>

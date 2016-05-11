@@ -1,0 +1,32 @@
+---
+layout: archive
+permalink: /tags/
+title: "Posts by Tags"
+author_profile: false
+---
+
+{% include base_path %}
+{% capture written_label %}'None'{% endcapture %}
+
+
+{% capture written_label %}'None'{% endcapture %}
+
+{% for collection in site.collections %}
+  {% unless collection.output == false or collection.label == "posts" %}
+    {% capture label %}{{ collection.label }}{% endcapture %}
+    {% if label != written_label %}
+    <span style="text-decoration: underline;"><h2 id="{{ label | slugify }}" >{{ label }}</h2> </span>
+      {% capture written_label %}{{ label }}{% endcapture %}
+    {% endif %}
+  {% endunless %}
+
+  {% for post in collection.docs %}
+    {% unless collection.output == false or collection.label == "posts" %}
+      {% for tag in post.tags %}
+      <h3 id="{{ tag | slugify }}" class="archive__subtitle">{{ tag }}</h3>
+        {% include archive-single.html %}
+      {% endfor %}
+    {% endunless %}
+  {% endfor %}
+
+{% endfor %}
