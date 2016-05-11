@@ -7,13 +7,13 @@
 
 # Site Settings
 locale                   : "en-US"
-title                    : "App-Hosting @xrdocs!"
+title                    : "Telemetry @xrdocs!"
 title_separator          : "-"
 name                     : &name "Cisco Systems Inc"
 description              : &description "Documentation, Blogs and Tutorials on the Application Hosting Infrastructure in IOS-XR"
 url                      : http://localhost:4000 #"https://xrdocs.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
-baseurl                  : #"/application-hosting" # the subpath of your site, e.g. "/blog"
-gh_repo                  : "https://github.com/xrdocs/application-hosting"
+baseurl                  : #"/telemetry" # the subpath of your site, e.g. "/blog"
+gh_repo                  : "https://github.com/xrdocs/telemetry"
 teaser                   : # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"
 # breadcrumbs            : false # true, false (default)
 words_per_minute         : 200
@@ -63,7 +63,7 @@ google_ad_slot           :
 # Site Author
 author:
   name             : "Cisco Web Team"
-  avatar           : "app-hosting-team.jpg"
+  avatar           : "telemetry-icon.png"
   bio              : "A Team of coders and network engineers determined to build the best network operating system for Web-Scale Service Providers" 
   location         : "San jose, California"
   email            : 
