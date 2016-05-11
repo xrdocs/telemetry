@@ -1,5 +1,13 @@
 # Authors
 
+Shelly Cadora:
+  name        : "Shelly Cadora"
+  email       : "scadora@cisco.com"
+  bio         : "Technical Marketing Engineer, Cisco"
+  avatar      : "scadora16.jpeg"
+  twitter     : "scadora"
+  github      : "scadora"
+
 Akshat Sharma:
   name        : "Akshat Sharma"
   github      : "akshshar"
@@ -20,5 +28,5 @@ Cisco Web Team:
   uri         : "https://developer.cisco.com/site/ios-xr"
   github      : "ios-xr"
   bio         : "A Team of coders and network engineers determined to build the best network operating system for Web-Scale Service Providers."
-  avatar      : "app-hosting-team.jpg"
+  avatar      : "telemetry-icon.png"
   twitter     : "CiscoDevNet"
