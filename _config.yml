@@ -306,6 +306,7 @@ prose:
     - /_recipes
     - /assets
     - /images
+    - /_data/ui-text.yml
     - Gemfile
     - Gemfile.lock
     - LICENSE
