@@ -8,7 +8,9 @@ permalink: /blogs/filtering_autobw
 ---
 
 Telemetry recently took center stage at [SDX Demo Friday](https://www.sdxcentral.com/resources/sdn-demofriday/cisco-ios-xr-signalfx-demo-monitoring-your-modern-network/) with a new demo showcasing the RSVP-TE auto-bandwidth feature.  In the demo, the TE tunnel headend streamed data about the output bytes sent per tunnel and the resulting applied auto-bandwidth.  We streamed the data to SignalFX's cloud monitoring system and were able to show nice visualizations of auto-bandwidth in action as well as some cool alerting capabilities.
+
 ![AutoBW.jpg]({{site.baseurl}}/images/AutoBW.jpg)
+
 This demo gave us an opportunity to exercise the new filtering capability in IOS XR 6.0.1. The operational data for a TE Tunnel headend is contained in the native path RootOper.MPLS_TE.P2P_P2MPTunnel.TunnelHead({'TunnelName': 'tunnel-te10'}). Streaming this path would result in over 600 lines of output for a single tunnel, with multiple layers of hierarchy.  To filter that data down to a single value, you can use a IncludeField in the policy file as follows: 
 
 ```json
