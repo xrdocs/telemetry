@@ -14,7 +14,7 @@ layout: null
     {% endunless %}
     {% unless forloop.last %}{% unless post.position == "hidden" %},{% endunless %}{% endunless %}
   {% endfor %}
-,
+{% unless site.blogs.size == 0 %},{% endunless %}
   {% for post in site.techdocs %}
     {% unless post.position == "hidden" %}
     "{{ post.url | slugify }}": {
@@ -26,7 +26,7 @@ layout: null
     {% endunless %}
     {% unless forloop.last %}{% unless post.position == "hidden" %},{% endunless %}{% endunless %}
   {% endfor %}
-,
+{% unless site.techdocs.size == 0 %},{% endunless %}
   {% for post in site.tutorials %}
     {% unless post.position == "hidden" %}
     "{{ post.url | slugify }}": {
@@ -39,5 +39,4 @@ layout: null
     {% endunless %}
     {% unless forloop.last %}{% unless post.position == "hidden" %},{% endunless %}{% endunless %}
   {% endfor %}
-
 }
