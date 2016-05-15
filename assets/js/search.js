@@ -5,6 +5,7 @@ jQuery(function() {
     this.field('title');
     this.field('content', { boost: 10 });
     this.field('author');
+    this.field('url');
     this.field('tags');
   });
 
