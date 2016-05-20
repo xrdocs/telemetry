@@ -282,8 +282,8 @@ tags:
 
 
 prose:
-  siteurl: 'http://xrdocs.github.io/application-hosting/'
-  relativeLinks: 'http://prose.github.io/starter/links.jsonp'
+  siteurl: 'https://xrdocs.github.io/telemetry/'
+  relativeLinks: 'https://xrdocs.github.io/telemetry/links.jsonp'
   media: 'images'
   ignore:
     - index.md
