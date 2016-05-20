@@ -23,6 +23,13 @@ Mike Korshunov:
   bio         : "Good guy"
   avatar      : "Mike_pic.jpg"
 
+Bruce McDougall:
+  name        : "Bruce McDougall"
+  github      : "brmcdoug"
+  email       : "brmcdoug@cisco.com"
+  avatar      : "brucemc_bio.jpg"
+  bio         : "Systems Engineer, Web Solutions, Cisco."
+
 Cisco Web Team:
   name        : "Cisco Web Team"
   uri         : "https://developer.cisco.com/site/ios-xr"
