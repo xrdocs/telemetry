@@ -26,22 +26,22 @@ main:
     url: https://xrdocs.github.io
 
   - title: "Tech-Docs"
-    url: /techdocs
+    url: /techdocs/
 
   - title: "Blogs"
-    url: /blogs
+    url: /blogs/
 
   - title: "Tutorials"
-    url: /tutorials
+    url: /tutorials/
 
   - title: "Search"
     url: /search
 
   - title: "Archive"
-    url: /collection-archive
+    url: /collection-archive/
 
   - title: "Tags"
-    url: /tags
+    url: /tags/
 
 
 
