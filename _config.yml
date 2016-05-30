@@ -8,6 +8,7 @@
 # Site Settings
 locale                   : "en-US"
 title                    : "IOS XR Streaming Telemetry @xrdocs"
+title_short              : "Telemetry @xrdocs"
 title_separator          : "|"
 name                     : &name "Cisco Systems Inc"
 description              : &description "Documentation, Blogs and Tutorials on the Application Hosting Infrastructure in IOS-XR"
