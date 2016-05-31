@@ -5,28 +5,36 @@ title: "Posts by Tags"
 author_profile: false
 ---
 
+{% capture written_tag %}'None'{% endcapture %}
 {% include base_path %}
-{% capture written_label %}'None'{% endcapture %}
 
-
-{% capture written_label %}'None'{% endcapture %}
+{% assign tag_array_local = site.tag_array %}
 
 {% for collection in site.collections %}
   {% unless collection.output == false or collection.label == "posts" %}
-    {% capture label %}{{ collection.label }}{% endcapture %}
-    {% if label != written_label %}
-    <span style="text-decoration: underline;"><h2 id="{{ label | slugify }}" >{{ label }}</h2> </span>
-      {% capture written_label %}{{ label }}{% endcapture %}
-    {% endif %}
-  {% endunless %}
-
-  {% for post in collection.docs %}
-    {% unless collection.output == false or collection.label == "posts" or post.position == "hidden" %}
+    {% for post in collection.docs %}
       {% for tag in post.tags %}
-      <h3 id="{{ tag | slugify }}" class="archive__subtitle">{{ tag }}</h3>
-        {% include archive-single.html %}
+        {% if tag != written_tag %}
+          {% assign tag_array_local = tag_array_local | push: tag %}
+        {% endif %}
+        {% capture written_tag %}{{ tag }}{% endcapture %}
       {% endfor %}
-    {% endunless %}
-  {% endfor %}
+    {% endfor %}  
+  {% endunless %}
+{% endfor %}
 
+{% assign sortedtags = tag_array_local | uniq | sort %}
+
+
+{% for tag_super in sortedtags %}
+ <h2 id="{{ tag_super | slugify }}" class="archive__subtitle"><a href="#{{ tag_super | slugify }}" class="btn btn--inverse">{{ tag_super }}</a></h2>
+  {% for collection in site.collections %}
+    {% for post in collection.docs %}
+      {% unless collection.output == false or collection.label == "posts" or post.position == "hidden" %}
+        {% if post.tags contains tag_super %}
+          {% include archive-single.html %}
+        {% endif %}
+      {% endunless %}
+    {% endfor %}
+  {% endfor %}
 {% endfor %}
