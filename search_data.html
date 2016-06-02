@@ -56,5 +56,6 @@ layout: null
     {% endif %}
     {% unless forloop.last %}{% unless post.position == "hidden" %},{% endunless %}{% endunless %}
   {% endfor %}
+  {% unless tutorial_cnt == 0 %},{% endunless %}
   "#": {}
 }
