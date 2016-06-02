@@ -37,11 +37,12 @@ main:
   - title: "Search"
     url: /search
 
+  - title: "Tags"
+    url: /tags/
+
   - title: "Archive"
     url: /collection-archive/
 
-  - title: "Tags"
-    url: /tags/
 
 
 
