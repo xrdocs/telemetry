@@ -4,11 +4,11 @@ layout: null
 {
   {% assign blog_cnt = 0 %}
   {% for post in site.blogs %}
+  {% assign blog_cnt = blog_cnt | plus: 1 %}
   {% if post.position == "hidden" %}
      "#": {}
    {% unless forloop.last %},{% endunless %}
    {% else %}
-  {% assign blog_cnt = blog_cnt | plus: 1 %}
     "{{ post.url | slugify }}": {
       "title": "{{ post.title | xml_escape }}",
       "content": {{ post.content | strip_newlines | strip_html | replace: '"', '~' | replace: ':', '#' | jsonify | strip}},
@@ -23,11 +23,11 @@ layout: null
 
   {% assign techdoc_cnt = 0 %}
   {% for post in site.techdocs %}
+  {% assign techdoc_cnt = techdoc_cnt | plus: 1  %}
   {% if post.position == "hidden" %}
      "#": {}
    {% unless forloop.last %},{% endunless %}
    {% else %}
-    {% assign techdoc_cnt = techdoc_cnt | plus: 1  %}
     "{{ post.url | slugify }}": {
       "title": "{{ post.title | xml_escape }}",
       "content": {{ post.content | strip_newlines | strip_html | replace: '"', '~' | replace: ':', '#' | jsonify | strip}},
@@ -41,11 +41,11 @@ layout: null
 
   {% assign tutorial_cnt = 0 %}
   {% for post in site.tutorials %}
+  {% assign tutorial_cnt = tutorial_cnt | plus: 1  %}
     {% if post.position == "hidden" %}
        "#": {}
      {% unless forloop.last %},{% endunless %}
     {% else %}
-    {% assign tutorial_cnt = tutorial_cnt | plus: 1  %}
     "{{ post.url | slugify }}": {
       "title": "{{ post.title | xml_escape }}",
       "content": {{ post.content | strip_newlines | strip_html | replace: '"', '~' | replace: ':', '#' | jsonify | strip }},
