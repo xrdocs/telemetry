@@ -324,11 +324,6 @@ prose:
             element: "text"
             label: "Title"   
             value: ""
-      - name: "permalink"
-        field: 
-            element: "text"
-            label: "Relative URL"
-            help: "provide a url relative to site url, for eg. /blogs/blog1"
       - name: "author"
         field: 
             element: "text"
@@ -412,11 +407,6 @@ prose:
             element: "text"
             label: "Title"   
             value: ""
-      - name: "permalink"
-        field: 
-            element: "text"
-            label: "Relative URL"
-            help: "provide a url relative to site url, for eg. /tutorials/tutorial1"
       - name: "author"
         field: 
             element: "text"
