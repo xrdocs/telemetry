@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 date: '2016-06-23 13:03 -0400'
 title: Copying Telemetry Policy Files in IOS XR 6.0.1
 author: Shelly Cadora
