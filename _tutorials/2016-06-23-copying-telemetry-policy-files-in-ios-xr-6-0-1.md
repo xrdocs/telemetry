@@ -23,9 +23,7 @@ Password:
   
 <div class="highlighter-rouge">
 <pre class="highlight">
-<code>
   {{ include-text | markdownify }}
-</code>
 </pre>
 </div>
 
