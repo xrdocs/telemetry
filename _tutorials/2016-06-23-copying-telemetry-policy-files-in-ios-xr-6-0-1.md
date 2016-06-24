@@ -29,7 +29,7 @@ RP/0/RP0/CPU0:Sun601#**run**
 [xr-vm_node0_RP0_CPU0:~]$**sftp scadora@172.30.8.11**
 Connecting to 172.30.8.11...  
 Password:  
-sftp&gt; **get /tftpboot/BasicPolicy.policy /disk0:/BasicPolicy.policy ** 
+sftp&gt; **get /tftpboot/BasicPolicy.policy /disk0:/BasicPolicy.policy** 
   Transferred 469 Bytes  
   469 bytes copied in 0 sec (0)bytes/sec  
 sftp&gt; **quit**  
