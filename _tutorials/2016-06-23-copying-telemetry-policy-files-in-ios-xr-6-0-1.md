@@ -21,8 +21,12 @@ Password:
 {% endcapture %}  
 
   
-<div>
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
   {{ include-text | markdownify }}
+</code>
+</pre>
 </div>
 
 The restriction on the /telemetry/policies directory will be lifted in 6.0.2, but in the meantime you can work around this by copying files to disk0: and then doing a local copy to the proper directory as follows:  
