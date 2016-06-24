@@ -21,9 +21,7 @@ sftp&gt;
 {% endcapture %}  
 
 <div class="highlighter-rouge">
-<pre class="highlight">
   {{ include-text | markdownify }}
-</pre>
 </div>
 
 The restriction on the /telemetry/policies directory will be lifted in 6.0.2, but in the meantime you can work around this by copying files to disk0: and then doing a local copy to the proper directory as follows:  
