@@ -18,7 +18,8 @@ RP/0/RP0/CPU0:Sun601#<mark>run</mark>
 Connecting to 172.30.8.11...  
 Password:  
 sftp&gt;<mark>get /tftpboot/BasicPolicy.policy /telemetry/policies/BasicPolicy.policy</mark> 
-  RP/0/RP0/CPU0:Jun 23 16:08:00.870 : sftp[69048]: %SECURITY-SSHD-3-ERR_GENERAL : Cannot overwrite system files  
+  RP/0/RP0/CPU0:Jun 23 16:08:00.870 : sftp[69048]: %SECURITY-SSHD-3-ERR_GENERAL : Cannot overwrite  
+  system files  
 sftp&gt;
 </code>
 </pre>
