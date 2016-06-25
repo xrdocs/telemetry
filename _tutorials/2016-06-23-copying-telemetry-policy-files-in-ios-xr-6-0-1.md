@@ -13,7 +13,7 @@ Due to some general security improvements in 6.0.1, it's not possible to sftp/sc
 <div class="highlighter-rouge">
 <pre class="highlight">
 <code>
-RP/0/RP0/CPU0:Sun601#<mark>bash</mark>
+RP/0/RP0/CPU0:Sun601#<mark>run</mark>
 [xr-vm_node0_RP0_CPU0:~]$<mark>sftp scadora@172.30.8.11</mark> 
 Connecting to 172.30.8.11...  
 Password:  
@@ -31,7 +31,7 @@ The restriction on the /telemetry/policies directory will be lifted in 6.0.2, bu
 <div class="highlighter-rouge">
 <pre class="highlight">
 <code>
-RP/0/RP0/CPU0:Sun601#<mark>bash</mark>
+RP/0/RP0/CPU0:Sun601#<mark>run</mark>
 [xr-vm_node0_RP0_CPU0:~]$<mark>sftp scadora@172.30.8.11</mark>
 Connecting to 172.30.8.11...  
 Password:  
