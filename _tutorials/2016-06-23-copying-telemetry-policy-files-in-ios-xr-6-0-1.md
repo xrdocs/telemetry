@@ -47,7 +47,7 @@ mypolicy.policy                                    100%  253     0.3KB/s   00:00
 
 Finally, the policy must be copied from its temporary location to the /telemetry/policies/ directory in the IOS XR filesystem:
 
-[xr-vm_node0_RP0_CPU0:~]$**cp /disk0\:/test/cpu.policy /telemetry/policies/**
+[xr-vm_node0_RP0_CPU0:~]$**cp /disk0\:/mypolicies/cpu.policy /telemetry/policies/**
 
 The policy is now loaded by IOS XR and is shown in the telemetry policy configuration:
 
