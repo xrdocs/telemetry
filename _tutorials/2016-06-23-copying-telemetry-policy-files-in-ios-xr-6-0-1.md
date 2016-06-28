@@ -31,5 +31,33 @@ sftp> **quit**
 [xr-vm_node0_RP0_CPU0:~]$**cp /disk0:/BasicPolicy.policy /telemetry/policies**  
 [xr-vm_node0_RP0_CPU0:~]$  
 
+If you wish to copy a policy file from the host Linux operating system to the IOS XR filesystem within the Vagrant box, then there is a two-step process. Firstly, a writeable directory must be created in disk0:
 
+RP/0/RP0/CPU0:ios#**run**
+Tue Jun 28 06:40:16.346 UTC
+[xr-vm_node0_RP0_CPU0:~]$**cd /disk0\:**
+[xr-vm_node0_RP0_CPU0:~]$**mkdir mypolicies**
+[xr-vm_node0_RP0_CPU0:~]$**chmod 777 mypolicies**
+
+The policy file can then be copied using scp to the Vagrant IOS XR instance:
+
+user@host:~/vagrant/iosxrv> **scp -P 2222 mypolicy.policy vagrant@localhost:/disk0:/mypolicies/**
+vagrant@localhost's password: 
+mypolicy.policy                                    100%  253     0.3KB/s   00:00 
+
+Finally, the policy must be copied from its temporary location to the /telemetry/policies/ directory in the IOS XR filesystem:
+
+[xr-vm_node0_RP0_CPU0:~]$**cp /disk0\:/test/cpu.policy /telemetry/policies/**
+
+The policy is now loaded by IOS XR and is shown in the telemetry policy configuration:
+
+RP/0/RP0/CPU0:ios#**show telemetry policies**
+Tue Jun 28 07:36:39.125 UTC
+
+cpu
+  Filename:             cpu.policy
+  Version:              25
+  Description:          cpu
+  Status:               Active
+  [etc]
 
