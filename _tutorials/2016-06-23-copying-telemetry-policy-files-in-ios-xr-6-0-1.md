@@ -76,17 +76,17 @@ Finally, the policy must be copied from its temporary location to the /telemetry
 <div class="highlighter-rouge">
 <pre class="highlight">
 <code>
-[xr-vm_node0_RP0_CPU0:~]$<mark>cp /disk0\:/mypolicies/cpu.policy /telemetry/policies/</mark>
+[xr-vm_node0_RP0_CPU0:~]$<mark>cp /disk0\:/mypolicies/mypolicy.policy /telemetry/policies/</mark>
 
 The policy is now loaded by IOS XR and is shown in the telemetry policy configuration:
 
 RP/0/RP0/CPU0:ios#<mark>show telemetry policies</mark>
 Tue Jun 28 07:36:39.125 UTC
 
-cpu
-  Filename:             cpu.policy
+mypolicy
+  Filename:             mypolicy.policy
   Version:              25
-  Description:          cpu
+  Description:          mypolicy
   Status:               Active
   [etc]
 </code>
