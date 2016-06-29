@@ -29,6 +29,13 @@ Bruce McDougall:
   email       : "brmcdoug@cisco.com"
   avatar      : "brucemc_bio.jpg"
   bio         : "Systems Engineer, Web Solutions, Cisco."
+  
+Richard Wade:
+  name        : "Richard Wade"
+  github      : "rikwade"
+  email       : "ricwade@cisco.com"
+  avatar      : "ricwade_bio.png"
+  bio         : "Customer Solutions Architect, Cisco."  
 
 Cisco Web Team:
   name        : "Cisco Web Team"
