@@ -24,7 +24,7 @@ With the TCP Dial-Out method, the router initiates a TCP session to the collecto
 There are three steps to configuring the router for telemetry with TCP dial-out:create a destination-group, create a sensor-group, create a subscription.
  
 #### Step 1: Create a destination-group
-The destination-group specifies the destination address, port, encoding and transport that the router should use to send out telemetry data.  In this case, we configure the router to send telemetry via tcp, encoding as self-describing gpb, to 172.30.8.4 port 5432.  
+The destination-group specifies the destination address, port, encoding and transport that the router should use to send out telemetry data.  In this case, we configure the router to send telemetry via tcp, encoding as self-describing gpb, to 172.30.8.4 port 5432.
 ```
 RP/0/RP0/CPU0:SunC(config)#telemetry model-driven  
 RP/0/RP0/CPU0:SunC(config-model-driven)# destination-group DGroup1  
