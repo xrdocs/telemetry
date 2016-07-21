@@ -49,7 +49,8 @@ RP/0/RP0/CPU0:SunC(config-model-driven-subs)#destination-id DGroup1
 RP/0/RP0/CPU0:SunC(config-mdt-subscription)# commit  
   
 #### All Together Now
-Here's the entire configuration for TCP dial-out with GPB encoding in one shot:
+Here's the entire configuration for TCP dial-out with GPB encoding in one shot:  
+
 ```
 telemetry model-driven  
  destination-group DGroup1  
