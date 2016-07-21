@@ -36,10 +36,10 @@ The destination-group specifies the destination address, port, encoding and tran
 #### Step 2: Create a sensor-group
 The sensor-group specifies a list of YANG models which are to be streamed.  The sensor path below represents the YANG model for interfaces statistics:
 ```
-RP/0/RP0/CPU0:SunC(config)#telemetry model-driven   
-RP/0/RP0/CPU0:SunC(config-model-driven)#sensor-group SGroup1  
-RP/0/RP0/CPU0:SunC(config-model-driven-snsr-grp)# sensor-path Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters  
-RP/0/RP0/CPU0:SunC(config-model-driven-snsr-grp)# commit  
+RP/0/RP0/CPU0:SunC(config)#telemetry model-driven
+RP/0/RP0/CPU0:SunC(config-model-driven)#sensor-group SGroup1
+RP/0/RP0/CPU0:SunC(config-model-driven-snsr-grp)# sensor-path Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters
+RP/0/RP0/CPU0:SunC(config-model-driven-snsr-grp)# commit
 ```
 #### Step 3: Create a subscription  
 The subscription associates a destination-group with a sensor-group and sets the streaming interval.  The following configuration associates the sensor-group and destination created above with a streaming interval of 30 seconds.  
