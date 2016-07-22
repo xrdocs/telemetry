@@ -34,7 +34,8 @@ The destination-group specifies the destination address, port, encoding and tran
 
 
 #### Step 2: Create a sensor-group
-The sensor-group specifies a list of YANG models which are to be streamed.  The sensor path below represents the YANG model for interfaces statistics:
+The sensor-group specifies a list of YANG models which are to be streamed.  The sensor path below represents the YANG model for interfaces statistics:  
+
 ```
 RP/0/RP0/CPU0:SunC(config)#telemetry model-driven
 RP/0/RP0/CPU0:SunC(config-model-driven)#sensor-group SGroup1
