@@ -13,6 +13,7 @@ tags:
 ## Important Background (aka TL;DR)
 
 Before configuring Model-Driven Telemetry, you should understand the different options that are available for encoding and transport and pick the combination that works for you.  Here's a quick summary:  
+
   -**Transport:** The router can deliver telemetry data either across using TCP or [gRPC](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwiSv9Tl7ITOAhUTzGMKHb-ICh0QFggeMAA&url=http%3A%2F%2Fwww.grpc.io%2F&usg=AFQjCNHCJm5rnsywES2mSmRVZrlyDB3Ebw&sig2=ovceQ1KnEIWKo7364lLhUg) over HTTP/2.  Some people will prefer the simplicity of a raw TCP socket, others will appreciate the optional TLS encyption that gRPC brings.  
   -**Session Initiation:** There are two options for initiating a telemetry session.  The router can "dial-out" to the collector or the collector can "dial-in" to the router.  Regardless of which side initiates the session, the router always streams the data to the collector at the requested intervals. TCP supports "dial-out" while gRPC supports both "dial-in" and "dial-out."  
   -**Encoding:** The router can deliver telemetry data in two different flavors of Google Protocol Buffers: [Compact and Self-Describing GPB](http://blogs.cisco.com/sp/streaming-telemetry-with-google-protocol-buffers).  Compact GPB is the most efficient encoding but requires a unique .proto for each YANG model that is streamed.  Self-describing GPB is less efficient but it uses a single .proto file to decode all YANG models because the keys are passed as strings in the .proto.  
@@ -36,7 +37,7 @@ RP/0/RP0/CPU0:SunC(config-model-driven-dest-addr)# commit
 ```
 
 #### Step 2: Create a sensor-group
-The sensor-group specifies a list of YANG models which are to be streamed.  The sensor path below represents the [XR YANG] (https://github.com/YangModels/yang/tree/master/vendor/cisco/xr) model for interfaces statistics:  
+The sensor-group specifies a list of YANG models which are to be streamed.  The sensor path below represents the [XR YANG](https://github.com/YangModels/yang/tree/master/vendor/cisco/xr) model for interfaces statistics:  
 
 ```
 RP/0/RP0/CPU0:SunC(config)#telemetry model-driven
@@ -112,7 +113,7 @@ RP/0/RP0/CPU0:SunC(config-model-driven-dest-addr)# commit
 ```
    
 #### Step 2: Create a sensor-group
-The sensor-group specifies a list of YANG models which are to be streamed.  The sensor path below represents the [XR YANG] (https://github.com/YangModels/yang/tree/master/vendor/cisco/xr) model for summarized memory statistics:  
+The sensor-group specifies a list of YANG models which are to be streamed.  The sensor path below represents the [XR YANG](https://github.com/YangModels/yang/tree/master/vendor/cisco/xr) model for summarized memory statistics:  
 
 ```
 RP/0/RP0/CPU0:SunC(config)#telemetry model-driven   
@@ -184,7 +185,7 @@ RP/0/RP0/CPU0:SunC(config-grpc)#commit
 ```
    
 #### Step 2: Create a sensor-group
-The sensor-group specifies a list of YANG models which are to be streamed.  The sensor path below represents the [OpenConfig YANG] (https://github.com/openconfig) model for interfaces:  
+The sensor-group specifies a list of YANG models which are to be streamed.  The sensor path below represents the [OpenConfig YANG](https://github.com/openconfig) model for interfaces:  
 
 ```
 RP/0/RP0/CPU0:SunC(config)#telemetry model-driven   
