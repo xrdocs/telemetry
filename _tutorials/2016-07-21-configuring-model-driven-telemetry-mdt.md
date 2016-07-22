@@ -25,13 +25,15 @@ There are three steps to configuring the router for telemetry with TCP dial-out:
  
 #### Step 1: Create a destination-group
 The destination-group specifies the destination address, port, encoding and transport that the router should use to send out telemetry data.  In this case, we configure the router to send telemetry via tcp, encoding as self-describing gpb, to 172.30.8.4 port 5432.  
-``RP/0/RP0/CPU0:SunC(config)# telemetry model-driven``  
-``RP/0/RP0/CPU0:SunC(config-model-driven)# destination-group DGroup1``  
-``RP/0/RP0/CPU0:SunC(config-model-driven-dest)#  address family ipv4 172.30.8.4 port 5432``  
-``RP/0/RP0/CPU0:SunC(config-model-driven-dest-addr)#   encoding self-describing-gpb``  
-``RP/0/RP0/CPU0:SunC(config-model-driven-dest-addr)#   protocol tcp``  
-``RP/0/RP0/CPU0:SunC(config-model-driven-dest-addr)# commit`` 
 
+```
+RP/0/RP0/CPU0:SunC(config)# telemetry model-driven
+RP/0/RP0/CPU0:SunC(config-model-driven)# destination-group DGroup1 
+RP/0/RP0/CPU0:SunC(config-model-driven-dest)#  address family ipv4 172.30.8.4 port 5432  
+RP/0/RP0/CPU0:SunC(config-model-driven-dest-addr)#   encoding self-describing-gpb  
+RP/0/RP0/CPU0:SunC(config-model-driven-dest-addr)#   protocol tcp  
+RP/0/RP0/CPU0:SunC(config-model-driven-dest-addr)# commit   
+```
 
 #### Step 2: Create a sensor-group
 The sensor-group specifies a list of YANG models which are to be streamed.  The sensor path below represents the YANG model for interfaces statistics:  
@@ -45,6 +47,7 @@ RP/0/RP0/CPU0:SunC(config-model-driven-snsr-grp)# commit
 
 #### Step 3: Create a subscription  
 The subscription associates a destination-group with a sensor-group and sets the streaming interval.  The following configuration associates the sensor-group and destination created above with a streaming interval of 30 seconds.  
+
 ```
 RP/0/RP0/CPU0:SunC(config)telemetry model-driven  
 RP/0/RP0/CPU0:SunC(config-model-driven)#subscription Sub1  
