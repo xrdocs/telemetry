@@ -2,7 +2,7 @@
 published: true
 date: '2016-07-21 09:06 -0600'
 title: Configuring Model-Driven Telemetry (MDT)
-position: hidden
+position: top
 author: Shelly Cadora
 excerpt: Quick Start for MDT Configuration
 tags:
