@@ -36,7 +36,7 @@ RP/0/RP0/CPU0:SunC(config-model-driven-dest-addr)# commit
 ```
 
 #### Step 2: Create a sensor-group
-The sensor-group specifies a list of YANG models which are to be streamed.  The sensor path below represents the YANG model for interfaces statistics:  
+The sensor-group specifies a list of YANG models which are to be streamed.  The sensor path below represents the XR YANG model for interfaces statistics:  
 
 ```
 RP/0/RP0/CPU0:SunC(config)#telemetry model-driven
@@ -76,7 +76,8 @@ telemetry model-driven
 ``` 
 
 #### Validation
-Use the following command to verify that you have correctly configured the router for TCP dial-out.
+Use the following command to verify that you have correctly configured the router for TCP dial-out.  
+
 ```
 RP/0/RP0/CPU0:SunC#show telemetry model-driven subscription
 Thu Jul 21 15:42:27.751 UTC
@@ -100,32 +101,40 @@ The steps to configure gRPC dial-out are the same as TCP dial-out: create a dest
 
 #### Step 1: Create a destination-group
 The destination-group specifies the destination address, port, encoding and transport that the router should use to send out telemetry data.  In this case, we configure the router to send telemetry via gRPC, encoding as self-describing gpb, to 172.30.8.4 port 57500.  
-  
+
+```
 RP/0/RP0/CPU0:SunC(config)#telemetry model-driven  
 RP/0/RP0/CPU0:SunC(config-model-driven)# destination-group DGroup2  
 RP/0/RP0/CPU0:SunC(config-model-driven-dest)#  address family ipv4 172.30.8.4 port 57500  
 RP/0/RP0/CPU0:SunC(config-model-driven-dest-addr)#   encoding self-describing-gpb  
 RP/0/RP0/CPU0:SunC(config-model-driven-dest-addr)#   protocol grpc  
 RP/0/RP0/CPU0:SunC(config-model-driven-dest-addr)# commit  
+```
    
 #### Step 2: Create a sensor-group
-The sensor-group specifies a list of YANG models which are to be streamed.  The sensor path below represents the YANG model for summarized memory statistics:
-  
+The sensor-group specifies a list of YANG models which are to be streamed.  The sensor path below represents the YANG model for summarized memory statistics:  
+
+```
 RP/0/RP0/CPU0:SunC(config)#telemetry model-driven   
 RP/0/RP0/CPU0:SunC(config-model-driven)#sensor-group SGroup2  
 RP/0/RP0/CPU0:SunC(config-model-driven-snsr-grp)# sensor-path Cisco-IOS-XR-nto-misc-oper:memory-summary/nodes/node/summary  
 RP/0/RP0/CPU0:SunC(config-model-driven-snsr-grp)# commit  
+```
   
 #### Step 3: Create a subscription
 The subscription associates a destination-group with a sensor-group and sets the streaming interval.  The following configuration associates the sensor-group and destination created above with a streaming interval of 30 seconds.  
+
+```
 RP/0/RP0/CPU0:SunC(config)telemetry model-driven  
 RP/0/RP0/CPU0:SunC(config-model-driven)#subscription Sub2  
 RP/0/RP0/CPU0:SunC(config-model-driven-subs)#sensor-group-id SGroup2 sample-interval 30000  
 RP/0/RP0/CPU0:SunC(config-model-driven-subs)#destination-id DGroup2  
 RP/0/RP0/CPU0:SunC(config-mdt-subscription)# commit  
+```
 
 #### All Together Now
-Here's the entire configuration for gRPC dial-out with GPB encoding in one shot:  
+Here's the entire configuration for gRPC dial-out with GPB encoding in one shot: 
+
 ```
 telemetry model-driven
  destination-group DGroup2
@@ -143,7 +152,8 @@ telemetry model-driven
 ``` 
 
 #### Validation
-Use the following command to verify that you have correctly configured the router for gRPC dial-out.
+Use the following command to verify that you have correctly configured the router for gRPC dial-out.  
+
 ```
 RP/0/RP0/CPU0:SunC#show telemetry model-driven subscription
 Thu Jul 21 21:14:08.636 UTC
@@ -166,28 +176,36 @@ There are three steps to configure gRPC dial-out: enable gRPC, create a sensor-g
 
 #### Step 1: Enable gRPC
 The following configuration enables the router's gRPC server to accept incoming connections from the collector.  
-  
+
+```
 RP/0/RP0/CPU0:SunC(config)#grpc  
 RP/0/RP0/CPU0:SunC(config-grpc)#port 57500  
 RP/0/RP0/CPU0:SunC(config-grpc)#commit  
+```
    
 #### Step 2: Create a sensor-group
-The sensor-group specifies a list of YANG models which are to be streamed.  The sensor path below represents the OpenConfig YANG model for interfaces:
-  
+The sensor-group specifies a list of YANG models which are to be streamed.  The sensor path below represents the OpenConfig YANG model for interfaces:  
+
+```
 RP/0/RP0/CPU0:SunC(config)#telemetry model-driven   
 RP/0/RP0/CPU0:SunC(config-model-driven)#sensor-group SGroup3  
 RP/0/RP0/CPU0:SunC(config-model-driven-snsr-grp)# sensor-path openconfig-interfaces:interfaces/interface  
 RP/0/RP0/CPU0:SunC(config-model-driven-snsr-grp)# commit  
+```
   
 #### Step 3: Create a subscription
-The subscription associates a sensor-group with the streaming interval.  No destination group is required because the collector will be dialing in.  The collector will need to request subscription "Sub3" when it connects.    
+The subscription associates a sensor-group with the streaming interval.  No destination group is required because the collector will be dialing in.  The collector will need to request subscription "Sub3" when it connects.  
+
+```
 RP/0/RP0/CPU0:SunC(config)telemetry model-driven  
 RP/0/RP0/CPU0:SunC(config-model-driven)#subscription Sub3  
 RP/0/RP0/CPU0:SunC(config-model-driven-subs)#sensor-group-id SGroup3 sample-interval 30000  
 RP/0/RP0/CPU0:SunC(config-mdt-subscription)# commit  
+```
 
 #### All Together Now
 Here's the entire configuration for gRPC dial-in in one shot:  
+
 ```
 grpc
  port 57500
@@ -202,7 +220,8 @@ telemetry model-driven
 ``` 
 
 #### Validation
-Use the following command to verify that you have correctly configured the router for gRPC dial-in.
+Use the following command to verify that you have correctly configured the router for gRPC dial-in.  
+
 ```
 RP/0/RP0/CPU0:SunC#show telemetry model-driven subscription Sub3
 Thu Jul 21 21:32:45.365 UTC
