@@ -12,11 +12,13 @@ tags:
 
 ## Important Background (aka TL;DR)
 
-Before configuring Model-Driven Telemetry, you should understand the different options that are available for encoding and transport and pick the combination that works for you.  Here's a quick summary:  
+Before configuring Model-Driven Telemetry, you should understand the different options that are available for transport, session initation and encoding and pick the combination that works for you.  Here's a quick summary:  
 
   - **Transport:** The router can deliver telemetry data either across using TCP or [gRPC](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwiSv9Tl7ITOAhUTzGMKHb-ICh0QFggeMAA&url=http%3A%2F%2Fwww.grpc.io%2F&usg=AFQjCNHCJm5rnsywES2mSmRVZrlyDB3Ebw&sig2=ovceQ1KnEIWKo7364lLhUg) over HTTP/2.  Some people will prefer the simplicity of a raw TCP socket, others will appreciate the optional TLS encyption that gRPC brings.  
   - **Session Initiation:** There are two options for initiating a telemetry session.  The router can "dial-out" to the collector or the collector can "dial-in" to the router.  Regardless of which side initiates the session, the router always streams the data to the collector at the requested intervals. TCP supports "dial-out" while gRPC supports both "dial-in" and "dial-out."  
   - **Encoding:** The router can deliver telemetry data in two different flavors of Google Protocol Buffers: [Compact and Self-Describing GPB](http://blogs.cisco.com/sp/streaming-telemetry-with-google-protocol-buffers).  Compact GPB is the most efficient encoding but requires a unique .proto for each YANG model that is streamed.  Self-describing GPB is less efficient but it uses a single .proto file to decode all YANG models because the keys are passed as strings in the .proto.  
+
+This tutorial covers the detailed configuration steps for three combinations: TCP Dial-Out, gRPC Dial-Out and gRPC Dial-In, all using the self-describing GPB encoding.  
 
 ## Using TCP Dial-Out
 With the TCP Dial-Out method, the router initiates a TCP session to the collector and sends whatever data is specified by the sensor-group in the subscription.
