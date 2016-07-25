@@ -36,7 +36,8 @@ for c in xr.server_capabilities:
 ...tells us that there are two models for telemetry configuration:  
 
 {% capture "output" %}
-Output:
+Output:  
+
 ```
 openconfig-telemetry
 Cisco-IOS-XR-telemetry-model-driven-cfg
