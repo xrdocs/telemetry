@@ -157,6 +157,10 @@ module: openconfig-telemetry
 ```  
 {% endcapture %}
 
+<div class="notice--warning">
+{{ output | markdownify }}
+</div>
+
 You can spend a lot of time understanding the intricacies of YANG and all the details, but all we really need to know for now is that the model has three major sections:  
 
 - The **destination-group** tells the router where to send telemetry data and how.  
