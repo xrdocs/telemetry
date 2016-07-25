@@ -56,7 +56,7 @@ The NETCONF \<get-schema\> operation will give you the contents of the schema bu
 ```python
 from subprocess import Popen, PIPE, STDOUT
 
-oc = xr.get_schema('Cisco-IOS-XR-telemetry-model-driven-cfg')
+oc = xr.get_schema('openconfig-telemetry')
 p = Popen(['pyang', '-f', 'tree'], stdout=PIPE, stdin=PIPE, stderr=PIPE) 
 print(p.communicate(input=oc.data)[0])
 ```
@@ -171,7 +171,7 @@ Let's see how this works in practice.
 
 ## Get-Config
 
-We can use the Cisco-IOS-XR-telemetry-model-driven-cfg model to filter for the telemetry config with the ncclient get_config operation:
+We can use the openconfig-telemetry model to filter for the telemetry config with the ncclient get_config operation:
 
 ```python      
 filter = '''<telemetry-system xmlns="http://openconfig.net/yang/telemetry">'''
@@ -188,55 +188,72 @@ Script Output:
 
 ```
 <?xml version="1.0"?>
-<rpc-reply message-id="urn:uuid:e884966d-6d41-4ca9-8a47-f4bccdf5af68" xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+<rpc-reply message-id="urn:uuid:b92e495e-9027-4cb6-8e36-2efdbf7ce2ab" xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
  <data>
-  <telemetry-model-driven xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-telemetry-model-driven-cfg">
-   <destination-groups>
-    <destination-group>
-     <destination-id>DGroup1</destination-id>
-     <destinations>
-      <destination>
-       <address-family>ipv4</address-family>
-       <ipv4>
-        <ipv4-address>172.30.8.4</ipv4-address>
-        <destination-port>5432</destination-port>
-        <encoding>self-describing-gpb</encoding>
-        <protocol>tcp</protocol>
-       </ipv4>
-      </destination>
-     </destinations>
-    </destination-group>
-   </destination-groups>
+  <telemetry-system xmlns="http://openconfig.net/yang/telemetry">
    <sensor-groups>
     <sensor-group>
-     <sensor-group-identifier>SGroup1</sensor-group-identifier>
-     <enable></enable>
+     <sensor-group-id>SGroup1</sensor-group-id>
+     <config>
+      <sensor-group-id>SGroup1</sensor-group-id>
+     </config>
      <sensor-paths>
       <sensor-path>
-       <telemetry-sensor-path>Cisco-IOS-XR-infra-statsd-oper:infra-statistics%2finterfaces%2finterface%2flatest%2fgeneric-counters</telemetry-sensor-path>
+       <path>Cisco-IOS-XR-infra-statsd-oper:infra-statistics%2finterfaces%2finterface%2flatest%2fgeneric-counters</path>
+       <config>
+        <path>Cisco-IOS-XR-infra-statsd-oper:infra-statistics%2finterfaces%2finterface%2flatest%2fgeneric-counters</path>
+       </config>
       </sensor-path>
      </sensor-paths>
     </sensor-group>
    </sensor-groups>
-   <enable></enable>
    <subscriptions>
-    <subscription>
-     <subscription-identifier>Sub1</subscription-identifier>
-     <sensor-profiles>
-      <sensor-profile>
-       <sensorgroupid>SGroup1</sensorgroupid>
-       <sample-interval>30000</sample-interval>
-      </sensor-profile>
-     </sensor-profiles>
-     <destination-profiles>
-      <destination-profile>
-       <destination-id>DGroup1</destination-id>
-       <enable></enable>
-      </destination-profile>
-     </destination-profiles>
-    </subscription>
+    <persistent>
+     <subscription>
+      <subscription-id>Sub1</subscription-id>
+      <config>
+       <subscription-id>Sub1</subscription-id>
+      </config>
+      <sensor-profiles>
+       <sensor-profile>
+        <sensor-group>SGroup1</sensor-group>
+        <config>
+         <sensor-group>SGroup1</sensor-group>
+         <sample-interval>30000</sample-interval>
+        </config>
+       </sensor-profile>
+      </sensor-profiles>
+      <destination-groups>
+       <destination-group>
+        <group-id>DGroup1</group-id>
+        <config>
+         <group-id>DGroup1</group-id>
+        </config>
+       </destination-group>
+      </destination-groups>
+     </subscription>
+    </persistent>
    </subscriptions>
-  </telemetry-model-driven>
+   <destination-groups>
+    <destination-group>
+     <group-id>DGroup1</group-id>
+     <config>
+      <group-id>DGroup1</group-id>
+     </config>
+     <destinations>
+      <destination>
+       <destination-address>172.30.8.4</destination-address>
+       <config>
+        <destination-address>172.30.8.4</destination-address>
+        <destination-port>5432</destination-port>
+        <destination-protocol>tcp</destination-protocol>
+       </config>
+       <destination-port>5432</destination-port>
+      </destination>
+     </destinations>
+    </destination-group>
+   </destination-groups>
+  </telemetry-system>
  </data>
 </rpc-reply>
 
@@ -344,70 +361,88 @@ print(c)
 Script Output:
 
 ```
-<?xml version="1.0"?>
-<rpc-reply message-id="urn:uuid:7fcd69e3-1e4b-457d-b41d-9e2c82faf76a" xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
- <data>
-  <telemetry-model-driven xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-telemetry-model-driven-cfg">
-   <destination-groups>
-    <destination-group>
-     <destination-id>DGroup1</destination-id>
-     <destinations>
-      <destination>
-       <address-family>ipv4</address-family>
-       <ipv4>
-        <ipv4-address>172.30.8.4</ipv4-address>
-        <destination-port>5432</destination-port>
-        <encoding>self-describing-gpb</encoding>
-        <protocol>tcp</protocol>
-       </ipv4>
-      </destination>
-      <destination>
-       <address-family>ipv6</address-family>
-       <ipv6>
-        <ipv6-address>2001:db8:0:100::b</ipv6-address>
-        <destination-port>5432</destination-port>
-        <encoding>self-describing-gpb</encoding>
-        <protocol>grpc</protocol>
-       </ipv6>
-      </destination>
-     </destinations>
-    </destination-group>
-   </destination-groups>
+<data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0">
+  <telemetry-system xmlns="http://openconfig.net/yang/telemetry">
    <sensor-groups>
     <sensor-group>
-     <sensor-group-identifier>SGroup1</sensor-group-identifier>
-     <enable></enable>
+     <sensor-group-id>SGroup1</sensor-group-id>
+     <config>
+      <sensor-group-id>SGroup1</sensor-group-id>
+     </config>
      <sensor-paths>
       <sensor-path>
-       <telemetry-sensor-path>Cisco-IOS-XR-ipv4-arp-oper:arp%2fnodes%2fnode%2fentries%2fentry</telemetry-sensor-path>
+       <path>Cisco-IOS-XR-ipv4-arp-oper:arp%2fnodes%2fnode%2fentries%2fentry</path>
+       <config>
+        <path>Cisco-IOS-XR-ipv4-arp-oper:arp%2fnodes%2fnode%2fentries%2fentry</path>
+       </config>
       </sensor-path>
       <sensor-path>
-       <telemetry-sensor-path>Cisco-IOS-XR-infra-statsd-oper:infra-statistics%2finterfaces%2finterface%2flatest%2fgeneric-counters</telemetry-sensor-path>
+       <path>Cisco-IOS-XR-infra-statsd-oper:infra-statistics%2finterfaces%2finterface%2flatest%2fgeneric-counters</path>
+       <config>
+        <path>Cisco-IOS-XR-infra-statsd-oper:infra-statistics%2finterfaces%2finterface%2flatest%2fgeneric-counters</path>
+       </config>
       </sensor-path>
      </sensor-paths>
     </sensor-group>
    </sensor-groups>
-   <enable></enable>
    <subscriptions>
-    <subscription>
-     <subscription-identifier>Sub1</subscription-identifier>
-     <sensor-profiles>
-      <sensor-profile>
-       <sensorgroupid>SGroup1</sensorgroupid>
-       <sample-interval>30000</sample-interval>
-      </sensor-profile>
-     </sensor-profiles>
-     <destination-profiles>
-      <destination-profile>
-       <destination-id>DGroup1</destination-id>
-       <enable></enable>
-      </destination-profile>
-     </destination-profiles>
-    </subscription>
+    <persistent>
+     <subscription>
+      <subscription-id>Sub1</subscription-id>
+      <config>
+       <subscription-id>Sub1</subscription-id>
+      </config>
+      <sensor-profiles>
+       <sensor-profile>
+        <sensor-group>SGroup1</sensor-group>
+        <config>
+         <sensor-group>SGroup1</sensor-group>
+         <sample-interval>30000</sample-interval>
+        </config>
+       </sensor-profile>
+      </sensor-profiles>
+      <destination-groups>
+       <destination-group>
+        <group-id>DGroup1</group-id>
+        <config>
+         <group-id>DGroup1</group-id>
+        </config>
+       </destination-group>
+      </destination-groups>
+     </subscription>
+    </persistent>
    </subscriptions>
-  </telemetry-model-driven>
+   <destination-groups>
+    <destination-group>
+     <group-id>DGroup1</group-id>
+     <config>
+      <group-id>DGroup1</group-id>
+     </config>
+     <destinations>
+      <destination>
+       <destination-address>172.30.8.4</destination-address>
+       <config>
+        <destination-address>172.30.8.4</destination-address>
+        <destination-port>5432</destination-port>
+        <destination-protocol>tcp</destination-protocol>
+       </config>
+       <destination-port>5432</destination-port>
+      </destination>
+      <destination>
+       <destination-address>2001:db8:0:100::b</destination-address>
+       <config>
+        <destination-address>2001:db8:0:100::b</destination-address>
+        <destination-port>5432</destination-port>
+        <destination-protocol>grpc</destination-protocol>
+       </config>
+       <destination-port>5432</destination-port>
+      </destination>
+     </destinations>
+    </destination-group>
+   </destination-groups>
+  </telemetry-system>
  </data>
-</rpc-reply>
+
 ```
 {% endcapture %}
 
