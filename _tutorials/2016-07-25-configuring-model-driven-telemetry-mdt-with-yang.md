@@ -453,7 +453,7 @@ Script Output:
 And if you need some CLI to reassure yourself that it worked, here it is:
 
 {% capture "output" %}
-Script Output:
+CLI Output:
 
 ```
 RP/0/RP0/CPU0:SunC#show run telemetry model-driven
