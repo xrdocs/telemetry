@@ -154,7 +154,7 @@ module: openconfig-telemetry
                      +--ro state
                         +--ro path?             string
                         +--ro exclude-filter?   string
-```
+```  
 {% endcapture %}
 
 You can spend a lot of time understanding the intricacies of YANG and all the details, but all we really need to know for now is that the model has three major sections:  
@@ -236,7 +236,8 @@ Script Output:
  </data>
 </rpc-reply>
 
-```
+```  
+{% endcapture %}
 
 So what does all that mean to the router?  It breaks down into three parts which you'll recall from the YANG model above:  
 
