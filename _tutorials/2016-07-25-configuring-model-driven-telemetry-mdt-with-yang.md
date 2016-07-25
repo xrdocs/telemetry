@@ -41,7 +41,7 @@ Cisco-IOS-XR-telemetry-model-driven-cfg
 
 The first model is the [OpenConfig telemetry model](https://github.com/openconfig/public/blob/master/release/models/telemetry/openconfig-telemetry.yang) and the second is the XR Native telemetry model.  If you look at them in detail, you will notice that the native model closely follows the OpenConfig model.  In this tutorial, I'll use Cisco-IOS-XR-telemetry-model-driven-cfg, but the two are functionally equivalent.
 
-The NETCONF <get-schema> operation will give you the contents of the schema but the full YANG output can be really verbose and overwhelming, so I'll pipe the output to the [pyang](https://github.com/mbj4668/pyang) utility for a compact tree view with the following bit of code:
+The NETCONF \<get-schema\> operation will give you the contents of the schema but the full YANG output can be really verbose and overwhelming, so I'll pipe the output to the [pyang](https://github.com/mbj4668/pyang) utility for a compact tree view with the following bit of code:
 
 ```python
 from subprocess import Popen, PIPE, STDOUT
@@ -101,7 +101,8 @@ module: Cisco-IOS-XR-telemetry-model-driven-cfg
       +--rw enable?               empty
 ```
 
-You can spend a lot of time understanding the intricacies of YANG and all the details, but all we really need to know for now is that the model has three major sections:
+You can spend a lot of time understanding the intricacies of YANG and all the details, but all we really need to know for now is that the model has three major sections:  
+
 - The **destination-group** tells the router where to send telemetry data and how.  
 - The **sensor-group** identifies a list of YANG models that the router should stream.  
 - The **subscription** ties together the destination-group and the sensor-group.  
@@ -204,9 +205,9 @@ telemetry model-driven
 
 ## Edit-Config
 
-So let's say we want to add a second destination (to 2001:db8:0:100::b) DGroup1 and a second model to SGroup1 (Cisco-IOS-XR-ipv4-arp-oper).  We can do that with the following NETCONF operations:
+So let's say we want to add a second destination (to 2001:db8:0\:100::b) to DGroup1 and a second model to SGroup1 (Cisco-IOS-XR-ipv4-arp-oper).  We can do that with the following NETCONF operations:
 
-```
+```python
 edit_data = '''
 <config>
 <telemetry-model-driven xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-telemetry-model-driven-cfg">
