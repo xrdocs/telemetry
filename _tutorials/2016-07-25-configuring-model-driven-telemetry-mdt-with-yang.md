@@ -417,6 +417,9 @@ Script Output:
 
 And if you need some CLI to reassure yourself that it worked, here it is:
 
+{% capture "output" %}
+Script Output:
+
 ```
 RP/0/RP0/CPU0:SunC#show run telemetry model-driven
 Mon Jul 25 19:27:26.632 UTC
@@ -441,6 +444,11 @@ telemetry model-driven
  !
 !
 ```
+{% endcapture %}
+
+<div class="notice--info">
+{{ output | markdownify }}
+</div>
 
 ## Conclusion
 Armed with the examples in this blog and a understanding of the telemetry YANG model, you should now be able to use YANG configuration models to configure the router to stream YANG models with the operational data you want.  How's that for model-driven programmability?
