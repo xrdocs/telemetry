@@ -111,7 +111,7 @@ Let's see how this works in practice.
 
 ## Get-Config
 
-We can use the Cisco-IOS-XR-telemetry-model-driven-cfg model to filter for the telemetry config:
+We can use the Cisco-IOS-XR-telemetry-model-driven-cfg model to filter for the telemetry config with the ncclient get_config operation:
 
 ```python      
 filter = '''<telemetry-model-driven xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-telemetry-model-driven-cfg">'''
