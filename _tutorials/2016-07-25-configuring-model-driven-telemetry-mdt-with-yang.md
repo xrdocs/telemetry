@@ -270,34 +270,42 @@ So let's say we want to add a second destination (to 2001:db8:0\:100::b) to DGro
 ```python
 edit_data = '''
 <config>
-<telemetry-model-driven xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-telemetry-model-driven-cfg">
-   <destination-groups>
-    <destination-group>
-     <destination-id>DGroup1</destination-id>
-     <destinations>
-      <destination>
-       <address-family>ipv6</address-family>
-       <ipv6>
-        <ipv6-address>2001:db8:0:100::b</ipv6-address>
-        <destination-port>5432</destination-port>
-        <encoding>self-describing-gpb</encoding>
-        <protocol>grpc</protocol>
-       </ipv6>
-      </destination>
-     </destinations>
-    </destination-group>
-   </destination-groups>
+<telemetry-system xmlns="http://openconfig.net/yang/telemetry">
    <sensor-groups>
     <sensor-group>
-     <sensor-group-identifier>SGroup1</sensor-group-identifier>
+     <sensor-group-id>SGroup1</sensor-group-id>
+     <config>
+      <sensor-group-id>SGroup1</sensor-group-id>
+     </config>
      <sensor-paths>
       <sensor-path>
-       <telemetry-sensor-path>Cisco-IOS-XR-ipv4-arp-oper:arp%2fnodes%2fnode%2fentries%2fentry</telemetry-sensor-path>
+       <path>Cisco-IOS-XR-ipv4-arp-oper:arp%2fnodes%2fnode%2fentries%2fentry</path>
+       <config>
+        <path>Cisco-IOS-XR-ipv4-arp-oper:arp%2fnodes%2fnode%2fentries%2fentry</path>
+       </config>
       </sensor-path>
      </sensor-paths>
     </sensor-group>
    </sensor-groups>
-  </telemetry-model-driven>
+   <destination-groups>
+    <destination-group>
+     <group-id>DGroup1</group-id>
+     <config>
+      <group-id>DGroup1</group-id>
+     </config>
+     <destinations>
+      <destination>
+       <destination-address>2001:db8:0:100::b</destination-address>
+       <config>
+        <destination-address>2001:db8:0:100::b</destination-address>
+        <destination-port>5432</destination-port>
+        <destination-protocol>grpc</destination-protocol>
+       </config>
+       <destination-port>5432</destination-port>
+      </destination>
+     </destinations>
+    </destination-group>
+   </destination-groups>
 </config>
 '''
 
