@@ -243,13 +243,20 @@ Script Output:
 ```  
 {% endcapture %}
 
+<div class="notice--warning">
+{{ output | markdownify }}
+</div>
+
 So what does all that mean to the router?  It breaks down into three parts which you'll recall from the YANG model above:  
 
 - The **destination-group** tells the router where to send telemetry data and how.  If you parse the XML above, you'll see that the router has a destination group named "DGroup 1" that goes to 172.30.8.4 port 5432 using the self-describing GPB encoding.
 - The **sensor-group** identifies a list of YANG models that the router should stream.  In this case, the router has a sensor-group called "SGroup1" that will send interface statistics data from the Cisco-IOS-XR-infra-statsd-oper YANG model.
 - The **subscription** ties together the destination-group and the sensor-group.  This router has a subscription name "Sub1" that will send the list of models in SGroup1 to the destinations in DGroup1 at an interval of 30 second (30000 milleseconds).  
 
-If you read the [earlier tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/) on configuring MDT with CLI, you might recognize this as the same as the TCP Dial-Out configuration described there.  If you missed that thrilling installment, the XML above is the YANG equivalent of this CLI:
+If you read the [earlier tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/) on configuring MDT with CLI, you might recognize this as the same as the TCP Dial-Out configuration described there.  If you missed that thrilling installment, the XML above is the YANG equivalent of this CLI:  
+
+{% capture "output" %}
+CLI Output:
 
 ```
 telemetry model-driven  
@@ -266,6 +273,12 @@ telemetry model-driven
   sensor-group-id SGroup1 sample-interval 30000  
   destination-id DGroup1   
 ``` 
+
+{% endcapture %}
+
+<div class="notice--info">
+{{ output | markdownify }}
+</div>
 
 ## Edit-Config
 
@@ -325,6 +338,10 @@ print(c)
 ```
 
 ... we'll see that SGroup1 and DGroup1 have the new additions.  
+
+
+{% capture "output" %}
+Script Output:
 
 ```
 <?xml version="1.0"?>
@@ -392,6 +409,11 @@ print(c)
  </data>
 </rpc-reply>
 ```
+{% endcapture %}
+
+<div class="notice--warning">
+{{ output | markdownify }}
+</div>
 
 And if you need some CLI to reassure yourself that it worked, here it is:
 
