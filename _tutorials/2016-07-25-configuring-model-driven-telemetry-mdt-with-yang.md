@@ -35,8 +35,8 @@ for c in xr.server_capabilities:
 ...tells us that there are two models for telemetry configuration:  
 
 ```
-**openconfig-telemetry
-Cisco-IOS-XR-telemetry-model-driven-cfg**
+openconfig-telemetry
+Cisco-IOS-XR-telemetry-model-driven-cfg
 ```
 
 The first model is the [OpenConfig telemetry model](https://github.com/openconfig/public/blob/master/release/models/telemetry/openconfig-telemetry.yang) and the second is the XR Native telemetry model.  If you look at them in detail, you will notice that the native model closely follows the OpenConfig model.  In this tutorial, I'll use Cisco-IOS-XR-telemetry-model-driven-cfg, but the two are functionally equivalent.
