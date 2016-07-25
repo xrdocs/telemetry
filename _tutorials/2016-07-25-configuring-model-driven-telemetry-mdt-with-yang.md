@@ -31,6 +31,7 @@ for c in xr.server_capabilities:
     if model is not None:
         print model.group(1)     
 ```
+{: .notice--primary}
 
 ...tells us that there are two models for telemetry configuration:  
 
