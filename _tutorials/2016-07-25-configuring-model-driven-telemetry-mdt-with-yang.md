@@ -36,7 +36,7 @@ for c in xr.server_capabilities:
 ...tells us that there are two models for telemetry configuration:  
 
 {% capture "output" %}
-Console Output:
+Script Output:
 
 ```
 openconfig-telemetry
@@ -56,60 +56,105 @@ The NETCONF \<get-schema\> operation will give you the contents of the schema bu
 ```python
 from subprocess import Popen, PIPE, STDOUT
 
-c = xr.get_schema('Cisco-IOS-XR-telemetry-model-driven-cfg')
-
+oc = xr.get_schema('Cisco-IOS-XR-telemetry-model-driven-cfg')
 p = Popen(['pyang', '-f', 'tree'], stdout=PIPE, stdin=PIPE, stderr=PIPE) 
-print(p.communicate(input=c.data)[0])
+print(p.communicate(input=oc.data)[0])
 ```
 
 And voila:  
+{% capture "output" %}
+Script Output:  
 
 ```
-module: Cisco-IOS-XR-telemetry-model-driven-cfg
-   +--rw telemetry-model-driven
+module: openconfig-telemetry
+   +--rw telemetry-system
       +--rw sensor-groups
-      |  +--rw sensor-group* [sensor-group-identifier]
+      |  +--rw sensor-group* [sensor-group-id]
+      |     +--rw sensor-group-id    -> ../config/sensor-group-id
+      |     +--rw config
+      |     |  +--rw sensor-group-id?   string
+      |     +--ro state
+      |     |  +--ro sensor-group-id?   string
       |     +--rw sensor-paths
-      |     |  +--rw sensor-path* [telemetry-sensor-path]
-      |     |     +--rw telemetry-sensor-path    xr:Cisco-ios-xr-string
-      |     +--rw enable?                    empty
-      |     +--rw sensor-group-identifier    xr:Cisco-ios-xr-string
-      +--rw subscriptions
-      |  +--rw subscription* [subscription-identifier]
-      |     +--rw source-address!
-      |     |  +--rw address-family    Af
-      |     |  +--rw ip-address?       inet:ipv4-address-no-zone
-      |     |  +--rw ipv6-address?     string
-      |     +--rw sensor-profiles
-      |     |  +--rw sensor-profile* [sensorgroupid]
-      |     |     +--rw sample-interval?      uint32
-      |     |     +--rw heartbeat-interval?   uint32
-      |     |     +--rw supress-redundant?    empty
-      |     |     +--rw sensorgroupid         xr:Cisco-ios-xr-string
-      |     +--rw destination-profiles
-      |     |  +--rw destination-profile* [destination-id]
-      |     |     +--rw enable?           empty
-      |     |     +--rw destination-id    xr:Cisco-ios-xr-string
-      |     +--rw source-qos-marking?        uint32
-      |     +--rw subscription-identifier    xr:Cisco-ios-xr-string
+      |        +--rw sensor-path* [path]
+      |           +--rw path      -> ../config/path
+      |           +--rw config
+      |           |  +--rw path?             string
+      |           |  +--rw exclude-filter?   string
+      |           +--ro state
+      |              +--ro path?             string
+      |              +--ro exclude-filter?   string
       +--rw destination-groups
-      |  +--rw destination-group* [destination-id]
+      |  +--rw destination-group* [group-id]
+      |     +--rw group-id        -> ../config/group-id
+      |     +--rw config
+      |     |  +--rw group-id?   string
+      |     +--ro state
+      |     |  +--ro group-id?   string
       |     +--rw destinations
-      |     |  +--rw destination* [address-family]
-      |     |     +--rw address-family    Af
-      |     |     +--rw ipv4* [ipv4-address destination-port]
-      |     |     |  +--rw ipv4-address        inet:ip-address-no-zone
-      |     |     |  +--rw destination-port    xr:Cisco-ios-xr-port-number
-      |     |     |  +--rw encoding?           Encode-type
-      |     |     |  +--rw protocol?           Proto-type
-      |     |     +--rw ipv6* [ipv6-address destination-port]
-      |     |        +--rw ipv6-address        xr:Cisco-ios-xr-string
-      |     |        +--rw destination-port    xr:Cisco-ios-xr-port-number
-      |     |        +--rw encoding?           Encode-type
-      |     |        +--rw protocol?           Proto-type
-      |     +--rw destination-id    xr:Cisco-ios-xr-string
-      +--rw enable?               empty
+      |        +--rw destination* [destination-address destination-port]
+      |           +--rw destination-address    -> ../config/destination-address
+      |           +--rw destination-port       -> ../config/destination-port
+      |           +--rw config
+      |           |  +--rw destination-address?    inet:ip-address
+      |           |  +--rw destination-port?       uint16
+      |           |  +--rw destination-protocol?   telemetry-stream-protocol
+      |           +--ro state
+      |              +--ro destination-address?    inet:ip-address
+      |              +--ro destination-port?       uint16
+      |              +--ro destination-protocol?   telemetry-stream-protocol
+      +--rw subscriptions
+         +--rw persistent
+         |  +--rw subscription* [subscription-id]
+         |     +--rw subscription-id       -> ../config/subscription-id
+         |     +--rw config
+         |     |  +--rw subscription-id?          uint64
+         |     |  +--rw local-source-address?     inet:ip-address
+         |     |  +--rw originated-qos-marking?   inet:dscp
+         |     +--ro state
+         |     |  +--ro subscription-id?          uint64
+         |     |  +--ro local-source-address?     inet:ip-address
+         |     |  +--ro originated-qos-marking?   inet:dscp
+         |     +--rw sensor-profiles
+         |     |  +--rw sensor-profile* [sensor-group]
+         |     |     +--rw sensor-group    -> ../config/sensor-group
+         |     |     +--rw config
+         |     |     |  +--rw sensor-group?         -> /telemetry-system/sensor-groups/sensor-group/config/sensor-group-id
+         |     |     |  +--rw sample-interval?      uint64
+         |     |     |  +--rw heartbeat-interval?   uint64
+         |     |     |  +--rw suppress-redundant?   boolean
+         |     |     +--ro state
+         |     |        +--ro sensor-group?         -> /telemetry-system/sensor-groups/sensor-group/config/sensor-group-id
+         |     |        +--ro sample-interval?      uint64
+         |     |        +--ro heartbeat-interval?   uint64
+         |     |        +--ro suppress-redundant?   boolean
+         |     +--rw destination-groups
+         |        +--rw destination-group* [group-id]
+         |           +--rw group-id    -> ../config/group-id
+         |           +--rw config
+         |           |  +--rw group-id?   -> ../../../../../../../destination-groups/destination-group/group-id
+         |           +--rw state
+         |              +--rw group-id?   -> ../../../../../../../destination-groups/destination-group/group-id
+         +--rw dynamic
+            +--ro subscription* [subscription-id]
+               +--ro subscription-id    -> ../state/subscription-id
+               +--ro state
+               |  +--ro subscription-id?          uint64
+               |  +--ro destination-address?      inet:ip-address
+               |  +--ro destination-port?         uint16
+               |  +--ro destination-protocol?     telemetry-stream-protocol
+               |  +--ro sample-interval?          uint64
+               |  +--ro heartbeat-interval?       uint64
+               |  +--ro suppress-redundant?       boolean
+               |  +--ro originated-qos-marking?   inet:dscp
+               +--ro sensor-paths
+                  +--ro sensor-path* [path]
+                     +--ro path     -> ../state/path
+                     +--ro state
+                        +--ro path?             string
+                        +--ro exclude-filter?   string
 ```
+{% endcapture %}
 
 You can spend a lot of time understanding the intricacies of YANG and all the details, but all we really need to know for now is that the model has three major sections:  
 
