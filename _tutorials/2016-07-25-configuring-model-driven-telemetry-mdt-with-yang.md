@@ -43,7 +43,7 @@ Cisco-IOS-XR-telemetry-model-driven-cfg
 {% endcapture %}
 
 
-<div class="notice--primary">
+<div class="notice--warning">
 {{ output | markdownify }}
 </div>
 
