@@ -16,7 +16,7 @@ In an [earlier tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21
 
 Let's start with a quick look at the NETCONF capabilities list from IOS XR 6.1.1.  This bit of code:
 
-```
+```python
 from ncclient import manager
 import re
     
@@ -43,7 +43,7 @@ The first model is the [OpenConfig telemetry model](https://github.com/openconfi
 
 The NETCONF <get-schema> operation will give you the contents of the schema but the full YANG output can be really verbose and overwhelming, so I'll pipe the output to the [pyang](https://github.com/mbj4668/pyang) utility for a compact tree view with the following bit of code:
 
-```
+```python
 from subprocess import Popen, PIPE, STDOUT
 
 c = xr.get_schema('Cisco-IOS-XR-telemetry-model-driven-cfg')
@@ -105,7 +105,7 @@ module: Cisco-IOS-XR-telemetry-model-driven-cfg
 
 Let's use the Cisco-IOS-XR-telemetry-model-driven-cfg model to filter for the telemetry config:
 
-```      
+```python      
 filter = '''<telemetry-model-driven xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-telemetry-model-driven-cfg">'''
 
 c = xr.get_config(source='running', filter=('subtree', filter))
@@ -117,7 +117,7 @@ And here's what we get:
 
 ```
 <?xml version="1.0"?>
-<rpc-reply message-id="urn:uuid:d4c94484-709f-451e-a734-a01eafae9658" xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+<rpc-reply message-id="urn:uuid:e884966d-6d41-4ca9-8a47-f4bccdf5af68" xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
  <data>
   <telemetry-model-driven xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-telemetry-model-driven-cfg">
    <destination-groups>
@@ -146,15 +146,6 @@ And here's what we get:
       </sensor-path>
      </sensor-paths>
     </sensor-group>
-    <sensor-group>
-     <sensor-group-identifier>SGroup3</sensor-group-identifier>
-     <enable></enable>
-     <sensor-paths>
-      <sensor-path>
-       <telemetry-sensor-path>openconfig-interfaces:interfaces%2finterface</telemetry-sensor-path>
-      </sensor-path>
-     </sensor-paths>
-    </sensor-group>
    </sensor-groups>
    <enable></enable>
    <subscriptions>
@@ -180,6 +171,29 @@ And here's what we get:
 
 ```
 
+So what does all that mean to the router?  It breaks down into three parts:  
+
+- The **destination-group** tells the router where to send telemetry data and how.  If you parse the XML above, you'll see that the router has a destination group named "DGroup 1" that goes to 172.30.8.4 port 5432 using the self-describing GPB encoding.
+- The **sensor-group** identifies a list of YANG models that the router should stream.  In this case, the router has a sensor-group called "SGroup1" that will send interface statistics data from the Cisco-IOS-XR-infra-statsd-oper YANG model.
+- The **subscription** ties together the destination-group and the sensor-group.  This router has a subscription name "Sub1" that will send the list of models in SGroup1 to the destinations in DGroup1 at an interval of 30 second (30000 milleseconds).  
+
+If you read the [earlier tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/) on configuring MDT with CLI, you might recognize this as the same as the TCP Dial-Out configuration described there.  If you missed that thrilling installment, the XML above is the YANG equivalent of this CLI:
+
+```
+telemetry model-driven  
+ destination-group DGroup1  
+   address family ipv4 172.30.8.4 port 5432  
+   encoding self-describing-gpb  
+   protocol tcp
+  !
+ !
+ sensor-group SGroup1
+  sensor-path Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters
+ !  
+ subscription Sub1  
+  sensor-group-id SGroup1 sample-interval 30000  
+  destination-id DGroup1   
+``` 
 
 
 
