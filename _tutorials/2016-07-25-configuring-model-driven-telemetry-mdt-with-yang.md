@@ -62,6 +62,7 @@ print(p.communicate(input=oc.data)[0])
 ```
 
 And voila:  
+
 {% capture "output" %}
 Script Output:  
 
