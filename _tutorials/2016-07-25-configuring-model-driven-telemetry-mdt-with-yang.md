@@ -64,7 +64,7 @@ print(p.communicate(input=oc.data)[0])
 And voila:  
 
 {% capture "output" %}
-Script Output:  
+Script Output:
 
 ```
 module: openconfig-telemetry
@@ -170,7 +170,7 @@ Let's see how this works in practice.
 We can use the Cisco-IOS-XR-telemetry-model-driven-cfg model to filter for the telemetry config with the ncclient get_config operation:
 
 ```python      
-filter = '''<telemetry-model-driven xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-telemetry-model-driven-cfg">'''
+filter = '''<telemetry-system xmlns="http://openconfig.net/yang/telemetry">'''
 
 c = xr.get_config(source='running', filter=('subtree', filter))
 
@@ -178,6 +178,9 @@ print(c)
 ```
 
 And here's what we get:  
+
+{% capture "output" %}
+Script Output:
 
 ```
 <?xml version="1.0"?>
