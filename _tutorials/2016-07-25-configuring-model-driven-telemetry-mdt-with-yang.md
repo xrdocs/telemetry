@@ -299,7 +299,7 @@ telemetry model-driven
 
 ## Edit-Config
 
-So let's say we want to add a second destination (to 2001:db8:0:100::b) to DGroup1 and a second model to SGroup1 (Cisco-IOS-XR-ipv4-arp-oper).  We can do that with the following NETCONF operations:
+So let's say we want to add a second destination (to `2001:db8:0:100::b`) to DGroup1 and a second model to SGroup1 (Cisco-IOS-XR-ipv4-arp-oper).  We can do that with the following NETCONF operations:
 
 ```python
 edit_data = '''
