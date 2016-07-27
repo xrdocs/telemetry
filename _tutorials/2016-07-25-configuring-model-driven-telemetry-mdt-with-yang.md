@@ -6,7 +6,7 @@ author: Shelly Cadora
 excerpt: Describes how to configure MDT with YANG models
 tags:
   - iosxr
-position: hidden
+position: top
 ---
 ## Model-Driven Configuration for Model-Driven Telemetry
 
