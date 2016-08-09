@@ -220,8 +220,16 @@ RP/0/RP0/CPU0:SunC#
 {{ output | markdownify }}
 </div>
      
+## Clean Up, Clean Up, Everybody Clean Up
+Let's delete all the config we added and disconnect the NETCONF session:
+
+```python
+rpc_service.delete(xr, sgroup)
+rpc_service.delete(xr, sub)
+xr.close()
+```
 
 ## Conclusion
-In this tutorial, we looked at a couple dozen lines of YDK code that resulted in five lines of CLI.  So you might be thinking "and that helps me be more efficient...how?"  But the power of automation in general and YDK in particular can't be fully revealed in a single, simple example like this.  The real power of YDK is that it allows you to do this for any YANG model on the box, automatically generating Python classes that inherit the syntactic checks and requirements of the underlying model, while also handling all the details of the underlying encoding and transport (no understanding of XML or NETCONF chunk framing required!).  The result is speed and scale at a whole new level.  Give a try and see what you think!
+In this tutorial, we looked at a couple dozen lines of YDK code that added and then removed five lines of CLI.  So you might be thinking "and that helps me be more efficient...how?"  But the power of automation in general and YDK in particular can't be fully revealed in a single, simple example like this.  The real power of YDK is that it allows you to do this for any YANG model on the box, automatically generating Python classes that inherit the syntactic checks and requirements of the underlying model, while also handling all the details of the underlying encoding and transport (no understanding of XML or NETCONF chunk framing required!).  The result is speed and scale at a whole new level.  Give a try and see what you think!
 
 
