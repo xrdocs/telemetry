@@ -189,7 +189,36 @@ sub.sensor_profiles.sensor_profile.append(new_sgroup)
 rpc_service.create(xr, sub)
 ```
 
+## What Did All That Code Do?
+
+So this is how all that shows up in CLI:
+
+{% capture "output" %}
+CLI Output:
+
+```
+RP/0/RP0/CPU0:SunC#show run telemetry model-driven
+Tue Aug  9 17:52:38.462 UTC
+telemetry model-driven
+ sensor-group SGroup4
+  sensor-path Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters
+ !
+ subscription 4
+  sensor-group-id SGroup4 sample-interval 30000
+ !
+!
+
+RP/0/RP0/CPU0:SunC#
+``` 
+
+{% endcapture %}
+
+<div class="notice--info">
+{{ output | markdownify }}
+</div>
+     
+
 ## Conclusion
-Armed with the examples in this blog and a understanding of the telemetry YANG model, you should now be able to use YANG configuration models to configure the router to stream YANG models with the operational data you want.  How's that for model-driven programmability?
+In this tutorial, we looked at a couple dozen lines of YDK code that resulted in five lines of CLI.  So you might be thinking "and that helps me be more efficient...how?"  But the power of automation in general and YDK in particular can't be fully revealed in a single, simple example like this.  The real power of YDK is that it allows you to do this for any YANG model on the box, automatically generating Python classes that inherit the syntactic checks and requirements of the underlying model, while also handling all the details of the underlying encoding and transport (no understanding of XML or NETCONF chunk framing required!).  The result is speed and scale at a whole new level.  Give a try and see what you think!
 
 
