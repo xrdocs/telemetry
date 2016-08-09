@@ -1,8 +1,11 @@
 ---
-published: false
+published: true
 date: '2016-08-08 17:52 -0600'
 title: Configuring Model-Driven Telemetry with YDK
 author: Shelly Cadora
+position: hidden
+tags:
+  - cisco
 ---
 ## Configuring Model-Driven Telemetry with YDK
 
