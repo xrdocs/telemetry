@@ -56,7 +56,7 @@ RP/0/RP0/CPU0:SunC#
 
 ## Define the sensor group
 
-We'll start by defining the sensor-group.  Here's the first bit of YDK for that:
+Now that our script is connected to the router, we'll start by defining the sensor-group.  Here's the first bit of YDK for that:
 
 ```python
 import ydk.models.openconfig.openconfig_telemetry as oc_telemetry 
@@ -87,7 +87,7 @@ module: openconfig-telemetry
 {{ output | markdownify }}
 </div>
 
-Start from the top and walk down from telemetry-system to sensor-groups to sensor-group.  Replace the dashes and lowercase syntax with CamelCase syntax and you get the class that instantiates that first object: TelemetrySystem.SensorGroups.SensorGroup().  Down to the next level, we have the leaf "sensor-group-id."  YDK converts this to an object attribute by replacing the hyphens with underscores.  The sensor-group-id list key is actually a leaf-ref to config/sensor-group-id, both of which are required (hence the two lines that seem redundant but are actually required for syntactic validation).
+Start from the top and walk down from telemetry-system to sensor-groups to sensor-group.  Replace the dashes and lowercase syntax with CamelCase syntax and you get the class that instantiates that first object: TelemetrySystem.SensorGroups.SensorGroup().  Down to the next level, we have the leaf "sensor-group-id."  YDK converts this to an object attribute by replacing the hyphens with underscores.  The sensor-group-id list key is actually a leaf-ref to config/sensor-group-id, both of which are required (hence the two lines that seem redundant but are actually required for syntactic validation because of the structure of the YANG model).
 
 Going down a little farther in the YANG model with some help from some pyang options, we see that the sensor-group contains a list of sensor-paths.
 
@@ -117,20 +117,28 @@ This is how that maps to YDK code:
 ```python
 sgroup.sensor_paths = sgroup.SensorPaths()
 new_sensorpath = sgroup.SensorPaths.SensorPath()
+
 new_sensorpath.path = 'Cisco-IOS-XR-infra-statsd-oper:infra-statistics%2finterfaces%2finterface%2flatest%2fgeneric-counters'
 new_sensorpath.config.path = 'Cisco-IOS-XR-infra-statsd-oper:infra-statistics%2finterfaces%2finterface%2flatest%2fgeneric-counters'
+
 sgroup.sensor_paths.sensor_path.append(new_sensorpath)
 ```
 
 So again, following the YANG model, we define the top-level SensorPaths object, then a SensorPath with an object attribute "path" that actually specifies the YANG model that we want to stream (in this case, our old friend, interface statistics).
 
-Note that the "%2f" in the path attributes represent URL encodings of the forward slash character ("/").  The code would look a little better if you used a utility such as urllib to do the string substitution for you, so you can use the more natural looking path with "/" characters.  
+Note that the "%2f" in the path attributes represent URL encodings of the forward slash character ("/").  The code would look a little better if you used a utility such as urllib to do the string substitution for you, so you can use the more natural looking path with "/" characters like this:  
 
 ```python
 import urllib
+
+sgroup.sensor_paths = sgroup.SensorPaths()
+new_sensorpath = sgroup.SensorPaths.SensorPath()
+
 interface_stats_path = urllib.quote('Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters', safe=':')
 new_sensorpath.path = interface_stats_path
 new_sensorpath.config.path = interface_stats_path
+
+sgroup.sensor_paths.sensor_path.append(new_sensorpath)
 ```
 
 ## Apply the SensorGroup object to the router
