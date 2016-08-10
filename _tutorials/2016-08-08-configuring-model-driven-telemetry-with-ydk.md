@@ -3,7 +3,7 @@ published: true
 date: '2016-08-08 17:52 -0600'
 title: Configuring Model-Driven Telemetry with YDK
 author: Shelly Cadora
-position: hidden
+position: top
 tags:
   - cisco
 ---
@@ -237,7 +237,7 @@ RP/0/RP0/CPU0:SunC#
 
 And that is all you need for Model-Driven Telemetry using gRPC dialin.
 
-## Clean Up, Clean Up, Everybody Clean Up
+## Clean up, clean up, everybody clean up!
 Let's delete the telemetry config completely and disconnect the NETCONF session:
 
 ```python
