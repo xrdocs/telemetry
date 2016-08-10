@@ -236,7 +236,7 @@ RP/0/RP0/CPU0:SunC#
 </div>
      
 ## Clean Up, Clean Up, Everybody Clean Up
-Let's delete all the config we added and disconnect the NETCONF session:
+Let's delete the telemetry config completely and disconnect the NETCONF session:
 
 ```python
 rpc_service.delete(xr, oc_telemetry.TelemetrySystem())
