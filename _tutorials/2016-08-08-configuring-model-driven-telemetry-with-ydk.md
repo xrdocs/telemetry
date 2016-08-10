@@ -27,10 +27,10 @@ USER = 'cisco'
 PASS = 'cisco'
 
 xr = NetconfServiceProvider(address=HOST,
-                                     port=PORT,
-                                     username=USER,
-                                     password=PASS,
-                                     protocol = 'ssh')
+	port=PORT,
+	username=USER,
+	password=PASS,
+	protocol = 'ssh')
 ```
 
 With that, we are now connected to the router:
@@ -87,7 +87,7 @@ module: openconfig-telemetry
 {{ output | markdownify }}
 </div>
 
-Start from the top and walk down from telemetry-system to sensor-groups to sensor-group.  Replace the dashes and lowercase syntax with CamelCase syntax and you get that first object: TelemetrySystem.SensorGroups.SensorGroup().  Down to the next level, we have the leaf "sensor-group-id."  YDK converts this to an object variable by replacing the hyphens with underscores.  The sensor-group-id list key is actually a leaf-ref to config/sensor-group-id, both of which are required (hence the two lines that seem redundant but are actually required for syntactic validation).
+Start from the top and walk down from telemetry-system to sensor-groups to sensor-group.  Replace the dashes and lowercase syntax with CamelCase syntax and you get the class that instantiates that first object: TelemetrySystem.SensorGroups.SensorGroup().  Down to the next level, we have the leaf "sensor-group-id."  YDK converts this to an object attribute by replacing the hyphens with underscores.  The sensor-group-id list key is actually a leaf-ref to config/sensor-group-id, both of which are required (hence the two lines that seem redundant but are actually required for syntactic validation).
 
 Going down a little farther in the YANG model with some help from some pyang options, we see that the sensor-group contains a list of sensor-paths.
 
@@ -122,7 +122,16 @@ new_sensorpath.config.path = 'Cisco-IOS-XR-infra-statsd-oper:infra-statistics%2f
 sgroup.sensor_paths.sensor_path.append(new_sensorpath)
 ```
 
-So again, following the YANG model, we define the top-level SensorPaths object, then a SensorPath with an object variable "path" that actually specifies the YANG model that we want to stream (in this case, our old friend, interface statistics).
+So again, following the YANG model, we define the top-level SensorPaths object, then a SensorPath with an object attribute "path" that actually specifies the YANG model that we want to stream (in this case, our old friend, interface statistics).
+
+Note that the "%2f" in the path attributes represent URL encodings of the forward slash character ("/").  The code would look a little better if you used a utility such as urllib to do the string substitution for you, so you can use the more natural looking path with "/" characters.  
+
+```python
+import urllib
+interface_stats_path = urllib.quote('Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters', safe=':')
+new_sensorpath.path = interface_stats_path
+new_sensorpath.config.path = interface_stats_path
+```
 
 ## Apply the SensorGroup object to the router
 
@@ -222,12 +231,9 @@ RP/0/RP0/CPU0:SunC#
 Let's delete all the config we added and disconnect the NETCONF session:
 
 ```python
-rpc_service.delete(xr, sgroup)
-rpc_service.delete(xr, sub)
+rpc_service.delete(xr, oc_telemetry.TelemetrySystem())
 xr.close()
 ```
 
 ## Conclusion
-In this tutorial, we looked at a couple dozen lines of YDK code that added and then removed five lines of CLI.  So you might be thinking "and that helps me be more efficient...how?"  But the power of automation in general and YDK in particular can't be fully revealed in a single, simple example like this.  The real power of YDK is that it allows you to do this for any YANG model on the box, automatically generating Python classes that inherit the syntactic checks and requirements of the underlying model, while also handling all the details of the underlying encoding and transport (no understanding of XML or NETCONF chunk framing required!).  The result is speed and scale at a whole new level.  Give a try and see what you think!
-
-
+In this tutorial, we looked at a couple dozen lines of YDK code that added and then removed five lines of CLI.  So you might be thinking "and that helps me be more efficient...how?"  But the power of automation in general and YDK in particular can't be fully revealed in a single, simple example like this.  The real power of YDK is that it allows you to do this for any YANG model on the box, automatically generating Python classes that inherit the syntactic checks and requirements of the underlying model, while also handling all the details of the underlying encoding and transport (no understanding of XML or NETCONF chunk framing required!).  Give a try and see what you think!
