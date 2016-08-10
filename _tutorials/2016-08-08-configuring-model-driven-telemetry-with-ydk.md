@@ -152,7 +152,7 @@ rpc_service = CRUDService()
 rpc_service.create(xr, sgroup)
 ```
 
-## Instantiate a Subscription Object and Apply It
+## Instantiate a Subscription object and apply it
 
 The Subscription is the final piece of the config.  Again, refer to the YANG model to understand the Python class that you should use.  I'll use pyang with the tree-path option to make it clearer:
 
@@ -207,7 +207,7 @@ sub.sensor_profiles.sensor_profile.append(new_sgroup)
 rpc_service.create(xr, sub)
 ```
 
-## What Did All That Code Do?
+## What did all that code do?
 
 So this is how all that shows up in CLI:
 
@@ -234,7 +234,9 @@ RP/0/RP0/CPU0:SunC#
 <div class="notice--info">
 {{ output | markdownify }}
 </div>
-     
+
+And that is all you need for Model-Driven Telemetry using gRPC dialin.
+
 ## Clean Up, Clean Up, Everybody Clean Up
 Let's delete the telemetry config completely and disconnect the NETCONF session:
 
