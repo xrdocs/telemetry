@@ -21,10 +21,10 @@ from ncclient import manager
 import re
     
 xr = manager.connect(host='10.30.111.9', port=830, username='cisco', password='cisco',
-                    allow_agent=False,
-                    look_for_keys=False,
-                    hostkey_verify=False,
-                    unknown_host_cb=True)
+	allow_agent=False,
+	look_for_keys=False,
+	hostkey_verify=False,
+	unknown_host_cb=True)
 
 for c in xr.server_capabilities:
     model = re.search('module=([^&]*telemetry[^&]*)&', c)
