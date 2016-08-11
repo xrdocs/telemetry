@@ -199,9 +199,9 @@ Script Output:
      </config>
      <sensor-paths>
       <sensor-path>
-       <path>openconfig-interfaces:interfaces%2finterface</path>
+       <path>openconfig-interfaces:interfaces/interface</path>
        <config>
-        <path>openconfig-interfaces:interfaces%2finterface</path>
+        <path>openconfig-interfaces:interfaces/interface</path>
        </config>
       </sensor-path>
      </sensor-paths>
@@ -318,15 +318,15 @@ Script Output:
      </config>
      <sensor-paths>
       <sensor-path>
-       <path>openconfig-interfaces:interfaces%2finterface</path>
+       <path>openconfig-interfaces:interfaces/interface</path>
        <config>
-        <path>openconfig-interfaces:interfaces%2finterface</path>
+        <path>openconfig-interfaces:interfaces/interface</path>
        </config>
       </sensor-path>
       <sensor-path>
-       <path>Cisco-IOS-XR-ipv4-arp-oper:arp%2fnodes%2fnode%2fentries%2fentry</path>
+       <path>Cisco-IOS-XR-ipv4-arp-oper:arp/nodes/node/entries/entry</path>
        <config>
-        <path>Cisco-IOS-XR-ipv4-arp-oper:arp%2fnodes%2fnode%2fentries%2fentry</path>
+        <path>Cisco-IOS-XR-ipv4-arp-oper:arp/nodes/node/entries/entry</path>
        </config>
       </sensor-path>
      </sensor-paths>
