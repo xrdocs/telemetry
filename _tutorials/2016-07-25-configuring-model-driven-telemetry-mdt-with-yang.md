@@ -279,7 +279,7 @@ edit_data = '''
      <sensor-paths>
       <sensor-path>
        <config>
-        <path>Cisco-IOS-XR-ipv4-arp-oper:arp%2fnodes%2fnode%2fentries%2fentry</path>
+        <path>Cisco-IOS-XR-ipv4-arp-oper:arp/nodes/node/entries/entry</path>
        </config>
       </sensor-path>
      </sensor-paths>
