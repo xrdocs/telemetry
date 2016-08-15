@@ -10,7 +10,7 @@ position: top
 ---
 ## Model-Driven Configuration for Model-Driven Telemetry
 
-In an [earlier tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/), I wrote about how to configure MDT using CLI.  But if the router is using YANG models to structure the operational data it streams, shouldn't we also be able to use models to configure the telemetry feature itself?  The answer is yes!  In this tutorial, we'll look at the XR YANG model for telemetry and how to configure it.  I will use [ncclient](https://github.com/ncclient/ncclient) as a simple Python NETCONF client, but you can use whatever client you want.  
+In an [earlier tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/), I wrote about how to configure MDT using CLI.  But if the router is using YANG models to structure the operational data it streams, shouldn't we also be able to use models to configure the telemetry feature itself?  The answer is yes!  In this tutorial, we'll look at the OpenConfig YANG model for telemetry and how to configure it.  I will use [ncclient](https://github.com/ncclient/ncclient) as a simple Python NETCONF client, but you can use whatever client you want.  
 
 ## The Models
 
@@ -49,7 +49,7 @@ Cisco-IOS-XR-telemetry-model-driven-cfg
 {{ output | markdownify }}
 </div>
 
-The first model is the [OpenConfig telemetry model](https://github.com/openconfig/public/blob/master/release/models/telemetry/openconfig-telemetry.yang) and the second is the XR native telemetry model.  If you look at them in detail, you will notice that the native model closely follows the OpenConfig model, although the native model will let you do things that are supported by IOS XR but not defined by OpenConfig (like disable TLS).  In this tutorial, I'll focus on openconfig-telemetry, but you could do everything with Cisco-IOS-XR-telemetry-model-driven-cfg as well.
+The first model is the [OpenConfig telemetry model](https://github.com/openconfig/public/blob/master/release/models/telemetry/openconfig-telemetry.yang) and the second is the XR native telemetry model.  If you look at them in detail, you will notice that the native model closely follows the OpenConfig model, although the native model will let you do things that are supported by IOS XR but not defined by this version of OpenConfig (like disabling TLS or enabling dial-out).  In this tutorial, I'll focus on openconfig-telemetry, but you could do everything with Cisco-IOS-XR-telemetry-model-driven-cfg as well.
 
 The NETCONF \<get-schema\> operation will give you the contents of the schema but the full YANG output can be really verbose and overwhelming, so I'll pipe the output to the [pyang](https://github.com/mbj4668/pyang) utility for a compact tree view with the following bit of code:
 
