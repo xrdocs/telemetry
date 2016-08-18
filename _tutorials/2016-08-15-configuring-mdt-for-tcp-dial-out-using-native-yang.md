@@ -119,9 +119,7 @@ Let's see how this works in practice.
 
 We can use the openconfig-telemetry model to filter for the telemetry config with the ncclient get_config operation. Continuing our python script from above:
 
-
 ```python      
-
 xr_filter = '''<telemetry-model-driven xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-telemetry-model-driven-cfg">'''
 
 c = xr.get_config(source='running', filter=('subtree', xr_filter))
