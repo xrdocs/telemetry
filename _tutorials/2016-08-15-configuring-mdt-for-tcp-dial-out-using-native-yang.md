@@ -482,7 +482,7 @@ telemetry model-driven
 
 
 ## Clean-up Time
-Since it's always a good idea to be able to remove what you configure, here's the XML instantiation of the YANG model to do that.
+Since it's always a good idea to be able to remove what you configure, here's the XML instantiation of the YANG model to do that using the "remove" operation.  There are other ways to do this, but this is the most surgical.
 
 ```python
 edit_data = '''
@@ -529,7 +529,7 @@ xr.commit()
 
 ## Conclusion
 
-Armed with the examples in this blog and a understanding of the telemetry YANG model, you should now be able to use YANG configuration models to configure the router to stream YANG models with the operational data you want.  How's that for model-driven programmability?
+The IOS XR native telemetry YANG model exposes the full range of functionality in Model-Driven Telemetry.  Hopefully the examples in this tutorial will get you started with configuring MDT in a programmatic way.  
 
 
 Prose
