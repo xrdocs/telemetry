@@ -6,7 +6,7 @@ title: Configuring MDT for TCP Dial-out Using Native YANG
 
 ## Getting the Most out of MDT with Native YANG
 
-In an [earlier tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-25-configuring-model-driven-telemetry-mdt-with-yang/), I wrote about how to configure an MDT for gRPC dial-in using the OpenConfig Telemetry YANG model.  In this tutorial, I'll describe how to use the IOS XR Native YANG model to configure MDT with TCP dialout.  I will use [ncclient](https://github.com/ncclient/ncclient) as a simple Python NETCONF client, but you can use whatever client you want.
+In an [earlier tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-25-configuring-model-driven-telemetry-mdt-with-yang/), I wrote about how to configure an MDT for gRPC dial-in using the OpenConfig Telemetry YANG model.  In this tutorial, I'll describe how to use the IOS XR Native YANG model to configure MDT with TCP and gRPC dialout.  I will use [ncclient](https://github.com/ncclient/ncclient) as a simple Python NETCONF client, but you can use whatever client you want.
 
 ## The Model
 
@@ -129,9 +129,7 @@ print(c)
 
 ```
 
-
 And here's what we get:  
-
 
 {% capture "output" %}
 
@@ -250,9 +248,86 @@ telemetry model-driven
 
 ## Edit-Config
 
-So let's say we want to add a second model to SGroup1 (Cisco-IOS-XR-ipv4-arp-oper).  We can do that with the following NETCONF operations:
+So let's say we want to add a second model (Cisco-IOS-XR-wdsysmon-fd-oper) to SGroup1 to stream cpu utilization data.  We can do that with the following NETCONF operations:
 
-Now let's add an IPv6 destination to DGroup1. You can do that with the following NETCONF operation:
+```python
+edit_data = '''
+<config>
+<telemetry-model-driven xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-telemetry-model-driven-cfg">
+   <sensor-groups>
+    <sensor-group>
+     <sensor-group-identifier>SGroup1</sensor-group-identifier>
+     <sensor-paths>
+      <sensor-path>
+       <telemetry-sensor-path>Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring</telemetry-sensor-path>
+      </sensor-path>
+     </sensor-paths>
+    </sensor-group>
+   </sensor-groups>
+  </telemetry-model-driven>
+</config>
+'''
+
+xr.edit_config(edit_data, target='candidate', format='xml')
+xr.commit()
+```
+
+If we do a get-config operation again, this time filtering on just the sensor-groups:  
+
+
+```python
+
+xr_filter = '''<telemetry-model-driven xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-telemetry-model-driven-cfg"><sensor-groups>'''
+
+c = xr.get_config(source='running', filter=('subtree', xr_filter))
+
+print(c)
+
+```
+
+
+... we'll see that SGroup1 has the new sensor-path.  
+
+
+{% capture "output" %}
+
+Script Output:
+
+```
+<?xml version="1.0"?>
+<rpc-reply message-id="urn:uuid:dbcef1db-83af-43f0-b2fe-153c53fc1f82" xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+ <data>
+  <telemetry-model-driven xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-telemetry-model-driven-cfg">
+   <sensor-groups>
+    <sensor-group>
+     <sensor-group-identifier>SGroup1</sensor-group-identifier>
+     <enable></enable>
+     <sensor-paths>
+      <sensor-path>
+       <telemetry-sensor-path>Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring</telemetry-sensor-path>
+      </sensor-path>
+      <sensor-path>
+       <telemetry-sensor-path>Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters</telemetry-sensor-path>
+      </sensor-path>
+     </sensor-paths>
+    </sensor-group>
+   </sensor-groups>
+  </telemetry-model-driven>
+ </data>
+</rpc-reply>
+```
+
+{% endcapture %}
+
+
+<div class="notice--warning">
+
+{{ output | markdownify }}
+
+</div>
+
+
+Now let's add an IPv6 destination to DGroup1 using gRPC dial-out and self-describing GPB encoding. You can do that with the following NETCONF operation:
 
 ```python
 
@@ -376,31 +451,28 @@ CLI Output:
 
 RP/0/RP0/CPU0:SunC#show run telemetry model-driven
 
-Mon Aug  8 20:09:57.149 UTC
-
 telemetry model-driven
-
- sensor-group SGroup3
-
-  sensor-path openconfig-interfaces:interfaces/interface
-
-  sensor-path Cisco-IOS-XR-ipv4-arp-oper:arp/nodes/node/entries/entry
-
+ destination-group DGroup1
+  address family ipv4 172.30.8.4 port 5432
+   encoding self-describing-gpb
+   protocol tcp
+  !
+  address family ipv6 2001:db8:0:100::b port 5432
+   encoding self-describing-gpb
+   protocol grpc
+  !
  !
-
- subscription Sub3
-
-  sensor-group-id SGroup3 sample-interval 30000
-
+ sensor-group SGroup1
+  sensor-path Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring
+  sensor-path Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters
  !
-
-!
+ subscription Sub1
+  sensor-group-id SGroup1 sample-interval 30000
+  destination-id DGroup1
 
 ```
 
 {% endcapture %}
-
-​
 
 <div class="notice--info">
 
@@ -408,13 +480,57 @@ telemetry model-driven
 
 </div>
 
-​
+
+## Clean-up Time
+Since it's always a good idea to be able to remove what you configure, here's the XML instantiation of the YANG model to do that.
+
+```python
+edit_data = '''
+<config>
+<telemetry-model-driven xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-telemetry-model-driven-cfg">
+   <sensor-groups>
+    <sensor-group>
+     <sensor-group-identifier>SGroup1</sensor-group-identifier>
+     <enable></enable>
+     <sensor-paths>
+      <sensor-path nc:operation="remove">
+       <telemetry-sensor-path >Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring</telemetry-sensor-path>
+      </sensor-path>
+     </sensor-paths>
+    </sensor-group>
+   </sensor-groups>
+  <destination-groups>
+    <destination-group>
+     <destination-id>DGroup1</destination-id>
+     <destinations>
+      <destination >
+       <address-family>ipv6</address-family>
+       <ipv6 nc:operation="delete">
+        <ipv6-address>2001:db8:0:100::b</ipv6-address>
+        <destination-port>5432</destination-port>
+        <encoding>self-describing-gpb</encoding>
+        <protocol>
+         <protocol>tcp</protocol>
+         <tls-hostname></tls-hostname>
+         <no-tls>0</no-tls>
+        </protocol>
+       </ipv6>
+      </destination>
+     </destinations>
+    </destination-group>
+   </destination-groups>
+  </telemetry-model-driven>
+  </config>
+'''
+
+xr.edit_config(edit_data, target='candidate', format='xml')
+xr.commit()
+```
 
 ## Conclusion
 
 Armed with the examples in this blog and a understanding of the telemetry YANG model, you should now be able to use YANG configuration models to configure the router to stream YANG models with the operational data you want.  How's that for model-driven programmability?
 
-​
 
 Prose
 
