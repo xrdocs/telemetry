@@ -10,7 +10,7 @@ In an [earlier tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-25
 
 ## The Model
 
-The Cisco IOS XR Native YANG model for telemetry is "Cisco-IOS-XR-telemetry-model-driven-cfg."  It can be used to configure any telemetry feature that IOS XR (unlike the OpenConfig model, which only covers a subset of IOS XR capabilities).
+The Cisco IOS XR Native YANG model for telemetry is "Cisco-IOS-XR-telemetry-model-driven-cfg."  It can be used to configure any telemetry feature that IOS XR (unlike the OpenConfig telemetry model, which only covers a subset of IOS XR capabilities).
 
 The NETCONF \<get-schema\> operation will give you the contents of the schema but the full YANG output can be really verbose and overwhelming, so I'll pipe the output to the [pyang](https://github.com/mbj4668/pyang) utility for a compact tree view with the following bit of code:
 
@@ -115,133 +115,89 @@ Let's see how this works in practice.
 
 ## Get-Config
 
-​
 
-We can use the openconfig-telemetry model to filter for the telemetry config with the ncclient get_config operation:
+We can use the openconfig-telemetry model to filter for the telemetry config with the ncclient get_config operation. Continuing our python script from above:
 
-​
 
 ```python      
 
-filter = '''<telemetry-system xmlns="http://openconfig.net/yang/telemetry">'''
+xr_filter = '''<telemetry-model-driven xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-telemetry-model-driven-cfg">'''
 
-​
-
-c = xr.get_config(source='running', filter=('subtree', filter))
-
-​
+c = xr.get_config(source='running', filter=('subtree', xr_filter))
 
 print(c)
 
 ```
 
-​
 
 And here's what we get:  
 
-​
 
 {% capture "output" %}
 
 Script Output:
 
-​
-
 ```
-
 <?xml version="1.0"?>
-
-<rpc-reply message-id="urn:uuid:939c718e-81ee-43ec-9733-565aa53fedb2" xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
-
+<rpc-reply message-id="urn:uuid:1ddd326c-e2c8-46b1-8433-11283799b9ce" xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
  <data>
-
-  <telemetry-system xmlns="http://openconfig.net/yang/telemetry">
-
+  <telemetry-model-driven xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-telemetry-model-driven-cfg">
+   <destination-groups>
+    <destination-group>
+     <destination-id>DGroup1</destination-id>
+     <destinations>
+      <destination>
+       <address-family>ipv4</address-family>
+       <ipv4>
+        <ipv4-address>172.30.8.4</ipv4-address>
+        <destination-port>5432</destination-port>
+        <encoding>self-describing-gpb</encoding>
+        <protocol>
+         <protocol>tcp</protocol>
+         <tls-hostname></tls-hostname>
+         <no-tls>0</no-tls>
+        </protocol>
+       </ipv4>
+      </destination>
+     </destinations>
+    </destination-group>
+   </destination-groups>
    <sensor-groups>
-
     <sensor-group>
-
-     <sensor-group-id>SGroup3</sensor-group-id>
-
-     <config>
-
-      <sensor-group-id>SGroup3</sensor-group-id>
-
-     </config>
-
+     <sensor-group-identifier>SGroup1</sensor-group-identifier>
+     <enable></enable>
      <sensor-paths>
-
       <sensor-path>
-
-       <path>openconfig-interfaces:interfaces/interface</path>
-
-       <config>
-
-        <path>openconfig-interfaces:interfaces/interface</path>
-
-       </config>
-
+       <telemetry-sensor-path>Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters</telemetry-sensor-path>
       </sensor-path>
-
      </sensor-paths>
-
     </sensor-group>
-
    </sensor-groups>
-
+   <enable></enable>
    <subscriptions>
-
-    <persistent>
-
-     <subscription>
-
-      <subscription-id>Sub3</subscription-id>
-
-      <config>
-
-       <subscription-id>Sub3</subscription-id>
-
-      </config>
-
-      <sensor-profiles>
-
-       <sensor-profile>
-
-        <sensor-group>SGroup3</sensor-group>
-
-        <config>
-
-         <sensor-group>SGroup3</sensor-group>
-
-         <sample-interval>30000</sample-interval>
-
-        </config>
-
-       </sensor-profile>
-
-      </sensor-profiles>
-
-     </subscription>
-
-    </persistent>
-
+    <subscription>
+     <subscription-identifier>Sub1</subscription-identifier>
+     <sensor-profiles>
+      <sensor-profile>
+       <sensorgroupid>SGroup1</sensorgroupid>
+       <sample-interval>30000</sample-interval>
+      </sensor-profile>
+     </sensor-profiles>
+     <destination-profiles>
+      <destination-profile>
+       <destination-id>DGroup1</destination-id>
+       <enable></enable>
+      </destination-profile>
+     </destination-profiles>
+    </subscription>
    </subscriptions>
-
-  </telemetry-system>
-
+  </telemetry-model-driven>
  </data>
-
 </rpc-reply>
-
-​
-
-​
 
 ```  
 
 {% endcapture %}
-
-​
 
 <div class="notice--warning">
 
@@ -249,53 +205,41 @@ Script Output:
 
 </div>
 
-​
-
 So what does all that mean to the router?  It breaks down into three parts which you'll recall from the YANG model above:  
 
-​
 
-- The **destination-group** tells the router where to send telemetry data and how.  The absence of a destination-group in the output above alerts us to the fact that this is a dial-in configuration (the collector will initiate the session to the router).
+- The **destination-group** tells the router where to send telemetry data and how.  The destination group in this configuration ("DGroup1") will send telemetry data to an IPv4 address (172.30.8.4) on port 5432 with a self-describing GPB encoding via TCP.
 
-- The **sensor-group** identifies a list of YANG models that the router should stream.  In this case, the router has a sensor-group called "SGroup3" that will send interface statistics data from the OpenConfig Interfaces YANG model.
+- The **sensor-group** identifies a list of YANG models that the router should stream.  In this case, the router has a sensor-group called "SGroup1" that will send interface statistics data from the IOS XR native YANG model for interface stats.
 
-- The **subscription** ties together the destination-group and the sensor-group.  This router has a subscription name "Sub3" that will send the list of models in SGroup3 at an interval of 30 second (30000 milleseconds).  
+- The **subscription** ties together the destination-group and the sensor-group.  This router has a subscription name "Sub1" that will send the list of models in SGroup1 to DGroup1 at an interval of 30 second (30000 milleseconds).  
 
-​
 
-If you read the [earlier tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/) on configuring MDT with CLI, you might recognize this as the same as the gRPC dial-in configuration described there.  If you missed that thrilling installment, the XML above is the YANG equivalent of this CLI:  
+If you read the [earlier tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/) on configuring MDT with CLI, you might recognize this as the same as the TCP dial-out configuration described there.  If you missed that thrilling installment, the XML above is the YANG equivalent of this CLI:  
 
-​
 
 {% capture "output" %}
 
 CLI Output:
 
-​
-
 ```
-
-telemetry model-driven
-
- sensor-group SGroup3
-
-  sensor-path openconfig-interfaces:interfaces/interface
-
+telemetry model-driven  
+ destination-group DGroup1  
+   address family ipv4 172.30.8.4 port 5432  
+   encoding self-describing-gpb  
+   protocol tcp
+  !
  !
-
- subscription Sub3
-
-  sensor-group-id SGroup3 sample-interval 30000
-
+ sensor-group SGroup1
+  sensor-path Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters
  !  
+ subscription Sub1  
+  sensor-group-id SGroup1 sample-interval 30000  
+  destination-id DGroup1 
 
 ``` 
 
-​
-
 {% endcapture %}
-
-​
 
 <div class="notice--info">
 
@@ -303,193 +247,116 @@ telemetry model-driven
 
 </div>
 
-​
 
 ## Edit-Config
 
-​
+So let's say we want to add a second model to SGroup1 (Cisco-IOS-XR-ipv4-arp-oper).  We can do that with the following NETCONF operations:
 
-So let's say we want to add a second model to SGroup3 (Cisco-IOS-XR-ipv4-arp-oper).  We can do that with the following NETCONF operations:
-
-​
+Now let's add an IPv6 destination to DGroup1. You can do that with the following NETCONF operation:
 
 ```python
 
 edit_data = '''
-
 <config>
-
-<telemetry-system xmlns="http://openconfig.net/yang/telemetry">
-
-   <sensor-groups>
-
-    <sensor-group>
-
-     <sensor-group-id>SGroup3</sensor-group-id>
-
-     <sensor-paths>
-
-      <sensor-path>
-
-       <config>
-
-        <path>Cisco-IOS-XR-ipv4-arp-oper:arp/nodes/node/entries/entry</path>
-
-       </config>
-
-      </sensor-path>
-
-     </sensor-paths>
-
-    </sensor-group>
-
-   </sensor-groups>
-
+<telemetry-model-driven xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-telemetry-model-driven-cfg">
+   <destination-groups>
+    <destination-group>
+     <destination-id>DGroup1</destination-id>
+     <destinations>
+      <destination>
+       <address-family>ipv6</address-family>
+       <ipv6>
+        <ipv6-address>2001:db8:0:100::b</ipv6-address>
+        <destination-port>5432</destination-port>
+        <encoding>self-describing-gpb</encoding>
+        <protocol>
+         <protocol>grpc</protocol>
+         <tls-hostname></tls-hostname>
+         <no-tls>0</no-tls>
+        </protocol>
+       </ipv6>
+      </destination>
+     </destinations>
+    </destination-group>
+   </destination-groups>
+  </telemetry-model-driven>
 </config>
-
 '''
 
-​
-
 xr.edit_config(edit_data, target='candidate', format='xml')
-
 xr.commit()
 
 ```
 
-​
+If we do a get-config operation again, this time filtering on just the destination group:  
 
-If we do a get-config operation again:  
-
-​
 
 ```python
 
-c = xr.get_config(source='running', filter=('subtree', filter))
+xr_filter = '''<telemetry-model-driven xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-telemetry-model-driven-cfg"><destination-groups>'''
+
+c = xr.get_config(source='running', filter=('subtree', xr_filter))
 
 print(c)
 
 ```
 
-​
 
-... we'll see that SGroup3 has the new addition.  
+... we'll see that DGroup1 has the new destination.  
 
-​
-
-​
 
 {% capture "output" %}
 
 Script Output:
 
-​
-
 ```
 
 <?xml version="1.0"?>
-
-<rpc-reply message-id="urn:uuid:abd0a7ee-5f06-4754-b2a3-dae6e3d797aa" xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
-
+<rpc-reply message-id="urn:uuid:d3b9beaa-9b69-4f5c-a7a8-5d3dc106ce0f" xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
  <data>
-
-  <telemetry-system xmlns="http://openconfig.net/yang/telemetry">
-
-   <sensor-groups>
-
-    <sensor-group>
-
-     <sensor-group-id>SGroup3</sensor-group-id>
-
-     <config>
-
-      <sensor-group-id>SGroup3</sensor-group-id>
-
-     </config>
-
-     <sensor-paths>
-
-      <sensor-path>
-
-       <path>openconfig-interfaces:interfaces/interface</path>
-
-       <config>
-
-        <path>openconfig-interfaces:interfaces/interface</path>
-
-       </config>
-
-      </sensor-path>
-
-      <sensor-path>
-
-       <path>Cisco-IOS-XR-ipv4-arp-oper:arp/nodes/node/entries/entry</path>
-
-       <config>
-
-        <path>Cisco-IOS-XR-ipv4-arp-oper:arp/nodes/node/entries/entry</path>
-
-       </config>
-
-      </sensor-path>
-
-     </sensor-paths>
-
-    </sensor-group>
-
-   </sensor-groups>
-
-   <subscriptions>
-
-    <persistent>
-
-     <subscription>
-
-      <subscription-id>Sub3</subscription-id>
-
-      <config>
-
-       <subscription-id>Sub3</subscription-id>
-
-      </config>
-
-      <sensor-profiles>
-
-       <sensor-profile>
-
-        <sensor-group>SGroup3</sensor-group>
-
-        <config>
-
-         <sensor-group>SGroup3</sensor-group>
-
-         <sample-interval>30000</sample-interval>
-
-        </config>
-
-       </sensor-profile>
-
-      </sensor-profiles>
-
-     </subscription>
-
-    </persistent>
-
-   </subscriptions>
-
-  </telemetry-system>
-
+  <telemetry-model-driven xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-telemetry-model-driven-cfg">
+   <destination-groups>
+    <destination-group>
+     <destination-id>DGroup1</destination-id>
+     <destinations>
+      <destination>
+       <address-family>ipv4</address-family>
+       <ipv4>
+        <ipv4-address>172.30.8.4</ipv4-address>
+        <destination-port>5432</destination-port>
+        <encoding>self-describing-gpb</encoding>
+        <protocol>
+         <protocol>tcp</protocol>
+         <tls-hostname></tls-hostname>
+         <no-tls>0</no-tls>
+        </protocol>
+       </ipv4>
+      </destination>
+      <destination>
+       <address-family>ipv6</address-family>
+       <ipv6>
+        <ipv6-address>2001:db8:0:100::b</ipv6-address>
+        <destination-port>5432</destination-port>
+        <encoding>self-describing-gpb</encoding>
+        <protocol>
+         <protocol>grpc</protocol>
+         <tls-hostname></tls-hostname>
+         <no-tls>0</no-tls>
+        </protocol>
+       </ipv6>
+      </destination>
+     </destinations>
+    </destination-group>
+   </destination-groups>
+  </telemetry-model-driven>
  </data>
-
 </rpc-reply>
 
-​
 
 ```
 
 {% endcapture %}
 
-​
 
 <div class="notice--warning">
 
@@ -497,17 +364,13 @@ Script Output:
 
 </div>
 
-​
 
 And if you need some CLI to reassure yourself that it worked, here it is:
-
-​
 
 {% capture "output" %}
 
 CLI Output:
 
-​
 
 ```
 
@@ -560,5 +423,3 @@ Prose
     Developers
     Language
     Logout
-
-
