@@ -1,7 +1,7 @@
 ---
 published: true
 date: '2016-08-08 17:52 -0600'
-title: Configuring Model-Driven Telemetry with YDK
+title: Configuring Model-Driven Telemetry (MDT) with YDK
 author: Shelly Cadora
 position: top
 tags:
