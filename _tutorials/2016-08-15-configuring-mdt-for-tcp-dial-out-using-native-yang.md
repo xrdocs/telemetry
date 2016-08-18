@@ -216,6 +216,7 @@ If you read the [earlier tutorial](https://xrdocs.github.io/telemetry/tutorials/
 {% capture "output" %}
 
 CLI Output:
+
 ```
 telemetry model-driven  
  destination-group DGroup1  
