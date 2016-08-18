@@ -211,7 +211,7 @@ So what does all that mean to the router?  It breaks down into three parts which
 
 - The **destination-group** tells the router where to send telemetry data and how.  The destination group in this configuration ("DGroup1") will send telemetry data to an IPv4 address (172.30.8.4) on port 5432 with a self-describing GPB encoding via TCP.
 
-- The **sensor-group** identifies a list of YANG models that the router should stream.  In this case, the router has a sensor-group called "SGroup1" that will send interface statistics data from the IOS XR native YANG model for interface stats.
+- The **sensor-group** identifies a list of YANG models that the router should stream.  In this case, the router has a sensor-group called "SGroup1" that will send interface statistics data from the IOS XR Native YANG model for interface stats.
 
 - The **subscription** ties together the destination-group and the sensor-group.  This router has a subscription name "Sub1" that will send the list of models in SGroup1 to DGroup1 at an interval of 30 second (30000 milleseconds).  
 
@@ -277,7 +277,6 @@ xr.commit()
 
 If we do a get-config operation again, this time filtering on just the sensor-groups:  
 
-
 ```python
 
 xr_filter = '''<telemetry-model-driven xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-telemetry-model-driven-cfg"><sensor-groups>'''
@@ -287,7 +286,6 @@ c = xr.get_config(source='running', filter=('subtree', xr_filter))
 print(c)
 
 ```
-
 
 ... we'll see that SGroup1 has the new sensor-path.  
 
@@ -329,11 +327,9 @@ Script Output:
 
 </div>
 
-
 Now let's add an IPv6 destination to DGroup1 using gRPC dial-out and self-describing GPB encoding. You can do that with the following NETCONF operation:
 
 ```python
-
 edit_data = '''
 <config>
 <telemetry-model-driven xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-telemetry-model-driven-cfg">
@@ -368,7 +364,6 @@ xr.commit()
 
 If we do a get-config operation again, this time filtering on just the destination group:  
 
-
 ```python
 
 xr_filter = '''<telemetry-model-driven xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-telemetry-model-driven-cfg"><destination-groups>'''
@@ -379,16 +374,13 @@ print(c)
 
 ```
 
-
 ... we'll see that DGroup1 has the new destination.  
 
 
 {% capture "output" %}
 
 Script Output:
-
 ```
-
 <?xml version="1.0"?>
 <rpc-reply message-id="urn:uuid:d3b9beaa-9b69-4f5c-a7a8-5d3dc106ce0f" xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
  <data>
@@ -430,7 +422,6 @@ Script Output:
  </data>
 </rpc-reply>
 
-
 ```
 
 {% endcapture %}
@@ -449,9 +440,7 @@ And if you need some CLI to reassure yourself that it worked, here it is:
 
 CLI Output:
 
-
 ```
-
 RP/0/RP0/CPU0:SunC#show run telemetry model-driven
 
 telemetry model-driven
@@ -482,7 +471,6 @@ telemetry model-driven
 {{ output | markdownify }}
 
 </div>
-
 
 ## Clean-up Time
 Since it's always a good idea to be able to remove what you configure, here's the XML instantiation of the YANG model to do that using the "remove" operation.  There are other ways to do this, but this is the most surgical.
@@ -528,11 +516,13 @@ edit_data = '''
 
 xr.edit_config(edit_data, target='candidate', format='xml')
 xr.commit()
+
+xr.close_session()
 ```
 
 ## Conclusion
 
-The IOS XR native telemetry YANG model exposes the full range of functionality in Model-Driven Telemetry.  Hopefully the examples in this tutorial will get you started with configuring MDT in a programmatic way.  
+The IOS XR Native telemetry YANG model exposes the full range of functionality in Model-Driven Telemetry.  The examples in this tutorial should get you started with configuring MDT in a programmatic way.  
 
 
 Prose
