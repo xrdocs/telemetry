@@ -18,7 +18,6 @@ The Cisco IOS XR Native YANG model for telemetry is "Cisco-IOS-XR-telemetry-mode
 The NETCONF \<get-schema\> operation will give you the contents of the schema but the full YANG output can be really verbose and overwhelming, so I'll pipe the output to the [pyang](https://github.com/mbj4668/pyang) utility for a compact tree view with the following bit of code:
 
 ```python
-
 from ncclient import manager
 import re
     
@@ -118,7 +117,6 @@ Let's see how this works in practice.
 
 ## Get-Config
 
-
 We can use the openconfig-telemetry model to filter for the telemetry config with the ncclient get_config operation. Continuing our python script from above:
 
 
@@ -208,7 +206,6 @@ Script Output:
 
 So what does all that mean to the router?  It breaks down into three parts which you'll recall from the YANG model above:  
 
-
 - The **destination-group** tells the router where to send telemetry data and how.  The destination group in this configuration ("DGroup1") will send telemetry data to an IPv4 address (172.30.8.4) on port 5432 with a self-describing GPB encoding via TCP.
 
 - The **sensor-group** identifies a list of YANG models that the router should stream.  In this case, the router has a sensor-group called "SGroup1" that will send interface statistics data from the IOS XR Native YANG model for interface stats.
@@ -218,11 +215,9 @@ So what does all that mean to the router?  It breaks down into three parts which
 
 If you read the [earlier tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/) on configuring MDT with CLI, you might recognize this as the same as the TCP dial-out configuration described there.  If you missed that thrilling installment, the XML above is the YANG equivalent of this CLI:  
 
-
 {% capture "output" %}
 
 CLI Output:
-
 ```
 telemetry model-driven  
  destination-group DGroup1  
@@ -278,7 +273,6 @@ xr.commit()
 If we do a get-config operation again, this time filtering on just the sensor-groups:  
 
 ```python
-
 xr_filter = '''<telemetry-model-driven xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-telemetry-model-driven-cfg"><sensor-groups>'''
 
 c = xr.get_config(source='running', filter=('subtree', xr_filter))
@@ -359,19 +353,16 @@ edit_data = '''
 
 xr.edit_config(edit_data, target='candidate', format='xml')
 xr.commit()
-
 ```
 
 If we do a get-config operation again, this time filtering on just the destination group:  
 
 ```python
-
 xr_filter = '''<telemetry-model-driven xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-telemetry-model-driven-cfg"><destination-groups>'''
 
 c = xr.get_config(source='running', filter=('subtree', xr_filter))
 
 print(c)
-
 ```
 
 ... we'll see that DGroup1 has the new destination.  
@@ -381,6 +372,7 @@ print(c)
 
 Script Output:
 ```
+
 <?xml version="1.0"?>
 <rpc-reply message-id="urn:uuid:d3b9beaa-9b69-4f5c-a7a8-5d3dc106ce0f" xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
  <data>
