@@ -4,7 +4,7 @@ date: '2016-08-15 14:05 -0600'
 title: Configuring MDT for Dial-out Using Native YANG
 tags:
   - iosxr
-postion: hidden
+postion: top
 ---
 
 ## Getting the Most out of MDT with Native YANG
