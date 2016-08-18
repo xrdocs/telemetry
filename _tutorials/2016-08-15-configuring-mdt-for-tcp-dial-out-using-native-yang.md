@@ -371,8 +371,8 @@ print(c)
 {% capture "output" %}
 
 Script Output:
-```
 
+```
 <?xml version="1.0"?>
 <rpc-reply message-id="urn:uuid:d3b9beaa-9b69-4f5c-a7a8-5d3dc106ce0f" xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
  <data>
