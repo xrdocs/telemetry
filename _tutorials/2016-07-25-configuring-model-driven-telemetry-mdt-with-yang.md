@@ -1,7 +1,7 @@
 ---
 published: true
 date: '2016-07-25 11:42 -0600'
-title: Configuring Model-Driven Telemetry (MDT) with YANG
+title: Configuring Model-Driven Telemetry (MDT) with OpenConfig YANG
 author: Shelly Cadora
 excerpt: Describes how to configure MDT with YANG models
 tags:
