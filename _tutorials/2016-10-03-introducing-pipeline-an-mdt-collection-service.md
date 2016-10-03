@@ -7,7 +7,7 @@ excerpt: >-
   Describes how to use the open source pipeline utility to collect and transform
   telemetry data for consumption by various applications
 ---
-## 
+## Using Pipeline 
 In an earlier blog (link) , I introduced Pipeline, a multi-function collection service written in Go.  In this tutorial, I'll cover how to set up Pipeline for the simplest of tasks:  ingesting telemetry data over TCP and writing it to a file as a JSON object.
 
 ### Preparing the Router
@@ -21,7 +21,7 @@ The pipeline.conf file contains all the configuration necessary to get Pipeline 
 
 The pipeline configuration is divided up into sections.  Each section is delineated by an arbitrary name enclosed in square brackets.  Each section defines either an input stage ("stage = xport_input") or an output stage ("stage = export_output").  Other parameters in the section tell Pipeline what to listen for (in the case of an input stage) or how to output the data (for an output stage).
 
-The easiest way to understand this is to look at specific examples.
+The easiest way to understand this is to look at a simple example.
 
 ### Configuring the Input Stage for TCP Dial-Out
 Let's take a look at the TCP dial-out section in the default pipeline.conf.
