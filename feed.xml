@@ -9,7 +9,7 @@ layout: null
 		<description>{% if site.description %}{{ site.description | xml_escape }}{% endif %}</description>
 		<link>{{ base_path }}</link>
 		<atom:link href="{{ base_path }}/{{ page.path }}" rel="self" type="application/rss+xml" />
-		{% for post in site.blogs limit:10 %}
+		{% for post in site.blogs %}
       {% unless post.position == "hidden" %}
 			<item>
 				<title>{{ post.title | xml_escape }}</title>
@@ -27,7 +27,7 @@ layout: null
 			</item>
       {% endunless %}
 		{% endfor %}
-    {% for post in site.tutorials limit:10 %}
+    {% for post in site.tutorials %}
       {% unless post.position == "hidden" %}
       <item>
         <title>{{ post.title | xml_escape }}</title>
