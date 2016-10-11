@@ -13,8 +13,7 @@ One of the most commonly polled MIBs is the Interfaces MIB (IF-MIB).  Pretty muc
 
 Below is a list of the most commonly requested IF-MIB OIDs, their YANG models, containers and leafs.  All the OID data is available through MDT, but there are some gotchas.  For example, telemetry and SNMP might return the values with different units or SNMP might return an enum where telemetry returns a string, etc.
 
-| OID     | Yang-Path                                                      | YANG Leaf  |
- Notes |
+| OID     | Yang-Path                                                      | YANG Leaf  | Notes |
 |---------|----------------------------------------------------------------|------------|  |
 | IF-MIB | ifAlias | Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface | description|  |
 |ifHCInBroadcastPkts|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|broadcast-packets-received|  |
