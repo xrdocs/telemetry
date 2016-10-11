@@ -11,7 +11,8 @@ tags:
 
 One of the most commonly polled MIBs is the Interfaces MIB (IF-MIB).  Pretty much everyone needs to know how many packets and bytes were sent and received on a given interface.  So it's not surprising that one of the first questions we get is how to get the IF-MIB data from MDT. 
 
-Below is a list of the most commonly requested IF-MIB OIDs, their corresponding YANG models, containers, leafs and any usage notes.  As you can see, most of the interface statistics are in the Cisco-IOS-XR-infra-statsd-oper.yang model, with some state parameters in Cisco-IOS-XR-infra-statsd-oper, and a couple SNMP-specific values in Cisco-IOS-XR-snmp-agent-oper.  
+Below is a list of the most commonly requested IF-MIB OIDs, their corresponding YANG models, containers, leafs and any usage notes.  
+
 
 | OID     | Yang-Path                                                      | YANG Leaf  | Notes |
 |---------|----------------------------------------------------------------|------------|  |
@@ -45,6 +46,8 @@ Below is a list of the most commonly requested IF-MIB OIDs, their corresponding 
 
 
 As you can see, most of the interface statistics are in the Cisco-IOS-XR-infra-statsd-oper.yang model, with some state parameters in Cisco-IOS-XR-infra-statsd-oper, and a couple SNMP-specific values in Cisco-IOS-XR-snmp-agent-oper.  
+
+### MDT Configuration for IF-MIB equivalence
 
 Leaving aside the SNMP-specific parameters, here is what the sensor-path configuration in MDT would look like for the IF-MIB:
 
