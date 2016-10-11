@@ -13,7 +13,7 @@ One of the most commonly polled MIBs is the Interfaces MIB (IF-MIB).  Pretty muc
 
 ### MDT Configuration for IF-MIB equivalence
 
-As you can see from the [table below](#oid-yang-table), most of the interface statistics are in the Cisco-IOS-XR-infra-statsd-oper.yang model, with some state parameters in Cisco-IOS-XR-infra-statsd-oper, and a couple SNMP-specific values in Cisco-IOS-XR-snmp-agent-oper.  
+As you can see from the [table below](#oid-yang-table), most of the interface statistics are in the Cisco-IOS-XR-infra-statsd-oper.yang model, with some state parameters in Cisco-IOS-XR-infra-statsd-oper.yang, and a couple SNMP-specific values in Cisco-IOS-XR-snmp-agent-oper.yang.  
 
 Leaving aside the SNMP-specific parameters, here is what the sensor-path configuration in MDT would look like for the IF-MIB:
 
