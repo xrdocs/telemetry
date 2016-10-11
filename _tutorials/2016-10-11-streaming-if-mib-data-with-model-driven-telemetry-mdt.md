@@ -22,12 +22,8 @@ Below is a list of the most commonly requested IF-MIB OIDs, their YANG models, c
 |IF-MIB|ifHCOutBroadcastPkts|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|broadcast-packets-sent|
 |IF-MIB|ifHCOutMulticastPkts|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|multicast-packets-sent|
 |IF-MIB|ifHCOutUcastPkts|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|packets-sent|
-|IF-MIB|ifIndex|" |
-|Sensor-path: Cisco-IOS-XR-snmp-agent-oper:snmp/interface-indexes/|
-|"|if-index|
-|IF-MIB|ifLastChange|"|
-|Sensor-path: Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface|
-|"|last-state-transition-time|
+|IF-MIB|ifIndex|Cisco-IOS-XR-snmp-agent-oper:snmp/interface-indexes/|if-index|
+|IF-MIB|ifLastChange|Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface|last-state-transition-time|
 |IF-MIB|ifOutDiscards| sensor-path Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface not resolved|output-drops|
 |IF-MIB|ifOutErrors||output-errors|
 |IF-MIB|ifStackStatus|Sensor-path : Cisco-IOS-XR-snmp-agent-oper/snmp/|if-stack-status|
