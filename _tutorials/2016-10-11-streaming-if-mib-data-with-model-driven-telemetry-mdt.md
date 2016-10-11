@@ -9,7 +9,27 @@ tags:
 ---
 ## Data from the IF-MIB
 
-One of the most commonly polled MIBs is the Interfaces MIB (IF-MIB).  Pretty much everyone needs to know how many packets and bytes were sent and received on a given interface.  So it's not surprising that one of the first questions we get is how to get the IF-MIB data from MDT. 
+One of the most commonly polled MIBs is the Interfaces MIB (IF-MIB).  Pretty much everyone needs to know how many packets and bytes were sent and received on a given interface.  So it's not surprising that one of the first questions we get is how to get the IF-MIB data from MDT.  
+
+### MDT Configuration for IF-MIB equivalence
+
+As you can see from the table below, most of the interface statistics are in the Cisco-IOS-XR-infra-statsd-oper.yang model, with some state parameters in Cisco-IOS-XR-infra-statsd-oper, and a couple SNMP-specific values in Cisco-IOS-XR-snmp-agent-oper.  
+
+Leaving aside the SNMP-specific parameters, here is what the sensor-path configuration in MDT would look like for the IF-MIB:
+
+```
+RP/0/RP0/CPU0:SunC(config)#telemetry model-driven
+RP/0/RP0/CPU0:SunC(config-model-driven)#sensor-group SGroup1
+RP/0/RP0/CPU0:SunC(config-model-driven-snsr-grp)# sensor-path Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters
+RP/0/RP0/CPU0:SunC(config-model-driven-snsr-grp)# sensor-path Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface
+RP/0/RP0/CPU0:SunC(config-model-driven-snsr-grp)# commit
+```  
+
+For the complete MDT configuration, see [my configuration tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/).
+
+With that, you should be streaming all your favorite IF-MIB data at a fraction of the cost of doing an SNMP poll. 
+
+### OID to YANG Table
 
 Below is a list of the most commonly requested IF-MIB OIDs, their corresponding YANG models, containers, leafs and any usage notes.  
 
@@ -45,20 +65,3 @@ Below is a list of the most commonly requested IF-MIB OIDs, their corresponding 
 |ifSpeed|Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface|bandwidth|  |
 
 
-As you can see, most of the interface statistics are in the Cisco-IOS-XR-infra-statsd-oper.yang model, with some state parameters in Cisco-IOS-XR-infra-statsd-oper, and a couple SNMP-specific values in Cisco-IOS-XR-snmp-agent-oper.  
-
-### MDT Configuration for IF-MIB equivalence
-
-Leaving aside the SNMP-specific parameters, here is what the sensor-path configuration in MDT would look like for the IF-MIB:
-
-```
-RP/0/RP0/CPU0:SunC(config)#telemetry model-driven
-RP/0/RP0/CPU0:SunC(config-model-driven)#sensor-group SGroup1
-RP/0/RP0/CPU0:SunC(config-model-driven-snsr-grp)# sensor-path Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters
-RP/0/RP0/CPU0:SunC(config-model-driven-snsr-grp)# sensor-path Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface
-RP/0/RP0/CPU0:SunC(config-model-driven-snsr-grp)# commit
-```  
-
-For the complete MDT configuration, see [my configuration tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/).
-
-With that, you should be streaming all your favorite IF-MIB data at a fraction of the cost of doing an SNMP poll. 
