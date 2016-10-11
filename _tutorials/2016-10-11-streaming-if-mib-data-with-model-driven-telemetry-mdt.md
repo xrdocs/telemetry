@@ -13,7 +13,7 @@ One of the most commonly polled MIBs is the Interfaces MIB (IF-MIB).  Pretty muc
 
 ### MDT Configuration for IF-MIB equivalence
 
-As you can see from the table below, most of the interface statistics are in the Cisco-IOS-XR-infra-statsd-oper.yang model, with some state parameters in Cisco-IOS-XR-infra-statsd-oper, and a couple SNMP-specific values in Cisco-IOS-XR-snmp-agent-oper.  
+As you can see from the [table below](#OID-YANG-Table), most of the interface statistics are in the Cisco-IOS-XR-infra-statsd-oper.yang model, with some state parameters in Cisco-IOS-XR-infra-statsd-oper, and a couple SNMP-specific values in Cisco-IOS-XR-snmp-agent-oper.  
 
 Leaving aside the SNMP-specific parameters, here is what the sensor-path configuration in MDT would look like for the IF-MIB:
 
@@ -29,7 +29,7 @@ For the complete MDT configuration, see [my configuration tutorial](https://xrdo
 
 With that, you should be streaming all your favorite IF-MIB data at a fraction of the cost of doing an SNMP poll. 
 
-### <a>name = "OID to YANG Table"</a>
+### OID-YANG Table
 
 Below is a table of the most commonly requested IF-MIB OIDs, their corresponding YANG models, containers, leafs and any usage notes.  
 
