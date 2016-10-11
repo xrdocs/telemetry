@@ -29,9 +29,9 @@ For the complete MDT configuration, see [my configuration tutorial](https://xrdo
 
 With that, you should be streaming all your favorite IF-MIB data at a fraction of the cost of doing an SNMP poll. 
 
-### OID to YANG Table
+### <a>name = "OID to YANG Table"</a>
 
-Below is a list of the most commonly requested IF-MIB OIDs, their corresponding YANG models, containers, leafs and any usage notes.  
+Below is a table of the most commonly requested IF-MIB OIDs, their corresponding YANG models, containers, leafs and any usage notes.  
 
 
 | OID     | Yang-Path                                                      | YANG Leaf  | Notes |
