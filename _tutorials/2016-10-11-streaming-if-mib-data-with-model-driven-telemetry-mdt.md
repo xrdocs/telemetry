@@ -11,7 +11,7 @@ tags:
 
 One of the most commonly polled MIBs is the Interfaces MIB (IF-MIB).  Pretty much everyone needs to know how many packets and bytes were sent and received on a given interface.  So it's not surprising that one of the first questions we get is how to get the IF-MIB data from MDT. 
 
-Below is a list of the most commonly requested IF-MIB OIDs, their YANG models, containers and leafs.  All the OID data is available through MDT, but there are some gotchas.  For example, telemetry and SNMP might return the values with different units or SNMP might return an enum where telemetry returns a string, etc.
+Below is a list of the most commonly requested IF-MIB OIDs, their corresponding YANG models, containers, leafs and any usage notes.  As you can see, most of the interface statistics are in the Cisco-IOS-XR-infra-statsd-oper.yang model, with some state parameters in Cisco-IOS-XR-infra-statsd-oper, and a couple SNMP-specific values in Cisco-IOS-XR-snmp-agent-oper.  
 
 | OID     | Yang-Path                                                      | YANG Leaf  | Notes |
 |---------|----------------------------------------------------------------|------------|  |
@@ -42,3 +42,18 @@ Below is a list of the most commonly requested IF-MIB OIDs, their YANG models, c
 |ifName|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|interface-name| interface-name format is "HundredGigE0_3_0_0" |
 |ifOutOctets|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|bytes-sent|  |
 |ifSpeed|Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface|bandwidth|  |
+
+
+As you can see, most of the interface statistics are in the Cisco-IOS-XR-infra-statsd-oper.yang model, with some state parameters in Cisco-IOS-XR-infra-statsd-oper, and a couple SNMP-specific values in Cisco-IOS-XR-snmp-agent-oper.  
+
+Leaving aside the SNMP-specific parameters, here is what the sensor-path configuration in MDT would look like for the IF-MIB:
+
+```
+RP/0/RP0/CPU0:SunC(config)#telemetry model-driven
+RP/0/RP0/CPU0:SunC(config-model-driven)#sensor-group SGroup1
+RP/0/RP0/CPU0:SunC(config-model-driven-snsr-grp)# sensor-path Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters
+RP/0/RP0/CPU0:SunC(config-model-driven-snsr-grp)# sensor-path Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface
+RP/0/RP0/CPU0:SunC(config-model-driven-snsr-grp)# commit
+```  
+
+For the complete MDT configuration, see [my tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/).
