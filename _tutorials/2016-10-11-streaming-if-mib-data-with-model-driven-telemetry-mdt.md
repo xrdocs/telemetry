@@ -23,7 +23,7 @@ Below is a list of the most commonly requested IF-MIB OIDs, their YANG models, c
 |ifHCOutMulticastPkts|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|multicast-packets-sent|  |
 |ifHCOutUcastPkts|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|packets-sent|  |
 |ifIndex|Cisco-IOS-XR-snmp-agent-oper:snmp/interface-indexes/|if-index|  |
-|ifLastChange|Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface|last-state-transition-time|  |
+|ifLastChange|Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface|last-state-transition-time| last-state-transition-time is the elapsed time since last state change while ifLastChange is the sysUpTime value of the last state change |
 |ifOutDiscards| sensor-path Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface not resolved|output-drops|  |
 |ifOutErrors|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|output-errors|  |
 |ifStackStatus|Sensor-path : Cisco-IOS-XR-snmp-agent-oper/snmp/|if-stack-status|  |
