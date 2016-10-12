@@ -9,6 +9,8 @@ tags:
   - YDK
   - telemetry
   - MDT
+  - OpenConfig
+  - YANG
 ---
 ## YDK: Automating YANG without XML
 
