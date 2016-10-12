@@ -8,6 +8,7 @@ excerpt: Quick Start for MDT Configuration
 tags:
   - iosxr
   - Telemetry
+  - MDT
 ---
 
 ## Important Background (aka TL;DR)
