@@ -6,6 +6,9 @@ author: Shelly Cadora
 position: top
 tags:
   - cisco
+  - YDK
+  - telemetry
+  - MDT
 ---
 ## YDK: Automating YANG without XML
 
