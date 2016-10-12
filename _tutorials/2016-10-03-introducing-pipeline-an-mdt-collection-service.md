@@ -1,11 +1,14 @@
 ---
-published: false
+published: true
 date: '2016-10-03 12:13 -0600'
 title: 'Using Pipeline: TCP to textfile'
 author: Shelly Cadora
 excerpt: >-
   Describes how to use the open source pipeline utility to collect and transform
   telemetry data for consumption by various applications
+position: hidden
+tags:
+  - iosxr
 ---
 ## Using Pipeline 
 In an earlier blog (link) , I introduced Pipeline, a multi-function collection service written in Go.  In this tutorial, I'll cover how to set up Pipeline for the simplest of tasks:  ingesting telemetry data over TCP and writing it to a file as a JSON object.
