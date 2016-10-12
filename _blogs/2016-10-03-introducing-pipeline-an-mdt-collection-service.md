@@ -1,7 +1,13 @@
 ---
-published: false
+published: true
 date: '2016-10-03 14:27 -0600'
 title: 'Introducing Pipeline: An MDT Collection Service'
+position: hidden
+tags:
+  - iosxr
+  - telemetry
+  - MDT
+  - pipeline
 ---
 ## The Other Half of The Story
 With model-driven telemetry (MDT), routers can stream out large amounts of operational data in a highly efficient, easily consumable way.  But getting data off the box is only half the story.  You have to have something on the other end to collect and transform the raw data in preparation for storage and analysis.  MDT uses standard transports, RPCs and encodings, so theoretically it wouldn't be too hard to whip up your own collector using standard libraries and packages.  Luckily, you don't have to start from scratch.  This week, we open-sourced Pipeline, a lightweight collection service that provides the first step in scalable data collection.  
