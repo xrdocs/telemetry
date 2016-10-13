@@ -1,5 +1,5 @@
 ---
-published: true
+published: false
 date: '2016-10-11 11:08 -0600'
 title: Streaming IF-MIB Data with Model-Driven Telemetry (MDT)
 author: Shelly Cadora
@@ -8,7 +8,6 @@ tags:
   - iosxr
   - Telemetry
   - MDT
-postion: top
 ---
 ## Data from the IF-MIB
 
