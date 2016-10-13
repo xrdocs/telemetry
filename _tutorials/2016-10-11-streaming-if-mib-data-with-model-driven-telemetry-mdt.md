@@ -6,6 +6,8 @@ author: Shelly Cadora
 position: hidden
 tags:
   - iosxr
+  - Telemetry
+  - MDT
 ---
 ## Data from the IF-MIB
 
