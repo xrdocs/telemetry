@@ -63,5 +63,3 @@ Below is a table of the most commonly requested IF-MIB OIDs, their corresponding
 |ifName|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|interface-name| interface-name format is "HundredGigE0_3_0_0" |
 |ifOutOctets|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|bytes-sent|  |
 |ifSpeed|Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface|bandwidth|  |
-
-
