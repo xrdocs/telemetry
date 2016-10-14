@@ -34,8 +34,6 @@ feature_row3:
 {% include base_path %}
 
 
-{% include feature_row id="feature_row1" type="left" %}
+{% include feature_row id="feature_row3" type="left" %}
 
 {% include feature_row id="feature_row2" type="left" %}
-
-{% include feature_row id="feature_row3" type="left" %}
