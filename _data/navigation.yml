@@ -25,9 +25,6 @@ main:
   - title: "@xrdocs"
     url: https://xrdocs.github.io
 
-  - title: "Tech-Docs"
-    url: /techdocs/
-
   - title: "Blogs"
     url: /blogs/
 
