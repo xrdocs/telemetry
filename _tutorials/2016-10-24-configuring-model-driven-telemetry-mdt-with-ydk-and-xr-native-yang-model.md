@@ -14,12 +14,12 @@ tags:
 
 In an [earlier tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-08-08-configuring-model-driven-telemetry-with-ydk/), Shelly introduces a methodology to configure MDT using YDK and the OpenConfig Telemetry YANG model.
 
-I strongly suggest to read and understand her initial tutorial because it describes the basis of using YDK. I decided to prepare this second document, covering a similar subject because the OpenConfig Telemetry YANG model is still incomplete and you will not be able to set the protocol and encoding fields in a destination group.
+This document provides a similar tutorial, addressing a complete XR Telemetry TCP dial-out configuration using the native YANG model and YDK.
 
-OpenConfig YANG models are the preferred option for POCs, demonstrating Cisco open configuration efforts. At the same time, if you need to demonstrate or implement a complete (working) MDT dial-out configuration using YANG models, you must still use a IOS XR Native YANG model with YDK (described in this tutorial) or with an XML schema as Shelly describes in [Configuring MDT with OpenConfig YANG](https://xrdocs.github.io/telemetry/tutorials/2016-07-25-configuring-model-driven-telemetry-mdt-with-yang/).  
-The engineering team is working to finalise a complete OpenConfig YANG model for our XR telemetry configuration but this effort may take some XR releases.
+I have tested the configuration in this document using the relative recent Vagrant IOS-XRv box version 6.2.1.15I.
+If you are looking for more information on IOS-XRv for Vagrant, you may follow Akshat tutorial [IOS-XRv Vagrant Quick Start](https://xrdocs.github.io/application-hosting/tutorials/iosxr-vagrant-quickstart) for step by step instructions.
 
-Note: I have tested the configuration in this document using IOS-XRv version 6.2.1.15I, noticing an issue with earlier versions that accept but don't implement the destination group TCP protocol configuration. I have also used the [ydk-py version 0.5.1](https://github.com/CiscoDevNet/ydk-py) and after installing YDK, you can check `ydk-models-cisco-ios-xr` current support for XR 6.1.1 using `pip list` command.
+I have also used the [ydk-py version 0.5.1](https://github.com/CiscoDevNet/ydk-py) and after installing YDK, you can check `ydk-models-cisco-ios-xr` current support for XR 6.1.1 using `pip list` command.
 
 {% capture "output" %}
 CLI Output:
@@ -59,7 +59,7 @@ telemetry model-driven
   !
  !
  sensor-group SG_Test
-  sensor-path Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters/bytes-received
+  sensor-path Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters
  !
  subscription 1
   sensor-group-id SG_Test sample-interval 30000
@@ -290,7 +290,7 @@ sgroup.sensor_group_identifier="SG_Test"
 
 sgroup.sensor_paths = sgroup.SensorPaths()
 new_sensorpath = sgroup.SensorPaths.SensorPath()
-new_sensorpath.telemetry_sensor_path = 'Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters/bytes-received'
+new_sensorpath.telemetry_sensor_path = 'Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters'
 sgroup.sensor_paths.sensor_path.append(new_sensorpath)
 ```
 
@@ -321,7 +321,7 @@ telemetry model-driven
   !
  !
  sensor-group SG_Test
-  sensor-path Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters/bytes-received
+  sensor-path Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters
  !
 !
 ``` 
@@ -413,7 +413,7 @@ telemetry model-driven
   !
  !
  sensor-group SG_Test
-  sensor-path Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters/bytes-received
+  sensor-path Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters
  !
  subscription 1
   sensor-group-id SG_Test sample-interval 30000
@@ -458,7 +458,5 @@ RP/0/RP0/CPU0:test_XR#
 
 ## Conclusion
 
-This tutorial repeats most of the concepts explained by Shelly in her [earlier tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-08-08-configuring-model-driven-telemetry-with-ydk/). The same values in programmability using YANG models, automatic generation of Python classes that inherit the syntactic checks and requirements of the underlying model, while also handling all the details of the underlying encoding and transport.
-
-At the same time, this tutorial introduces an alternative YANG telemetry model that at the time of writing is the only option to demonstrate a working XR dial-out telemetry solution using YDK.  
-I hope this will be useful when preparing a POC or just learning YDK and XR telemetry.
+This tutorial complements the concepts explained by Shelly in her [earlier tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-08-08-configuring-model-driven-telemetry-with-ydk/). 
+The same values in programmability using YANG models, automatic generation of Python classes that inherit the syntactic checks and requirements of the underlying model, while also handling all the details for the sensor group using the native telemetry YANG model.
