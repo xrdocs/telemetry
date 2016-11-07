@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 date: '2016-10-24 16:39 +1100'
 title: Configuring Model-Driven Telemetry (MDT) with YDK and XR Native YANG model
 author: Marco Umer
