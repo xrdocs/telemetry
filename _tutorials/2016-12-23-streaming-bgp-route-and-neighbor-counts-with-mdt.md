@@ -12,7 +12,7 @@ position: hidden
 ---
 ## BGP Performance Indicators
 
-The number of BGP routes and neighbor at any given time can be good, high-level indicators of network health.  Being able to stream those numbers periodically is a good use of model-driven telemetry (MDT).  The BGP YANG models are large and can be intimidating, so this tutorial shows how to drill down for these specific stats. 
+The number of BGP routes and neighbor at any given time can be good, high-level indicators of network health.  Being able to stream those numbers periodically is a good use of model-driven telemetry (MDT) but the associated YANG models are large and can be intimidating, so this tutorial shows how to drill down for these specific stats. 
 
 ### Number of BGP Routes
 
@@ -33,7 +33,7 @@ Total                            12         3          0           3600
 RP/0/RP0/CPU0:SunC#
 ```
  
-This data is included in the IOS XR native YANG model called "Cisco-IOS-XR-ip-rib-ipv4-oper.yang".  Now, there is a ton of stuff in that YANG model, including all of the prefixes in the RIB.  That's too much. I just want the summary statistics.  So I needed to filter down to a very specific tree path.  Using [pyang](https://github.com/mbj4668/pyang) to present a tree view of the model, here is the desired path:
+This data is included in the IOS XR native YANG model called "Cisco-IOS-XR-ip-rib-ipv4-oper.yang".  Now, there is a ton of stuff in that YANG model, including all of the prefixes in the RIB.  That's too much. I just want the summary statistics for BGP routes.  So I needed to filter down to a very specific tree path.  Using [pyang](https://github.com/mbj4668/pyang) to present a tree view of the model, here is the desired path:
 
 ```
 $ pyang -f tree Cisco-IOS-XR-ip-rib-ipv4-oper.yang --tree-path rib/vrfs/vrf/afs/af/safs/saf/ip-rib-route-table-names/ip-rib-route-table-name/protocol/bgp/as/information
@@ -117,16 +117,14 @@ If you did a NETCONF <get> operation on this subtree, the data would be returned
 </rpc-reply>
 ```
 
-To get this same data encoded in Google Protocol Buffers and streamed using MDT, just configure a sensor path as follows:
-
-To get that data via MDT,  configure the sensor path like this:
+To get this same data encoded in Google Protocol Buffers and streamed using MDT, just configure a sensor-path as follows:
 
 ```
 telemetry model-driven
   sensor-group SGroup1
    sensor-path Cisco-IOS-XR-ip-rib-ipv4-oper:rib/vrfs/vrf/afs/af/safs/saf/ip-rib-route-table-names/ip-rib-route-table-name/protocol/bgp/as/information
 ```
- 
+
 Notice that the subtree filter (everything after **Cisco-IOS-XR-ip-rib-ipv4-oper:** in the sensor-path) is exactly the same as the argument I passed to the --tree-path filter in pyang.  That's a handy tip for constructing sensor-paths in general!
 
 ### Number of BGP Neighbors
@@ -177,7 +175,8 @@ module: Cisco-IOS-XR-ipv4-bgp-oper
                         +--ro msg-log-pool-size*                    uint32
                         +--ro msg-log-pool-alloc-count*             uint32
                         +--ro msg-log-pool-free-count*              uint32
-                        ```
+
+```
 
 Depending on whether you're interested in all neighbors or just neighbors in the established state, you can grab neighbors-count-total or established-neighbors-count-total from that list.
 
