@@ -5,27 +5,29 @@ title: Streaming BGP Route and Neighbor Counts with MDT
 ---
 ## BGP Performance Indicators
 
-The number of BGP routes and neighbor at any given time can be good, high-level indications network health.  Being able to stream those numbers periodically is a good use of model-driven telemetry (MDT).  The BGP YANG models are large and can be intimidating, so I thought it would be a good idea to show how to drill down for these specific stats. 
+The number of BGP routes and neighbor at any given time can be good, high-level indicators of network health.  Being able to stream those numbers periodically is a good use of model-driven telemetry (MDT).  The BGP YANG models are large and can be intimidating, so this tutorial shows how to drill down for these specific stats. 
 
 ### Number of BGP Routes
 
 For CLI fans, the information that I was looking for is often found in the output of "show route ipv4 summary":
 
 ```
-RP/0/RP0/CPU0:SunC#show route ipv4  summ
-Fri Sep 16 23:15:40.570 UTC
+RP/0/RP0/CPU0:SunC#show route ipv4 summary
+Fri Dec 23 16:48:59.988 UTC
 Route Source                     Routes     Backup     Deleted     Memory(bytes)
+local                            3          0          0           720
+connected                        2          1          0           720
 static                           1          0          0           240
-local                            4          0          0           960
-connected                        3          1          0           960
 dagr                             0          0          0           0
-bgp 5021                         147        0          0           103040
-Total                            8          1          0           2160
+bgp 1                            5          1          0           1440
+isis 1                           1          1          0           480
+Total                            12         3          0           3600
 
 RP/0/RP0/CPU0:SunC#
 ```
  
-This data is included in the IOS XR native YANG model called "Cisco-IOS-XR-ip-rib-ipv4-oper.yang".  Now, there is a ton of stuff in that YANG model, including all of the prefixes in the RIB.  That's too much. I just want the summary statistics.  So I needed to filter down to a very specific tree path.  Using pyang to present a tree view of the model, here is the desired path:
+This data is included in the IOS XR native YANG model called "Cisco-IOS-XR-ip-rib-ipv4-oper.yang".  Now, there is a ton of stuff in that YANG model, including all of the prefixes in the RIB.  That's too much. I just want the summary statistics.  So I needed to filter down to a very specific tree path.  Using [pyang](https://github.com/mbj4668/pyang) to present a tree view of the model, here is the desired path:
+
 ```
 $ pyang -f tree Cisco-IOS-XR-ip-rib-ipv4-oper.yang --tree-path rib/vrfs/vrf/afs/af/safs/saf/ip-rib-route-table-names/ip-rib-route-table-name/protocol/bgp/as/information
 
@@ -55,54 +57,68 @@ module: Cisco-IOS-XR-ip-rib-ipv4-oper
                                           +--ro protocol-route-memory?         uint32
 $
 ```
- 
-As you can see from the [table below](#oid-yang-table), most of the interface statistics are in the Cisco-IOS-XR-infra-statsd-oper.yang model, with some state parameters in Cisco-IOS-XR-infra-statsd-oper.yang, and a couple SNMP-specific values in Cisco-IOS-XR-snmp-agent-oper.yang.  
 
-Leaving aside the SNMP-specific parameters, here is what the sensor-path configuration in MDT would look like for the IF-MIB:
+If you did a NETCONF <get> operation on this subtree, the data would be returned encoded in XML like this:
 
 ```
-RP/0/RP0/CPU0:SunC(config)#telemetry model-driven
-RP/0/RP0/CPU0:SunC(config-model-driven)#sensor-group SGroup1
-RP/0/RP0/CPU0:SunC(config-model-driven-snsr-grp)# sensor-path Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters
-RP/0/RP0/CPU0:SunC(config-model-driven-snsr-grp)# sensor-path Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface
-RP/0/RP0/CPU0:SunC(config-model-driven-snsr-grp)# commit
-```  
+<?xml version="1.0"?>
+<rpc-reply message-id="urn:uuid:7aa4d7d8-4638-40ed-bb87-93b1403e0baa" xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+ <data>
+  <rib xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-ip-rib-ipv4-oper">
+   <vrfs>
+    <vrf>
+     <vrf-name>default</vrf-name>
+     <afs>
+      <af>
+       <af-name>IPv4</af-name>
+       <safs>
+        <saf>
+         <saf-name>Unicast</saf-name>
+         <ip-rib-route-table-names>
+          <ip-rib-route-table-name>
+           <route-table-name>default</route-table-name>
+           <protocol>
+            <bgp>
+             <as>
+              <as>1</as>
+              <information>
+               <protocol-names>bgp</protocol-names>
+               <instance>1</instance>
+               <version>0</version>
+               <redistribution-client-count>0</redistribution-client-count>
+               <protocol-clients-count>1</protocol-clients-count>
+               <routes-counts>6</routes-counts>
+               <active-routes-count>5</active-routes-count>
+               <deleted-routes-count>0</deleted-routes-count>
+               <paths-count>6</paths-count>
+               <protocol-route-memory>1440</protocol-route-memory>
+               <backup-routes-count>1</backup-routes-count>
+              </information>
+             </as>
+            </bgp>
+           </protocol>
+          </ip-rib-route-table-name>
+         </ip-rib-route-table-names>
+        </saf>
+       </safs>
+      </af>
+     </afs>
+    </vrf>
+   </vrfs>
+  </rib>
+ </data>
+</rpc-reply>
+```
 
-For the complete MDT configuration, see [my configuration tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/).
+To get this same data encoded in Google Protocol Buffers and streamed using MDT, just configure a sensor path as follows:
 
-With that, you should be streaming all your favorite IF-MIB data at a fraction of the cost of doing an SNMP poll. 
+To get that data via MDT,  configure the sensor path like this:
 
-### OID-YANG Table
+```
+telemetry model-driven
+  sensor-group SGroup1
+   sensor-path Cisco-IOS-XR-ip-rib-ipv4-oper:rib/vrfs/vrf/afs/af/safs/saf/ip-rib-route-table-names/ip-rib-route-table-name/protocol/bgp/as/information
+```
+ 
+Notice that the subtree filter (everything after **Cisco-IOS-XR-ip-rib-ipv4-oper:** in the sensor-path) is exactly the same as the argument I passed to the --tree-path filter in pyang.  That's a handy tip for constructing sensor-paths in general!
 
-Below is a table of the most commonly requested IF-MIB OIDs, their corresponding YANG models, containers, leafs and any usage notes.  
-
-
-| OID     | Yang-Path                                                      | YANG Leaf  | Notes |
-|---------|----------------------------------------------------------------|------------|  |
-| ifAlias | Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface | description|  |
-|ifHCInBroadcastPkts|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|broadcast-packets-received|  |
-|ifHCInMulticastPkts|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|multicast-packets-received|  |
-|ifHCInUcastPkts|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|N/A| Must be calculated: packets-received - multicast-packets-received - broadcast-packets-received |
-|ifHCOutBroadcastPkts|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|broadcast-packets-sent|  |
-|ifHCOutMulticastPkts|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|multicast-packets-sent|  |
-|ifHCOutUcastPkts|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|N/A| Must be calculated: packets-sent - multicast-packets-sent - broadcast-packets-sent  |
-|ifIndex|Cisco-IOS-XR-snmp-agent-oper:snmp/interface-indexes/|if-index|  |
-|ifLastChange|Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface|last-state-transition-time| last-state-transition-time is the elapsed time since last state change while ifLastChange is the sysUpTime value of the last state change |
-|ifOutDiscards| Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|output-drops|  |
-|ifOutErrors|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|output-errors|  |
-|ifStackStatus|Cisco-IOS-XR-snmp-agent-oper/snmp/|if-stack-status|  |
-|ifAdminStatus|Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface|state|  |
-|ifDescr|Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface|interface-name|  |
-|ifHCInOctets|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|bytes-received|  |
-|ifHCOutOctets|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|bytes-sent|  |
-|ifHighSpeed|Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface|speed| ifHighSpeed is in Mbps, speed is in kbps |
-|ifInErrors|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|input-errors|  |
-|ifOperStatus|Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface|state|  |
-|ifPhysAddress|Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface|address|  |
-|ifType|Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface|interface-type|  |
-|ifInDiscards|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|input-drops|  |
-|ifInOctets|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|bytes-received|  |
-|ifMtu|Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface|mtu|  |
-|ifName|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|interface-name| interface-name format is "HundredGigE0_3_0_0" |
-|ifOutOctets|Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters|bytes-sent|  |
-|ifSpeed|Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-xr/interface|bandwidth|  |
