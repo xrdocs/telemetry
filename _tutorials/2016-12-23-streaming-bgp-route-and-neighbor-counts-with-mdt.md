@@ -187,3 +187,5 @@ telemetry model-driven
   sensor-group SGroup1
    sensor-path Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/default-vrf/process-info
 ```
+
+The hardest part of MDT is often just figuring out which YANG model and subtree has the data you need.  Once you've got that, the configuration is pretty trivial.  Hopefully these two examples will get you started.
