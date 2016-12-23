@@ -1,7 +1,14 @@
 ---
-published: false
+published: true
 date: '2016-12-23 09:45 -0700'
 title: Streaming BGP Route and Neighbor Counts with MDT
+excerpt: >-
+  Describes how to configure sensor-paths to stream BGP route counts and
+  neighbor counts
+tags:
+  - iosxr
+author: Shelly Cadora
+position: hidden
 ---
 ## BGP Performance Indicators
 
