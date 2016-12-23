@@ -129,3 +129,62 @@ telemetry model-driven
  
 Notice that the subtree filter (everything after **Cisco-IOS-XR-ip-rib-ipv4-oper:** in the sensor-path) is exactly the same as the argument I passed to the --tree-path filter in pyang.  That's a handy tip for constructing sensor-paths in general!
 
+### Number of BGP Neighbors
+
+For BGP neighbor counts, the model you want is Cisco-IOS-XR-ipv4-bgp-oper.yang.  Again, this is a very juicy model, so it's best to winnow it down to the nearest subtree:
+
+```
+$ pyang -f tree Cisco-IOS-XR-ipv4-bgp-oper.yang --tree-path bgp/instances/instance/instance-active/default-vrf/process-info/global
+module: Cisco-IOS-XR-ipv4-bgp-oper
+   +--ro bgp
+      +--ro instances
+         +--ro instance* [instance-name]
+            +--ro instance-active
+               +--ro default-vrf
+                  +--ro process-info
+                     +--ro global
+                        +--ro process-instance-node?                string
+                        +--ro restart-count?                        uint32
+                        +--ro path-attributes-entry-count?          uint32
+                        +--ro path-attribute-memory?                uint32
+                        +--ro as-path-entry-count?                  uint32
+                        +--ro as-path-entries-memory?               uint32
+                        +--ro community-entry-count?                uint32
+                        +--ro community-memory?                     uint32
+                        +--ro extended-community-entry-count?       uint32
+                        +--ro extended-community-memory?            uint32
+                        +--ro pe-distinguisher-label-entry-count?   uint32
+                        +--ro pe-distinguisher-label-memory?        uint32
+                        +--ro pta-entry-count?                      uint32
+                        +--ro pta-memory?                           uint32
+                        +--ro ribrnh-entry-count?                   uint32
+                        +--ro ribrnh-memory?                        uint32
+                        +--ro ppmp-entry-count?                     uint32
+                        +--ro ppmp-memory?                          uint32
+                        +--ro route-reflectors?                     uint32
+                        +--ro route-reflector-memory?               uint32
+                        +--ro nexthop-count?                        uint32
+                        +--ro nexthop-memory?                       uint32
+                        +--ro local-as?                             uint32
+                        +--ro total-vrf-count?                      uint32
+                        +--ro neighbors-count-total?                uint32
+                        +--ro established-neighbors-count-total?    uint32
+                        +--ro sn-num-non-dflt-vrf-nbrs?             uint32
+                        +--ro sn-num-non-dflt-vrf-nbrs-estab?       uint32
+                        +--ro pool-size*                            uint32
+                        +--ro pool-alloc-count*                     uint32
+                        +--ro pool-free-count*                      uint32
+                        +--ro msg-log-pool-size*                    uint32
+                        +--ro msg-log-pool-alloc-count*             uint32
+                        +--ro msg-log-pool-free-count*              uint32
+                        ```
+
+Depending on whether you're interested in all neighbors or just neighbors in the established state, you can grab neighbors-count-total or established-neighbors-count-total from that list.
+
+To get that data via MDT,  configure the sensor path like this:
+
+```
+telemetry model-driven
+  sensor-group SGroup1
+   sensor-path Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/default-vrf/process-info
+```
