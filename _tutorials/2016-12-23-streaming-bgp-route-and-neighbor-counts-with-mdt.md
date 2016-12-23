@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 date: '2016-12-23 09:45 -0700'
 title: Streaming BGP Route and Neighbor Counts with MDT
 excerpt: >-
@@ -8,7 +8,7 @@ excerpt: >-
 tags:
   - iosxr
 author: Shelly Cadora
-position: hidden
+position: top
 ---
 ## BGP Performance Indicators
 
