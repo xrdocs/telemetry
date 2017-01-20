@@ -49,8 +49,10 @@ Since the collector "dials-in" to the router, there's no need to specify each MD
 
 ## Decisions, Decisions
 So what transport should you use for MDT?  Here's a few quick heuristics:
--If you're looking for a quick and simple solution, try TCP dial-out.  It's simple to configure, there are no new protocols to learn, and you won't have to worry about opening up inbound connections.  
--If you need encryption, go for gRPC Dial-out.  
--If you're already using gRPC for configuration, consider gRPC Dial-In. 
+
+- If you're looking for a quick and simple solution, try TCP dial-out.  It's simple to configure, there are no new protocols to learn, and you won't have to worry about opening up inbound connections.  
+- If you need encryption, go for gRPC Dial-out.  
+- If you're already using gRPC for configuration, consider gRPC Dial-In.
+
 
 As you deploy MDT, you may find that your transport needs change or evolve.  No problem.  The most important thing to remember is that the push mechanism for telemetry data remains exactly the same, dial-in or dial-out, TCP or gRPC.  No matter what you choose, you'll get the same data, in the same data model, at the same speed.  That's the beauty of Model-Driven Telemetry.
