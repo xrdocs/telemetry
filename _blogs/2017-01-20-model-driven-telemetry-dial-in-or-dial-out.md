@@ -10,13 +10,14 @@ position: hidden
 ---
 ## Transport Options
 
-In one of my first tutorials on [configuring Model-Driven Telemetry (MDT)](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/), I somewhat blithely referred to three options for transport: TCP Dial-Out, gRPC Dial-Out and gRPC Dial-In.  It's all well and good to know how to configure each one, but what's the difference and which one should you choose?  This blog tackles those questions.
+In one of my first tutorials on [configuring Model-Driven Telemetry (MDT)](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/), I blithely referred to three options for transport: TCP Dial-Out, gRPC Dial-Out and gRPC Dial-In.  It's all well and good to know how to configure each one, but what's the difference and which one should you choose?  This blog tackles those questions.
 
 ## Dial-Out
 
 When we say "dial-out," we are speaking from the router's perspective.  So when you configure dial-out, the router "dials out" to the collector.  In other words, the router sends the SYN packet in the TCP handshake.
 
-![Dial-Out.png]({{site.baseurl}}/images/Dial-Out.png)
+
+![Dial-Out.png]({{site.baseurl}}/images/Dial-Out.png=200x200){: .align-center}
 
 Anyone who has had to modify ACLs to enable a new SNMP manager to connect to the network can appreciate the value of the dial-out option.  Since the router initiates the connection, you don't have to worry about opening up ports for inbound management traffic.
 
