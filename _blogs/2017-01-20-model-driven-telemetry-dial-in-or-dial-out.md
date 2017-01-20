@@ -6,6 +6,7 @@ author: Shelly Cadora
 excerpt: Discusses the transport options for model-driven telemetry
 tags:
   - cisco
+  - MDT
 position: hidden
 ---
 ## Transport Options
