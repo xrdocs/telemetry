@@ -16,7 +16,7 @@ In one of my first tutorials on [configuring Model-Driven Telemetry (MDT)](https
 
 When we say "dial-out," we are speaking from the router's perspective.  So when you configure dial-out, the router "dials out" to the collector.  In other words, the router sends the SYN packet in the TCP handshake.
 
-![Dial-Out.png=200x200]({{site.baseurl}}/images/Dial-Out.png){: .align-center}
+![Dial-Out.png ]({{site.baseurl}}/images/Dial-Out.png =200x){: .align-center}
 
 Anyone who has had to modify ACLs to enable a new SNMP manager to connect to the network can appreciate the value of the dial-out option.  Since the router initiates the connection, you don't have to worry about opening up ports for inbound management traffic.
 
