@@ -14,7 +14,7 @@ In one of my first tutorials on [configuring Model-Driven Telemetry (MDT)](https
 
 ## Dial-Out Vs. Dial-In
 
-When we say "dial-out," we are speaking from the router's perspective.  So when you configure dial-out, the router "dials out" to the collector.  In other words, the router sends the SYN packet in the TCP handshake.
+When we say "dial-out," we are speaking from the router's perspective: the router "dials out" to the collector.  In other words, the router sends the SYN packet in the TCP handshake.
 
 ![DialOut2.png]({{site.baseurl}}/images/DialOut2.png)
 
