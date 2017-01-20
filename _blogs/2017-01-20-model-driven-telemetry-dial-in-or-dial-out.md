@@ -24,9 +24,9 @@ With dial-in, on the other hand, the router listens passively on a specified por
 
 ![DialIn2.png]({{site.baseurl}}/images/DialIn2.png)
 
-After the initial session establishment, the router still pushes the data off the box at the configured interval.  This is very important!  Don't be fooled by the direction of the SYN packet.  There is no polling mechanism.  
+After the initial session establishment, the router still pushes the data off the box at the configured interval.  This is very important!  Don't be fooled by the direction of the SYN packet.  There is no polling mechanism in MDT.  
 
-Dial-in appeals to folks who are looking for a "single channel" to communicate with the network.  These are operators who want a single transport and protocol for both configuration data and operational data. Sound impossible?  Well, we're already doing it today.
+Dial-in appeals to folks who are looking for a "single channel" to communicate with the network.  These are operators who want a single transport and protocol for both configuration data and streaming operational data. Sound impossible?  Well, we're already doing it today.
 
 ## TCP Dial-Out
 Our first dial-out protocol was also the simplest: plain old TCP.  Open up a raw TCP socket on your collector and the router will complete the standard three-way handshake and start pushing telemetry data across the session.  No fancy programming libraries are required on the collector -- in python it's a simple matter of a "bind" to the port.  TCP dial-out inherits all the goodness of TCP (reliable delivery, fragmentation, re-ordering, etc) without having to invent a new protocol or define new mechanisms.  It's a great place to start if you're configuring MDT for the first time.
@@ -41,7 +41,7 @@ One of the main reasons that people enable gRPC dial-out is that gRPC allows you
 gRPC is not quite as trivial from a developer's perspective, but one of its strengths is the plethora of idiomatic client libraries in multiple programming languages.  Go, Python, Ruby, Java, C developers -- grab your gRPC library from github and you'll be juggling gRPC sessions like a pro.
 
 ## gRPC Dial-In
-Do you want to connect to the device, push down new configs (including telemetry subscription configs) and have operational data streamed back -- all within a single, unified channel, all using the same underlying data models?  Well, then gRPC dial-in is for you.  In addition to secure and efficient transport, gRPC provides bidirectional streams (so the router can still push data even if the collector dials in) and connection multiplexing.  Cisco IOS XR has supported [configuration via gRPC](https://github.com/CiscoDevNet/grpc-getting-started) since 6.0.0 and telemetry over gRPC since 6.1.1.  
+In addition to secure and efficient transport, gRPC provides bidirectional streaming  and connection multiplexing.  This means that you can "dial-in" to a router, push down new configs (including telemetry subscription configs) and have operational data streamed back -- all within a single, unified channel, all using the same underlying data models.  Cisco IOS XR has supported [configuration via gRPC](https://github.com/CiscoDevNet/grpc-getting-started) since 6.0.0 and dial-in telemetry over gRPC since 6.1.1.  
 
 Since the collector "dials-in" to the router, there's no need to specify each MDT destination in the configuration.  In fact, since you can configure MDT via gRPC, you don't have to configure telemetry at all.  Just enable the gRPC service on the router, connect your client, and dynamically enable the telemetry subscription you want.
 
