@@ -10,7 +10,7 @@ position: hidden
 ---
 ## Transport Options
 
-In one of my first tutorials on [configuring Model-Driven Telemetry (MDT)](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/), I blithely referred to three options for transport: TCP Dial-Out, gRPC Dial-Out and gRPC Dial-In.  It's all well and good to know how to configure each one, but what's the difference and which one should you choose?  This blog tackles those questions.
+In one of my first tutorials on [configuring Model-Driven Telemetry (MDT)](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/), I blithely referred to three options for transport: TCP dial-out, gRPC dial-out and gRPC dial-in.  It's all well and good to know how to configure each one, but what's the difference and which one should you choose?  This blog tackles those questions.
 
 ## Dial-Out
 
@@ -20,15 +20,15 @@ When we say "dial-out," we are speaking from the router's perspective.  So when 
 
 Anyone who has had to modify ACLs to enable a new SNMP manager to connect to the network can appreciate the value of the dial-out option.  Since the router initiates the connection, you don't have to worry about opening up ports for inbound management traffic.
 
-Dial-out was the first option that we implemented and is still commonly used.  MDT enables the router to _push_ monitoring data, so it seems intuitive that the router should also initiate the session.
+Dial-out was the first option that we implemented and is still commonly used.  MDT enables the router to push monitoring data, so it seems intuitive that the router should also initiate the session.
 
 ### TCP Dial-Out
-Our first dial-out protocol was also the simplest: plain old TCP.  Open up a raw TCP socket on your collector and the router will complete the standard three-way handshake and start pushing telemetry data across the session.  No fancy programming libraries are required on the collector -- in python it's a simple matter of a "bind" to the port -- and you're off and running.  MDT Dial-Out inherits all the goodness of TCP (reliable delivery, fragmentation, re-ordering, etc) without having to invent a new protocol or define new mechanisms.  It's a great place to start if you're configuring MDT for the first time.
+Our first dial-out protocol was also the simplest: plain old TCP.  Open up a raw TCP socket on your collector and the router will complete the standard three-way handshake and start pushing telemetry data across the session.  No fancy programming libraries are required on the collector -- in python it's a simple matter of a "bind" to the port.  TCP dial-out inherits all the goodness of TCP (reliable delivery, fragmentation, re-ordering, etc) without having to invent a new protocol or define new mechanisms.  It's a great place to start if you're configuring MDT for the first time.
 
 ### gRPC Dial-Out
 TCP is a great transport option, but it is not a general purpose RPC mechanism.  For that, we turned to [gRPC](http://www.grpc.io/).  gRPC runs on top of HTTP/2 and provides additional features for performance, security, RPC definition, etc.  
 
-One of the main reasons that people enable gRPC Dial-Out is that gRPC allows you to do authentication and encryption via TLS.  If you're worried about sending operational data in the clear and/or you want to protect your collector with certificate-based authentication, enable gRPC with TLS.  
+One of the main reasons that people enable gRPC dial-out is that gRPC allows you to do authentication and encryption via TLS.  If you're worried about sending operational data in the clear and/or you want to protect your collector with certificate-based authentication, enable gRPC with TLS.  
 
 gRPC is not quite as trivial from a developer's perspective, but one of its strengths is the plethora of idiomatic client libraries in multiple programming languages.  Go, Python, Ruby, Java, C developers -- grab your gRPC library from github and you'll be juggling gRPC sessions like a pro.
 
@@ -51,8 +51,8 @@ Since the collector "dials-in" to the router, there's no need to specify each MD
 So what transport should you use for MDT?  Here's a few quick heuristics:
 
 - If you're looking for a quick and simple solution, try TCP dial-out.  It's simple to configure, there are no new protocols to learn, and you won't have to worry about opening up inbound connections.  
-- If you need encryption, go for gRPC Dial-out.  
-- If you're already using gRPC for configuration, consider gRPC Dial-In.
+- If you need encryption, go for gRPC dial-out.  
+- If you're already using gRPC for configuration, consider gRPC dial-in.
 
 
 As you deploy MDT, you may find that your transport needs change or evolve.  No problem.  The most important thing to remember is that the push mechanism for telemetry data remains exactly the same, dial-in or dial-out, TCP or gRPC.  No matter what you choose, you'll get the same data, in the same data model, at the same speed.  That's the beauty of Model-Driven Telemetry.
