@@ -35,7 +35,8 @@ gRPC is not quite as trivial from a developer's perspective, but one of its stre
 ## Dial-In
 The main difference between dial-in and dial-out is who sends that first SYN packet.  With dial-in, the router listens passively on a specified port until the collector "dials-in."  
 
-![Dial-In.png]({{site.baseurl}}/images/Dial-In.png)
+![DialIn2.png]({{site.baseurl}}/images/DialIn2.png)
+
 
 After the initial session establishment, everything is exactly the same.  The router still pushes the data off the box at the configured interval.  This is very important!  Don't be fooled by the direction of the SYN packet.  There is no polling mechanism.  
 
