@@ -30,9 +30,19 @@ gRPC is not quite as trivial from a developer's perspective, but one of its stre
 ## Dial-In
 The main difference between dial-in and dial-out is who sends that first SYN packet.  With dial-in, the router listens passively on a specified port until the collector "dials-in."  
 
+![Dial-In.png]({{site.baseurl}}/images/Dial-In.png)
 
+After the initial session establishment, everything is exactly the same.  The router still pushes the data off the box at the configured interval.  This is very important!  Don't be fooled by the direction of the SYN packet.  There is no polling mechanism.  
 
-After the initial session establishment, everything is exactly the same.  The router still pushes the data off the box at the configured interval.  There is no polling mechanism.  
+Dial-in often appeals to folks who are looking for a "single channel" to communicate with the network.  These are operators who want a single transport, protocol and RPC for both configuration data and operational data.  Connect to the device, push down new configs (including telemetry subscription configs) and have operational data streamed back -- all within a single, unified channel, all using the same underlying data models.  Sound impossible?  Well, we're already doing it today.
 
-Another cool feature of gRPC is that it enables bi-directional steaming.  This means that you don't have to initiate the session
+### gRPC Dial-In
+The mechanism that provides single-channel access is gRPC.  In addition to secure and efficient transport, gRPC provides bidirectional streams (so the router can still push data even if the collector dials in) and connection multiplexing.  Cisco IOS XR has supported [configuration via gRPC](https://github.com/CiscoDevNet/grpc-getting-started) since 6.0.0 and telemetry over gRPC since 6.1.1.  
 
+Since the collector "dials-in" to the router, there's no need to specify each MDT destination in the configuration.  In fact, since you can configure MDT via gRPC, you don't have to configure telemetry at all.  Just enable the gRPC service on the router, connect your client, and dynamically enable the telemetry subscription you want.
+
+## Decisions, Decisions
+So what transport should you use for MDT?  Here's a few quick heuristics:
+-If you're looking for a quick and simple solution, try TCP dial-out.  It's simple to configure, there are no new protocols to learn, and you won't have to worry about opening up inbound connections.  
+-If you need encryption, go for gRPC Dial-out.  
+-If you're already using gRPC for configuration, consider gRPC Dial-In. 
