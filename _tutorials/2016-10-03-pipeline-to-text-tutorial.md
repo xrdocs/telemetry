@@ -11,10 +11,10 @@ tags:
   - iosxr
 ---
 ## Using Pipeline 
-In an [earlier blog](http://blogs.cisco.com/sp/introducing-pipeline-a-model-driven-telemetry-collection-service), I introduced Pipeline, a multi-function collection service written in Go.  In this tutorial, I'll cover how to set up Pipeline for the simplest of tasks:  ingesting telemetry data over TCP and writing it to a file as a JSON object.
+In an [earlier blog](http://blogs.cisco.com/sp/introducing-pipeline-a-model-driven-telemetry-collection-service), I introduced Pipeline, a multi-function telemetry collection service written in Go.  In this tutorial, I'll cover how to set up Pipeline for the simplest of tasks:  ingesting telemetry data over TCP and writing it to a file as a JSON object.
 
 ### Preparing the Router
-This tutorial assumes that you've already configured your router for TCP dial-out using the instructions in [this tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/). The IP address and port that you specify in the destination-group in the router config should match the IP address and port on which Pipeline is listening.
+This tutorial assumes that you've already configured your router for model-driven telemetry (MDT) with TCP dial-out using the instructions in [this tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/). The IP address and port that you specify in the destination-group in the router config should match the IP address and port on which Pipeline is listening.
 
 ### Getting Pipeline
 Pipeline is available from [github](https://github.com/cisco/bigmuddy-network-telemetry-pipeline).   
@@ -59,10 +59,10 @@ listen = :5432
 {{ output | markdownify }}
 </div>
 
-This [testbed] section shown above will work "as is" for MDT with TCP dial-out.  If you want to change the port that Pipeline listens on to something other than "5432", you can edit this section of the pipeline.conf.  Otherwise, we're good to go for the input stage.
+This ```[testbed]``` section shown above will work "as is" for MDT with TCP dial-out.  If you want to change the port that Pipeline listens on to something other than "5432", you can edit this section of the pipeline.conf.  Otherwise, we're good to go for the input stage.
 
 ### Configuring the Output Stage for Text File
-To dump the received data to a file, we need a "tap" stage in Pipeline.  The default pipeline.conf file comes with a tap stage section called [inspector] as you can see below.
+To dump the received data to a file, we need a "tap" stage in Pipeline.  The default pipeline.conf file comes with a tap stage section called ```[inspector]``` as you can see below.
 
 {% capture "output" %}
 
@@ -114,7 +114,7 @@ scadora@darcy:~/bigmuddy-network-telemetry-pipeline$
 </div>
 
 ### Seeing the Data
-Assuming your router is properly configured, the router should initiate the TCP session to Pipeline and stream the data specified in the sensor-group configuration.  To see the data as it comes in, use the Linux "tail" utility on the file that the [inspector] stage was configured to write to.
+Assuming your router is properly configured, the router should initiate the TCP session to Pipeline and stream the data specified in the sensor-group configuration.  To see the data as it comes in, use the Linux "tail" utility on the file that the ```[inspector]``` stage was configured to write to.
 
 {% capture "output" %}
 
