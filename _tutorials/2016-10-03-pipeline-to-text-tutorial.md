@@ -90,7 +90,7 @@ file = /data/dump.txt
 {{ output | markdownify }}
 </div>
 
-This [inspector] section shown above will work "as is" for dumping data to a file.  If you want to change the file that Pipeline writes to (default is /data/dump.txt) or write with a different encoding (default is JSON), you can edit this section of the pipeline.conf.  Otherwise, we're good to go for the output stage as well.
+This ```[inspector]``` section shown above will work "as is" for dumping data to a file.  If you want to change the file that Pipeline writes to (default is /data/dump.txt) or write with a different encoding (default is JSON), you can edit this section of the pipeline.conf.  Otherwise, we're good to go for the output stage as well.
 
 ### Running Pipeline
 Running pipeline is trivial.  Just execute the binary in the bin directory.  Pipeline will use the pipeline.conf file by default.
