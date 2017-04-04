@@ -6,7 +6,7 @@ author: Shelly Cadora
 excerpt: >-
   Describes how to use the open source pipeline utility to collect and transform
   telemetry data for consumption by various applications
-position: hidden
+position: top
 tags:
   - iosxr
 ---
