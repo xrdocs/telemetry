@@ -158,6 +158,8 @@ Summary: GPB(common) Message [172.30.8.53:15457(SunC)/Cisco-IOS-XR-infra-statsd-
 </div>
 
 ### Why Did We Do That Again?
-Dumping telemetry data into a text file is not particularly efficient and definitely not something you'd do in production.  To leverage the real power of telemetry, you need to get the data into an analytics stack like InfluxDB or Prometheus...or to multiple consumers via a pub/sub mechanism like Kafka.  Pipeline can do all that and I'll show you how in future tutorials.
+To leverage the real power of telemetry, you need to get the data into an analytics stack like InfluxDB or Prometheus...or to multiple consumers via a pub/sub mechanism like Kafka.  Pipeline can do all that and I'll show you how in future tutorials.
 
-But hopefully this simple example gets you familiar with the basic structure of pipeline.  In addition, having the power to dump GPB-encoded data This also gives you a quick way to validate the telemetry configuration on your router and 
+But having the power to dump encoded telemetry data into a text file does come in handy, especially when you're setting up telemetry and Pipeline for the first time.  The ```tap``` output module gives you a quick and easy way to validate that the router is sending the data you think it should be sending.  Once that's settled, it's a simple matter of configuring a different output module to send the data some place really useful.
+
+Give Pipeline a try and let us know what you think!
