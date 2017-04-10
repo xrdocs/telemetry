@@ -2,6 +2,10 @@
 published: false
 date: '2017-04-10 14:19 -0600'
 title: 'Using Pipeline: Integrating with InfluxDB'
+author: Shelly Cadora
+excerpt: Describes how to configure Pipeline to relay telemetry data to InfluxDB.
+tags:
+  - iosxr
 ---
 
 
@@ -9,7 +13,6 @@ title: 'Using Pipeline: Integrating with InfluxDB'
 
 In an [earlier blog](https://xrdocs.github.io/telemetry/tutorials/2016-10-03-pipeline-to-text-tutorial/), I discussed how to configure [Pipeline](http://blogs.cisco.com/sp/introducing-pipeline-a-model-driven-telemetry-collection-service) to write Model-Driven-Telemetry (MDT) data to a plain text file. In this tutorial, I'll describe the Pipeline configuration that enables you to write telemetry data into [InfluxDB](https://www.influxdata.com/), an open source platform for time-series data.
 
-​
 
 ### Preparing the Router
 
@@ -18,7 +21,7 @@ This tutorial assumes that you've already configured your router for model-drive
 
 ### Getting Influxdb
 
-This tutorial assumes that you have a working instance of Influxdb with an IP address that is accessible by your Pipeline instance.  Influxdb is available from [github](https://github.com/influxdata/influxdb).  
+This tutorial assumes that you have a working instance of Influxdb with an IP address that is accessible from your Pipeline instance.  Influxdb is available from [github](https://github.com/influxdata/influxdb).  
 
 
 ### Getting Pipeline
@@ -29,65 +32,22 @@ Pipeline is available from [github](https://github.com/cisco/bigmuddy-network-te
 ### Pipeline.conf
 
 The pipeline.conf file contains all the configuration necessary to get Pipeline running.  
-The pipeline configuration is divided up into sections.  Each section is delineated by an arbitrary name enclosed in square brackets.  Each section defines either an input stage ("stage = xport_input") or an output stage ("stage = export_output").  Other parameters in the section tell Pipeline what to listen for (in the case of an input stage) or how to output the data (for an output stage).
-
-The easiest way to understand this is to look at a simple example.
-
+The pipeline configuration is divided up into sections.  Each section is delineated by an arbitrary name enclosed in square brackets.  Each section defines either an input stage or an output stage.
 
 ### Configuring the Input Stage for TCP Dial-Out
 
-Let's take a look at the TCP dial-out section in the default pipeline.conf.
+For this tutorial, I'll use the default pipeline.conf input stage for MDT TCP Dial-Out described in the [TCP to Textfile tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/).  If you take out all the comments, this reduces to 5 lines in pipeline.conf:
 
 {% capture "output" %}
-
-
 ```
-
-scadora@darcy:~/bigmuddy-network-telemetry-pipeline$ grep -A20 "Example of a TCP dialout" pipeline.conf
-
-# Example of a TCP dialout (router connects to pipeline over TCP)
-
-#
-
 [testbed]
-
 stage = xport_input
-
-#
-
-# Module type, the type dictates the rest of the options in the section.
-
-# TCP can only be used as xport_iinput currently. UDP works similarly.
-
-#
-
 type = tcp
-
-#
-
-# Supported encapsulation is 'st' for streaming telemetry header. This
-
-# is the header used to carry streaming telemetry payload in TCP and UDP.
-
-#
-
 encap = st
-
-#
-
-# TCP option dictating which binding to listen on. Can be a host name
-
-# or address and port, or just port.
-
-#
-
 listen = :5432
 
 ```  
-
 {% endcapture %}
-
-​
 
 <div class="notice--warning">
 
@@ -95,73 +55,34 @@ listen = :5432
 
 </div>
 
-​
 
 This ```[testbed]``` section shown above will work "as is" for MDT with TCP dial-out.  If you want to change the port that Pipeline listens on to something other than "5432", you can edit this section of the pipeline.conf.  Otherwise, we're good to go for the input stage.
 
 ​
 
-### Configuring the Output Stage for Text File
+### Configuring the Output Stage for InfluxDB
 
-To dump the received data to a file, we need a "tap" stage in Pipeline.  The default pipeline.conf file comes with a tap stage section called ```[inspector]``` as you can see below.
-
-​
+To push the data to influxdb, we need "metrics" stage in Pipeline.  The default pipeline.conf file comes with an example metrics stage section called ```[mymetrics]```.  Taking out the comments, the important lines are as follows: 
 
 {% capture "output" %}
 
-​
-
 ```
-
-scadora@darcy:~/bigmuddy-network-telemetry-pipeline$ grep -A20 "Example of a tap stage" pipeline.conf
-
-# Example of a tap stage; dump content to file, or at least count messages
-
-#
-
-[inspector]
-
+[mymetrics]
 stage = xport_output
-
-#
-
-# Module type: tap is only supported in xport_output stage currently.
-
-#
-
-type = tap
-
-#
-
-# File to dump decoded messages
-
-#
-
-file = /data/dump.txt
-
-#
-
-# encoding = json
-
-#
-
+type = metrics
+file = metrics.json
+dump = metricsdump.txt
+output = influx
+influx = http://10.152.176.74:8086
+database = mdt_db
 ```  
-
 {% endcapture %}
-
-​
-
 <div class="notice--warning">
-
 {{ output | markdownify }}
-
 </div>
 
-​
+This configuration instructs pipeline to transform the MDT data according to the ```[metrics.json]``` file and pushes it to an influxdb instance at 10.152.176.74 that has a database named ```[mdt_db]```.
 
-This ```[inspector]``` section shown above will work "as is" for dumping data to a file.  If you want to change the file that Pipeline writes to (default is /data/dump.txt) or write with a different encoding (default is JSON), you can edit this section of the pipeline.conf.  Otherwise, we're good to go for the output stage as well.
-
-​
 
 ### Running Pipeline
 
