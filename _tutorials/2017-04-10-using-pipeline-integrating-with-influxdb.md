@@ -92,7 +92,7 @@ YANG models define data hierarchies.  Because MDT is based on YANG models, the r
 
 One of the important functions of Pipeline is to take the hierarchical YANG-based data and transform it into the Line Protocol for easy consumption by influxdb.  Pipeline uses the ```metrics.json``` file to perform the transformation.
 
-The ```metrics.json``` file contains a series of json objects, one for each YANG model and sub-tree path that the router streams.  Take the sensor-path configured on the router in the [TCP Dial Out Tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/): ```Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters```.  The corresponding object in the default metrics.json
+The ```metrics.json``` file contains a series of json objects, one for each YANG model and sub-tree path that the router streams.  Take the sensor-path configured on the router in the [TCP Dial Out Tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/): ```Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters```.  The corresponding object in the default metrics.json is below:
 
 {% capture "output" %}
 ```
@@ -103,7 +103,7 @@ The ```metrics.json``` file contains a series of json objects, one for each YANG
 				{"name" : "interface-name", "tag" : true},
 				{"name" : "packets-received"},
 				{"name" : "bytes-received"},
-				{"name" : "packets-sent", "tag": true},
+				{"name" : "packets-sent"},
 				{"name" : "bytes-sent"},
 				{"name" : "output-drops"},
 				{"name" : "output-queue-drops"},
@@ -120,142 +120,70 @@ The ```metrics.json``` file contains a series of json objects, one for each YANG
 	}
 ```  
 {% endcapture %}
-
 <div class="notice--warning">
-
 {{ output | markdownify }}
-
 </div>
+
+This entry in the metrics.json file enables Pipeline to post interface statistics in the influxdb Line Protocol with the following characteristics:
+
+Measurement: 
+-Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters
+
+Tag Names and Values
+-EncodingPath=Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counter
+-Producer=SunC
+-interface-name=MgmtEth0/RP0/CPU0/0
+
+Field Keys and Values
+-bytes-received=307428735
+-bytes-sent=23017070265
+-<etc>
+
+Timestamp
+-1491942788950000000
+
+If the path you are streaming is already described in the metrics.json (as this one is), there is nothing to do.  Adding objects to the metrics.json will be the topic of a future tutorial.
 
 ### Running Pipeline
 
-Running pipeline is trivial.  Just execute the binary in the bin directory.  Pipeline will use the pipeline.conf file by default.
-
-​
+Run pipeline as usual, by executing the binary in the bin directory. Pipeline will use the pipeline.conf file by default.  Pipeline will prompt you for credentials to use when posting to influxdb.
 
 {% capture "output" %}
-
-​
-
 ```
-
-scadora@darcy:~/bigmuddy-network-telemetry-pipeline$ bin/pipeline &
-
-[1] 21975
-
-scadora@darcy:~/bigmuddy-network-telemetry-pipeline$ Startup pipeline
-
+scadora@darcy:~/bigmuddy-network-telemetry-pipeline$ bin/pipeline
+Startup pipeline
 Load config from [pipeline.conf], logging in [pipeline.log]
 
+CRYPT Client [mymetrics],[http://10.152.176.84:8086]
+ Enter username: admin
+ Enter password:
 Wait for ^C to shutdown
 
-​
-
-scadora@darcy:~/bigmuddy-network-telemetry-pipeline$
-
-​
-
 ```  
-
 {% endcapture %}
-
-​
-
 <div class="notice--warning">
-
 {{ output | markdownify }}
-
 </div>
 
-​
 
-### Seeing the Data
+### Seeing the Data Before It Goes To Influxdb
 
-Assuming your router is properly configured, the router should initiate the TCP session to Pipeline and stream the data specified in the sensor-group configuration.  To see the data as it comes in, use the Linux "tail" utility on the file that the ```[inspector]``` stage was configured to write to.
-
-​
+Since we configure a "dump" file in the ```[mymetrics]``` output stage above, Pipeline will dump a local copy of the data it posts to influxdb into a text file in the Line Protocol format.
 
 {% capture "output" %}
-
-​
-
 ```
-
-scadora@darcy:~/bigmuddy-network-telemetry-pipeline$ tail -f dump.txt
-
-​
-
-------- 2017-04-03 20:37:06.763244782 -0700 PDT -------
-
-Summary: GPB(common) Message [172.30.8.53:15457(SunC)/Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters msg len: 5984]
-
-{
-
-    "Source": "172.30.8.53:15457",
-
-    "Telemetry": {
-
-        "node_id_str": "SunC",
-
-        "subscription_id_str": "Sub1",
-
-        "encoding_path": "Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters",
-
-        "collection_id": 712163,
-
-        "collection_start_time": 1491277026499,
-
-        "msg_timestamp": 1491277026499,
-
-        "collection_end_time": 1491277026507
-
-    },
-
-    "Rows": [
-
-        {   
-
-            "Timestamp": 1491277026506,
-
-            "Keys": {
-
-                "interface-name": "MgmtEth0/RP0/CPU0/0"
-
-            },
-
-            "Content": {
-
-                "applique": 0,
-
-                "availability-flag": 0,
-
-                "broadcast-packets-received": 65679,
-
-                "broadcast-packets-sent": 0,
-
-                "bytes-received": 272894774,
-
-                "bytes-sent": 20829696017,
-
-                "carrier-transitions": 1,
-
-                <output snipped for brevity>
-
-​
-
+scadora@darcy:~/bigmuddy-network-telemetry-pipeline$ tail -f metricsdump.txt_wkid0
+Server: [http://10.152.176.84:8086], wkid 0, writing 7 points in db: mdt_db
+(prec: [ms], consistency: [], retention: [])
+	Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters,EncodingPath=Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters,Producer=SunC,interface-name=Bundle-Ether1 bytes-received=175069849,bytes-sent=9057828,carrier-transitions=0i,crc-errors=0i,input-drops=0i,input-errors=0i,input-ignored-packets=0i,input-queue-drops=0i,output-buffer-failures=0i,output-drops=0i,output-errors=0i,output-queue-drops=0i,packets-received=1189543,packets-sent=103020 1491943978355000000
+	Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters,EncodingPath=Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters,Producer=SunC,interface-name=Null0 bytes-received=0,bytes-sent=0,carrier-transitions=0i,crc-errors=0i,input-drops=0i,input-errors=0i,input-ignored-packets=0i,input-queue-drops=0i,output-buffer-failures=0i,output-drops=0i,output-errors=0i,output-queue-drops=0i,packets-received=0,packets-sent=0 1491943978355000000
+	Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters,EncodingPath=Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters,Producer=SunC,interface-name=MgmtEth0/RP0/CPU0/0 bytes-received=307431285,bytes-sent=23017071885,carrier-transitions=1i,crc-errors=0i,input-drops=139i,input-errors=0i,input-ignored-packets=0i,input-queue-drops=0i,output-buffer-failures=0i,output-drops=0i,output-errors=0i,output-queue-drops=0i,packets-received=4338703,packets-sent=16808000 1491943978355000000
 ```  
-
 {% endcapture %}
-
-​
-
 <div class="notice--warning">
-
 {{ output | markdownify }}
-
 </div>
 
-​
 
 ### Why Did We Do That Again?
 
