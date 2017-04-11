@@ -34,7 +34,7 @@ Pipeline is available from [github](https://github.com/cisco/bigmuddy-network-te
 The pipeline.conf file contains all the configuration necessary to get Pipeline running.  
 The pipeline configuration is divided up into sections.  Each section is delineated by an arbitrary name enclosed in square brackets.  Each section defines either an input stage or an output stage.
 
-### Configuring the Input Stage for TCP Dial-Out
+#### Configuring the Input Stage for TCP Dial-Out
 
 For this tutorial, I'll use the default pipeline.conf input stage for MDT TCP Dial-Out described in the [TCP to Textfile tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/).  If you take out all the comments, this reduces to 5 lines in pipeline.conf:
 
@@ -58,11 +58,10 @@ listen = :5432
 
 This ```[testbed]``` section shown above will work "as is" for MDT with TCP dial-out.  If you want to change the port that Pipeline listens on to something other than "5432", you can edit this section of the pipeline.conf.  Otherwise, we're good to go for the input stage.
 
-​
 
-### Configuring the Output Stage for InfluxDB
+#### Configuring the Output Stage for InfluxDB
 
-To push the data to influxdb, we need "metrics" stage in Pipeline.  The default pipeline.conf file comes with an example metrics stage section called ```[mymetrics]```.  Taking out the comments, the important lines are as follows: 
+To push the data to influxdb, we need a "metrics" output stage in Pipeline.  The default pipeline.conf file comes with an example metrics stage section called ```[mymetrics]```.  Taking out the comments, the important lines are as follows: 
 
 {% capture "output" %}
 
@@ -81,8 +80,52 @@ database = mdt_db
 {{ output | markdownify }}
 </div>
 
-This configuration instructs pipeline to transform the MDT data according to the ```[metrics.json]``` file and pushes it to an influxdb instance at 10.152.176.74 that has a database named ```[mdt_db]```.
+This configuration instructs Pipeline to post MDT data to an influxdb instance at 10.152.176.74:8086 that has a database named ```mdt_db```.  For more information on creating databases in influxdb, see https://github.com/influxdata/influxdb#create-your-first-database.
 
+Before posting the data to influxdb, pipeline transforms the data according to the instructions in the ```metrics.json``` file.  More on this file in the next section.
+
+Finally, the ```dump = metricsdump.txt``` option lets you locally dump a copy of the same data that is being pushed to influxdb.  This is useful for first-time setup and debugging.
+
+### Using metrics.json 
+
+YANG models define data hierarchies.  Because MDT is based on YANG models, the raw telemetry data from a router is also hierarchical.  Time-series databases, however, typically expect data in a simple format: metric name, metric value, timestamp and, optionally, some tags or keys.  In influxdb, this format is called the "Line Protocol."
+
+One of the important functions of Pipeline is to take the hierarchical YANG-based data and transform it into the Line Protocol for easy consumption by influxdb.  Pipeline uses the ```metrics.json``` file to perform the transformation.
+
+The ```metrics.json``` file contains a series of json objects, one for each YANG model and sub-tree path that the router streams.  Take the sensor-path configured on the router in the [TCP Dial Out Tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/): ```Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters```.  The corresponding object in the default metrics.json
+
+{% capture "output" %}
+```
+{
+		"basepath" : "Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters",
+		"spec" : {
+			"fields" : [
+				{"name" : "interface-name", "tag" : true},
+				{"name" : "packets-received"},
+				{"name" : "bytes-received"},
+				{"name" : "packets-sent", "tag": true},
+				{"name" : "bytes-sent"},
+				{"name" : "output-drops"},
+				{"name" : "output-queue-drops"},
+				{"name" : "input-drops"},
+				{"name" : "input-queue-drops"},
+				{"name" : "input-errors"},
+				{"name" : "crc-errors"},
+				{"name" : "input-ignored-packets"},
+				{"name" : "output-errors"},
+				{"name" : "output-buffer-failures"},
+				{"name" : "carrier-transitions"}
+			]
+		}
+	}
+```  
+{% endcapture %}
+
+<div class="notice--warning">
+
+{{ output | markdownify }}
+
+</div>
 
 ### Running Pipeline
 
@@ -235,4 +278,3 @@ Prose
     Developers
     Language
     Logout
-
