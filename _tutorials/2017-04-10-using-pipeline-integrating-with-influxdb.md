@@ -193,7 +193,8 @@ Server: [http://10.152.176.84:8086], wkid 0, writing 7 points in db: mdt_db
 To validate that the data has been received by influxdb, you can use curl to query the database:
 
 {% capture "output" %}
-```$curl -G 'http://localhost:8086/query?pretty=true' --data-urlencode "db=mdt_db" --data-urlencode "q=SELECT \"bytes-sent\" FROM \"Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters\" WHERE \"interface-name\"='GigabitEthernet0/0/0/0'"
+```
+$ curl -G 'http://localhost:8086/query?pretty=true' --data-urlencode "db=mdt_db" --data-urlencode "q=SELECT \"bytes-sent\" FROM \"Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters\" WHERE \"interface-name\"='GigabitEthernet0/0/0/0'"
 {
     "results": [
         {
