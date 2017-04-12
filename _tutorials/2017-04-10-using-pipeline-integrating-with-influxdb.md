@@ -1,11 +1,12 @@
 ---
-published: false
+published: true
 date: '2017-04-10 14:19 -0600'
 title: 'Using Pipeline: Integrating with InfluxDB'
 author: Shelly Cadora
 excerpt: Describes how to configure Pipeline to relay telemetry data to InfluxDB.
 tags:
   - iosxr
+position: hidden
 ---
 
 
