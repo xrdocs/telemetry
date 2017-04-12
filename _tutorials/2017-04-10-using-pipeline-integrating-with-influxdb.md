@@ -168,7 +168,7 @@ Wait for ^C to shutdown
 
 ### Seeing the Data Before It Goes To Influxdb
 
-Since we configure a "dump" file in the ```[mymetrics]``` output stage above, Pipeline will dump a local copy of the data it posts to influxdb into a text file in the Line Protocol format.
+Since we configure a "dump" file in the ```[mymetrics]``` output stage above, Pipeline will dump a local copy of the data it posts to influxdb into a text file in the Line Protocol format.  This is a good way to confirm that Pipeline is receiving data from the router and parsing it with a ```metrics.json``` entry.
 
 {% capture "output" %}
 ```
@@ -185,24 +185,52 @@ Server: [http://10.152.176.84:8086], wkid 0, writing 7 points in db: mdt_db
 </div>
 
 
-### Why Did We Do That Again?
+### Influxdb
 
-To leverage the real power of telemetry, you need to get the data into an analytics stack like InfluxDB or Prometheus...or to multiple consumers via a pub/sub mechanism like Kafka.  Pipeline can do all that and I'll show you how in future tutorials.
+To validate that the data has been received by influxdb, you can use curl to query the database:
 
-​
+{% capture "output" %}
+```
+$ curl -G 'http://localhost:8086/query?pretty=true' --data-urlencode "db=mdt_db" --data-urlencode "q=SELECT \"bytes-sent\" FROM \"Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters\" WHERE \"interface-name\"='GigabitEthernet0/0/0/0'"
+{
+    "results": [
+        {
+            "series": [
+                {
+                    "name": "Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters",
+                    "columns": [
+                        "time",
+                        "bytes-sent"
+                    ],
+                    "values": [
+                        [
+                            "2017-04-11T21:04:57.205Z",
+                            1.911903356e+09
+                        ],
+                        [
+                            "2017-04-11T21:05:27.214Z",
+                            1.911903356e+09
+                        ],
+                        [
+                            "2017-04-11T21:05:57.226Z",
+                            1.911911181e+09
+                        ]
+                    ]
+                }
+            ]
+        }
+    ]
+}
 
-But having the power to dump encoded telemetry data into a text file does come in handy, especially when you're setting up telemetry and Pipeline for the first time.  The ```tap``` output module gives you a quick and easy way to validate that the router is sending the data you think it should be sending.  Once that's settled, it's a simple matter of configuring a different output module to send the data some place really useful.
+{% endcapture %}
+<div class="notice--warning">
+{{ output | markdownify }}
+</div>
 
-​
+
+
+### Conclusion
+
 
 Give Pipeline a try and let us know what you think!
 
-​
-
-Prose
-
-    Prose
-    About
-    Developers
-    Language
-    Logout
