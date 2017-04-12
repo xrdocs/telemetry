@@ -24,7 +24,7 @@ This tutorial assumes that you've already configured your router for model-drive
 
 This tutorial assumes that you have a working instance of InfluxDB with an IP address that is accessible from your Pipeline instance and has a database named "mdt_db".   If you want to use a different database name, edit the ```pipeline.conf``` output stage configuration below.  
 
-InfluxDB is available from [github](https://github.com/influxdata/influxdb) and includes documentation on [creating databases](https://github.com/influxdata/influxdb#create-your-first-database).
+InfluxDB is available from [github](https://github.com/influxdata/influxdb) and includes documentation on [creating databases](https://github.com/influxdata/influxdb#create-your-first-database).  InfluxDB is also available as a [Docker container](https://hub.docker.com/_/influxdb/).
 
 
 ### Getting Pipeline
@@ -33,9 +33,6 @@ Pipeline is available from [github](https://github.com/cisco/bigmuddy-network-te
 
 
 ### Pipeline.conf
-
-The pipeline.conf file contains all the configuration necessary to get Pipeline running.  
-The pipeline configuration is divided up into sections.  Each section is delineated by an arbitrary name enclosed in square brackets.  Each section defines either an input stage or an output stage.
 
 #### Configuring the Input Stage for TCP Dial-Out
 
@@ -162,6 +159,24 @@ CRYPT Client [mymetrics],[http://10.152.176.84:8086]
  Enter username: admin
  Enter password:
 Wait for ^C to shutdown
+```  
+{% endcapture %}
+<div class="notice--warning">
+{{ output | markdownify }}
+</div>
+
+Power users will appreciate the ```-log= -debug``` option for pipeline:
+{% capture "output" %}
+```
+scadora@darcy:~/bigmuddy-network-telemetry-pipeline$ bin/pipeline -log= -debug
+INFO[2017-04-12 14:41:05.038501] Conductor says hello, loading config          config=pipeline.conf debug=true fluentd= logfile= maxthreads=1 tag=pipeline version="v1.0.0(bigmuddy)"
+DEBU[2017-04-12 14:41:05.039562] Conductor processing section...               name=conductor section=inspector tag=pipeline
+DEBU[2017-04-12 14:41:05.039690] Conductor processing section, type...         name=conductor section=inspector tag=pipeline type=tap
+INFO[2017-04-12 14:41:05.039800] Conductor starting up section                 name=conductor section=inspector stage="xport_output" tag=pipeline
+DEBU[2017-04-12 14:41:05.039887] Conductor processing section...               name=conductor section=mymetrics tag=pipeline
+DEBU[2017-04-12 14:41:05.039940] Conductor processing section, type...         name=conductor section=mymetrics tag=pipeline type=metrics
+INFO[2017-04-12 14:41:05.039982] Conductor starting up section                 name=conductor section=mymetrics stage="xport_output" tag=pipeline
+<output snipped for brevity>
 ```  
 {% endcapture %}
 <div class="notice--warning">
