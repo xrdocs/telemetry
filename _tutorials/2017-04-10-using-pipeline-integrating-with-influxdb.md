@@ -22,7 +22,9 @@ This tutorial assumes that you've already configured your router for model-drive
 
 ### Getting Influxdb
 
-This tutorial assumes that you have a working instance of Influxdb with an IP address that is accessible from your Pipeline instance.  Influxdb is available from [github](https://github.com/influxdata/influxdb).  
+This tutorial assumes that you have a working instance of InfluxDB with an IP address that is accessible from your Pipeline instance and has a database named "mdt_db".   If you want to use a different database name, edit the ```pipeline.conf``` output stage configuration below.  
+
+InfluxDB is available from [github](https://github.com/influxdata/influxdb) and includes documentation on [creating databases](https://github.com/influxdata/influxdb#create-your-first-database).
 
 
 ### Getting Pipeline
@@ -46,14 +48,10 @@ stage = xport_input
 type = tcp
 encap = st
 listen = :5432
-
 ```  
 {% endcapture %}
-
 <div class="notice--warning">
-
 {{ output | markdownify }}
-
 </div>
 
 
@@ -62,10 +60,9 @@ This ```[testbed]``` section shown above will work "as is" for MDT with TCP dial
 
 #### Configuring the Output Stage for InfluxDB
 
-To push the data to influxdb, we need a "metrics" output stage in Pipeline.  The default pipeline.conf file comes with an example metrics stage section called ```[mymetrics]```.  Taking out the comments, the important lines are as follows: 
+To push the data to InfluxDB, we need a "metrics" output stage in Pipeline.  The default pipeline.conf file comes with an example metrics stage section called ```[mymetrics]```.  Taking out the comments, the important lines are as follows: 
 
 {% capture "output" %}
-
 ```
 [mymetrics]
 stage = xport_output
@@ -81,9 +78,9 @@ database = mdt_db
 {{ output | markdownify }}
 </div>
 
-This configuration instructs Pipeline to post MDT data to an influxdb instance at 10.152.176.74:8086 that has a database named ```mdt_db```.  For more information on creating databases in influxdb, see https://github.com/influxdata/influxdb#create-your-first-database.
+This configuration instructs Pipeline to post MDT data to an InfluxDB instance at 10.152.176.74:8086 that has a database named ```mdt_db```.  
 
-Before posting the data to influxdb, pipeline transforms the data according to the instructions in the ```metrics.json``` file.  More on this file in the next section.
+Before posting the data to influxdb, pipeline transforms the data according to the instructions in the ```metrics.json``` file.  More on this in the next section.
 
 Finally, the ```dump = metricsdump.txt``` option lets you locally dump a copy of the same data that is being pushed to influxdb.  This is useful for first-time setup and debugging.
 
@@ -128,12 +125,12 @@ The ```metrics.json``` file contains a series of json objects, one for each YANG
 This entry in the metrics.json file enables Pipeline to post interface statistics in the influxdb Line Protocol with the following characteristics:
 
 Measurement: 
--Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters
+- Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters
 
 Tag Names and Values
--EncodingPath=Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counter
--Producer=SunC
--interface-name=MgmtEth0/RP0/CPU0/0
+- EncodingPath=Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counter
+- Producer=SunC
+- interface-name=MgmtEth0/RP0/CPU0/0
 
 Field Keys and Values
 -bytes-received=307428735
