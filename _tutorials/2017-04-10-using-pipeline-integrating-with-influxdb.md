@@ -86,6 +86,8 @@ Finally, the ```dump = metricsdump.txt``` option lets you locally dump a copy of
 
 #### Using metrics.json 
 
+tl;dr If you are using the sensor-path from the [TCP to Textfile tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/) and the default metrics.json, you actually have nothing to do.  But if you need to know _how_ things works, please read the rest of the section!
+
 YANG models define data hierarchies.  Because MDT is based on YANG models, the raw telemetry data from a router is also hierarchical.  Time-series databases, however, typically expect data in a simple format: metric name, metric value, timestamp and, optionally, some tags or keys.  In influxdb, this format is called the "Line Protocol."
 
 One of the important functions of Pipeline is to take the hierarchical YANG-based data and transform it into the Line Protocol for easy consumption by influxdb.  Pipeline uses the ```metrics.json``` file to perform the transformation.
@@ -133,16 +135,16 @@ Tag Names and Values
 - interface-name=MgmtEth0/RP0/CPU0/0
 
 Field Keys and Values
--bytes-received=307428735
--bytes-sent=23017070265
--<etc>
+- bytes-received=307428735
+- bytes-sent=23017070265
+- <etc>
 
 Timestamp
--1491942788950000000
+- 1491942788950000000
 
 You might have noticed that "interface-name" is one of the Tag Names, not a Field Key above.  That's because the metrics.json file had ```"tag" : true``` for interface-name.  Any entry in the metrics.json file with that tag will be added to the Tag Names in the Line Protocol and not sent as a Field Key.
 
-Also good to know: if you don't have an entry in the metrics.json file, then that data point will not be posted to influxdb, even if the router sends that data to Pipeline.  That's actually a feature!  Because bulk data collection is more efficient for the router, the router stream at the container level of the YANG model.  That means you will sometimes receive more data than you actually need.  Pipeline gives you the ability to filter what data gets passed on to your time series database.     
+Also good to know: if you don't have an entry in the metrics.json file, then that data point will not be posted to InfluxDB, even if the router sends that data to Pipeline.  That's actually a feature!  Because bulk data collection is more efficient for the router, the router streams data at the container level of the YANG model.  That means you will sometimes receive more data than you actually need.  Pipeline gives you the ability to filter what data gets passed on to your time series database.     
 
 Final takeaway, if the path you are streaming is already described in the metrics.json and has all the fields you care about (as is this case here), there is nothing to do.  Adding objects to the metrics.json will be the topic of a future tutorial.
 
@@ -160,7 +162,6 @@ CRYPT Client [mymetrics],[http://10.152.176.84:8086]
  Enter username: admin
  Enter password:
 Wait for ^C to shutdown
-
 ```  
 {% endcapture %}
 <div class="notice--warning">
@@ -168,9 +169,9 @@ Wait for ^C to shutdown
 </div>
 
 
-### Seeing the Data Before It Goes To Influxdb
+### Seeing the Data Before It Goes To InfluxDB
 
-Since we configure a "dump" file in the ```[mymetrics]``` output stage above, Pipeline will dump a local copy of the data it posts to influxdb into a text file in the Line Protocol format.  This is a good way to confirm that Pipeline is receiving data from the router and parsing it with a ```metrics.json``` entry.
+Since we configure a "dump" file in the ```[mymetrics]``` output stage above, Pipeline will dump a local copy of the data it posts to InfluxDB into a text file in the Line Protocol format.  This is a good way to confirm that Pipeline is receiving data from the router and parsing it with a valid ```metrics.json``` entry.
 
 {% capture "output" %}
 ```
@@ -187,13 +188,12 @@ Server: [http://10.152.176.84:8086], wkid 0, writing 7 points in db: mdt_db
 </div>
 
 
-### Influxdb
+### InfluxDB
 
 To validate that the data has been received by influxdb, you can use curl to query the database:
 
 {% capture "output" %}
-```
-$ curl -G 'http://localhost:8086/query?pretty=true' --data-urlencode "db=mdt_db" --data-urlencode "q=SELECT \"bytes-sent\" FROM \"Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters\" WHERE \"interface-name\"='GigabitEthernet0/0/0/0'"
+```$curl -G 'http://localhost:8086/query?pretty=true' --data-urlencode "db=mdt_db" --data-urlencode "q=SELECT \"bytes-sent\" FROM \"Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters\" WHERE \"interface-name\"='GigabitEthernet0/0/0/0'"
 {
     "results": [
         {
@@ -223,7 +223,7 @@ $ curl -G 'http://localhost:8086/query?pretty=true' --data-urlencode "db=mdt_db"
         }
     ]
 }
-
+```
 {% endcapture %}
 <div class="notice--warning">
 {{ output | markdownify }}
