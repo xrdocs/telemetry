@@ -227,7 +227,9 @@ $ curl -G 'http://localhost:8086/query?pretty=true' --data-urlencode "db=mdt_db"
 {{ output | markdownify }}
 </div>
 
+If you are using [grafana](https://grafana.com/) to query and visualize your influxdb data, you can use all the queries and dashboards you know and love, as in this simple graph of packets sent on Gigabit Ethernet 0/0/0/0:
 
+![basic_influxdb.png]({{site.baseurl}}/images/basic_influxdb.png)
 
 ### Conclusion
 
