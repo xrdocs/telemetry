@@ -142,6 +142,12 @@ Field Keys and Values
 Timestamp
 -1491942788950000000
 
+You might have noticed that "interface-name" is one of the Tag Names, not a Field Key above.  That's because the metrics.json file had ```"tag" : true``` for interface-name.  Any entry in the metrics.json file with that tag will be added to the Tag Names in the Line Protocol and not sent as a Field Key.
+
+Also good to know: if you don't have an entry in the metrics.json file, then that data point will not be posted to influxdb, even if the router sends that data to Pipeline.  That's actually a good thing!  Because bulk data collection is more efficient for the router, the router stream at the container level of the YANG model.  That means you will sometimes receive more data than you actually need.  Pipeline gives you the ability to filter what data gets passed on to your time series database.     
+
+Second, 
+
 If the path you are streaming is already described in the metrics.json (as this one is), there is nothing to do.  Adding objects to the metrics.json will be the topic of a future tutorial.
 
 ### Running Pipeline
@@ -232,7 +238,5 @@ If you are using [grafana](https://grafana.com/) to query and visualize your inf
 ![basic_influxdb.png]({{site.baseurl}}/images/basic_influxdb.png)
 
 ### Conclusion
-
-
-Give Pipeline a try and let us know what you think!
+Pipeline gives you a easy, flexible way to get data into commonly used open-source tools like influxdb.  Give it a try and let us know what you think!
 
