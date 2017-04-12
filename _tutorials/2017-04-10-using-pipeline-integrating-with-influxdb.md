@@ -86,7 +86,7 @@ Before posting the data to influxdb, pipeline transforms the data according to t
 
 Finally, the ```dump = metricsdump.txt``` option lets you locally dump a copy of the same data that is being pushed to influxdb.  This is useful for first-time setup and debugging.
 
-### Using metrics.json 
+#### Using metrics.json 
 
 YANG models define data hierarchies.  Because MDT is based on YANG models, the raw telemetry data from a router is also hierarchical.  Time-series databases, however, typically expect data in a simple format: metric name, metric value, timestamp and, optionally, some tags or keys.  In influxdb, this format is called the "Line Protocol."
 
@@ -144,11 +144,9 @@ Timestamp
 
 You might have noticed that "interface-name" is one of the Tag Names, not a Field Key above.  That's because the metrics.json file had ```"tag" : true``` for interface-name.  Any entry in the metrics.json file with that tag will be added to the Tag Names in the Line Protocol and not sent as a Field Key.
 
-Also good to know: if you don't have an entry in the metrics.json file, then that data point will not be posted to influxdb, even if the router sends that data to Pipeline.  That's actually a good thing!  Because bulk data collection is more efficient for the router, the router stream at the container level of the YANG model.  That means you will sometimes receive more data than you actually need.  Pipeline gives you the ability to filter what data gets passed on to your time series database.     
+Also good to know: if you don't have an entry in the metrics.json file, then that data point will not be posted to influxdb, even if the router sends that data to Pipeline.  That's actually a feature!  Because bulk data collection is more efficient for the router, the router stream at the container level of the YANG model.  That means you will sometimes receive more data than you actually need.  Pipeline gives you the ability to filter what data gets passed on to your time series database.     
 
-Second, 
-
-If the path you are streaming is already described in the metrics.json (as this one is), there is nothing to do.  Adding objects to the metrics.json will be the topic of a future tutorial.
+Final takeaway, if the path you are streaming is already described in the metrics.json and has all the fields you care about (as is this case here), there is nothing to do.  Adding objects to the metrics.json will be the topic of a future tutorial.
 
 ### Running Pipeline
 
