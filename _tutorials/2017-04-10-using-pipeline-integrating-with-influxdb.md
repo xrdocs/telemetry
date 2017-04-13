@@ -83,13 +83,15 @@ Finally, the ```dump = metricsdump.txt``` option lets you locally dump a copy of
 
 #### Using metrics.json 
 
-tl;dr If you are using the sensor-path from the [TCP to Textfile tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/) and the default metrics.json, you actually have nothing to do.  But if you need to know _how_ things works, please read the rest of the section!
+**TL;DR** If you are using the sensor-path from the [TCP to Textfile tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/) and the default metrics.json, you actually have nothing to do.  But if you have a burning desire to know _how_ things works, please read the rest of the section!
 
 YANG models define data hierarchies.  Because MDT is based on YANG models, the raw telemetry data from a router is also hierarchical.  Time-series databases, however, typically expect data in a simple format: metric name, metric value, timestamp and, optionally, some tags or keys.  In influxdb, this format is called the "Line Protocol."
 
 One of the important functions of Pipeline is to take the hierarchical YANG-based data and transform it into the Line Protocol for easy consumption by influxdb.  Pipeline uses the ```metrics.json``` file to perform the transformation.
 
-The ```metrics.json``` file contains a series of json objects, one for each YANG model and sub-tree path that the router streams.  Take the sensor-path configured on the router in the [TCP Dial Out Tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/): ```Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters```.  The corresponding object in the default metrics.json is below:
+The ```metrics.json``` file contains a series of json objects, one for each YANG model and sub-tree path that the router streams.  Pipeline takes the complex, hierarchical YANG-modeled data and flattens it into a consumable time series. 
+
+Take the sensor-path configured on the router in the [TCP Dial Out Tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/): ```Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters```.  The corresponding object in the default metrics.json is below:
 
 {% capture "output" %}
 ```
@@ -139,7 +141,7 @@ Field Keys and Values
 Timestamp
 - 1491942788950000000
 
-You might have noticed that "interface-name" is one of the Tag Names, not a Field Key above.  That's because the metrics.json file had ```"tag" : true``` for interface-name.  Any entry in the metrics.json file with that tag will be added to the Tag Names in the Line Protocol and not sent as a Field Key.
+You might have noticed that "interface-name" is one of the Tag Names, not a Field Key above. There are two ways to get an MDT metric marked as a Tag.  First, recall that the router sends MDT data as one of two types: Keys and Content.  Pipeline will automatically translate items in the MDT Keys section to a Tag.  You can also use the metrics.json file.  Any entry in the metrics.json file with ```"tag" : true``` will be added to the Tag Names in the Line Protocol and not sent as a Field Key.  
 
 Also good to know: if you don't have an entry in the metrics.json file, then that data point will not be posted to InfluxDB, even if the router sends that data to Pipeline.  That's actually a feature!  Because bulk data collection is more efficient for the router, the router streams data at the container level of the YANG model.  That means you will sometimes receive more data than you actually need.  Pipeline gives you the ability to filter what data gets passed on to your time series database.     
 
