@@ -15,7 +15,7 @@ position: null
 In an [earlier blog](https://xrdocs.github.io/telemetry/tutorials/2016-10-03-pipeline-to-text-tutorial/), I discussed how to configure [Pipeline](http://blogs.cisco.com/sp/introducing-pipeline-a-model-driven-telemetry-collection-service) to write Model-Driven-Telemetry (MDT) data to a plain text file. In this tutorial, I'll describe the Pipeline configuration that enables you to write telemetry data into [InfluxDB](https://www.influxdata.com/), an open source platform for time-series data.
 
 Here's a picture of what we are trying to do:
-![RoutertoPipelinetoInflux]({{site.baseurl}}/images/PipelinetoInflux.png)
+![RouterToPipelineToInfluxdb]({{site.baseurl}}/images/PipelinetoInflux2.png)
 
 Pipeline and InfluxDB can run on the same server or on different servers, as long as there is connectivity between them.
 
