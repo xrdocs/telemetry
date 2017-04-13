@@ -253,7 +253,7 @@ If you are using [grafana](https://grafana.com/) to query and visualize your inf
 
 ![basic_influxdb.png]({{site.baseurl}}/images/basic_influxdb.png)
 
-For those hearty souls who slogged through the [Using metrics.json](#metrics.json) section, note that we could use ```interface-name``` in the Where clause of the query because interface-name was sent as a Tag.
+For those hearty souls who slogged through the [Using metrics.json](#metrics.json) section, note that we could use ```interface-name``` in the Where clause of the query above because it was sent as a Tag in the Line Protocol.
 
 ### Conclusion
 Pipeline gives you a easy, flexible way to get data into commonly used open-source tools like influxdb.  Give it a try and let us know what you think!
