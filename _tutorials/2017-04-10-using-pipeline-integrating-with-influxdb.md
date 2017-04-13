@@ -14,6 +14,10 @@ position: hidden
 
 In an [earlier blog](https://xrdocs.github.io/telemetry/tutorials/2016-10-03-pipeline-to-text-tutorial/), I discussed how to configure [Pipeline](http://blogs.cisco.com/sp/introducing-pipeline-a-model-driven-telemetry-collection-service) to write Model-Driven-Telemetry (MDT) data to a plain text file. In this tutorial, I'll describe the Pipeline configuration that enables you to write telemetry data into [InfluxDB](https://www.influxdata.com/), an open source platform for time-series data.
 
+Here's a picture of what we are trying to do:
+![RoutertoPipelinetoInflux]({{site.baseurl}}/images/PipelinetoInflux.png)
+
+Pipeline and InfluxDB can run on the same server or on different servers, as long as there is connectivity between them.
 
 ### Preparing the Router
 
@@ -87,9 +91,7 @@ Finally, the ```dump = metricsdump.txt``` option lets you locally dump a copy of
 
 YANG models define data hierarchies.  Because MDT is based on YANG models, the raw telemetry data from a router is also hierarchical.  Time-series databases, however, typically expect data in a simple format: metric name, metric value, timestamp and, optionally, some tags or keys.  In influxdb, this format is called the "Line Protocol."
 
-One of the important functions of Pipeline is to take the hierarchical YANG-based data and transform it into the Line Protocol for easy consumption by influxdb.  Pipeline uses the ```metrics.json``` file to perform the transformation.
-
-The ```metrics.json``` file contains a series of json objects, one for each YANG model and sub-tree path that the router streams.  Pipeline takes the complex, hierarchical YANG-modeled data and flattens it into a consumable time series. 
+One of the important functions of Pipeline is to take the hierarchical YANG-based data and transform it into the Line Protocol for easy consumption by influxdb.  Pipeline takes the complex, hierarchical YANG-modeled data and flattens it into multiple time series.  Pipeline uses the ```metrics.json``` file to perform the transformation. The ```metrics.json``` file contains a series of json objects, one for each YANG model and sub-tree path that the router streams.   
 
 Take the sensor-path configured on the router in the [TCP Dial Out Tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/): ```Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters```.  The corresponding object in the default metrics.json is below:
 
