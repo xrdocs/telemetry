@@ -85,7 +85,7 @@ Before posting the data to influxdb, pipeline transforms the data according to t
 
 Finally, the ```dump = metricsdump.txt``` option lets you locally dump a copy of the same data that is being pushed to influxdb.  This is useful for first-time setup and debugging.
 
-#### Using metrics.json 
+#### Using metrics.json<a name="metrics.json"></a>
 
 **TL;DR** If you are using the sensor-path from the [TCP to Textfile tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/) and the default metrics.json, you actually have nothing to do.  But if you have a burning desire to know _how_ things works, please read the rest of the section!
 
@@ -252,6 +252,8 @@ $ curl -G 'http://localhost:8086/query?pretty=true' --data-urlencode "db=mdt_db"
 If you are using [grafana](https://grafana.com/) to query and visualize your influxdb data, you can use all the queries and dashboards you know and love, as in this simple graph of packets sent on Gigabit Ethernet 0/0/0/0:
 
 ![basic_influxdb.png]({{site.baseurl}}/images/basic_influxdb.png)
+
+For those hearty souls who slogged through the [Using metrics.json](#metrics.json) section, note that we could use ```interface-name``` in the Where clause of the query because interface-name was sent as a Tag.
 
 ### Conclusion
 Pipeline gives you a easy, flexible way to get data into commonly used open-source tools like influxdb.  Give it a try and let us know what you think!
