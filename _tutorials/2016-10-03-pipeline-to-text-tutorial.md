@@ -1,6 +1,6 @@
 ---
 published: true
-date: '2016-10-03 12:13 -0600'
+date: '2017-03-03 12:13 -0600'
 title: 'Using Pipeline: TCP to textfile'
 author: Shelly Cadora
 excerpt: >-
