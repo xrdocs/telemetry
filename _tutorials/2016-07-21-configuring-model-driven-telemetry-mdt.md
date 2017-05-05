@@ -96,8 +96,7 @@ Subscription:  Sub1                     State: ACTIVE
   DGroup1           self-describing-gpb tcp         Active  5432    172.30.8.4
 ```
 
-
-## Using gRPC Dial-Out
+## Using gRPC Dial-Out<a name="grpc-dial-out"></a>
 With the gRPC Dial-Out method, the router initiates a gRPC session to the collector and sends whatever data is specified by the sensor-group in the subscription.
  
 ### gRPC Dial-Out Router Config
@@ -172,7 +171,7 @@ Subscription:  Sub2                     State: ACTIVE
   DGroup2           self-describing-gpb grpc        NA      57500   172.30.8.4
 ```
 
-## Using gRPC Dial-In
+## Using gRPC Dial-In<a name="grpc-dial-in"></a>
 With the gRPC Dial-In method, the collector initiates a gRPC session to the collector.  The router sends whatever data is specified by the sensor-group in the subscription requested by the collector.
  
 ### gRPC Dial-In Router Config
