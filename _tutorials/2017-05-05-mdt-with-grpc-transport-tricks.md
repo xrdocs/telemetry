@@ -86,7 +86,7 @@ See that "src 172.30.8.53" ?  That's the source address that gRPC will use when 
 
 ## I Didn't Configure TPA But It Still Works, So There!
 
-So some lucky people who didn't configure TPA can still get gRPC to work!  Doesn't seem fair, does it?  Well, the reason is that they have a Loopback (any Loopback except Loopback 1 which is reserved -- read [this](https://xrdocs.github.io/application-hosting/blogs/2016-06-28-xr-app-hosting-architecture-quick-look/] for the gory details) configured.  When a Loopback interface is configured, you also get a default route in the Linux stack:
+So some lucky people who didn't configure TPA can still get gRPC to work!  Doesn't seem fair, does it?  Well, the reason is that they have a Loopback (any Loopback except Loopback 1 which is reserved -- gory detail fans read [this](https://xrdocs.github.io/application-hosting/blogs/2016-06-28-xr-app-hosting-architecture-quick-look/).  When a Loopback interface is configured, you also get a default route in the Linux stack:
 
 ```
 RP/0/RP0/CPU0:SunC(config)#no tpa
