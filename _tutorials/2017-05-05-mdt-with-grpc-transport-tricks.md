@@ -118,4 +118,4 @@ Traffic sent to the collector will have a source address of 5.5.5.5.  If your co
 
 ## Conclusion
 
-I hope you didn't have to read this tutorial at all.  But if you did and even if you glazed over the bits about the Linux networking stack and XR Linux shell, just remember this: either configure a TPA source address or a routable Loopback and gRPC will work.
+I hope you didn't have to read this tutorial at all.  But if you did and even if you glazed over the bits about the Linux networking stack and XR Linux shell, just remember this: to make gRPC work, either configure a TPA source address or a routable Loopback.
