@@ -14,7 +14,7 @@ Note that you may not need to read this blog!  It is entirely likely that your g
 
 (gRPC)[http://www.grpc.io/] is an open source RPC framework that leverages HTTP/2 as a transport.  Compared to simple TCP transport, gRPC brings two important features to MDT: 1) Optional encryption with TLS and 2) Support for "dial-in" (from collector to router).
 
-Now bear with me for a moment, as this next bit get a little complicated.  If you are familiar with the 64 bit (IOS XR software architecture)[https://xrdocs.github.io/application-hosting/blogs/2016-06-28-xr-app-hosting-architecture-quick-look/], you may already be aware that IOS XR runs in a container on top of a Linux kernel.  The gRPC process used by MDT lives in the IOS XR container (it's part of the IOS XR Linux shell) but it is not part of the XR Control Plane proper.  This means that gRPC uses the global-vrf namespace.  And this is where problems can happen.
+Now bear with me for a moment, as this next bit get a little complicated.  If you are familiar with the 64 bit (IOS XR software architecture)[https://xrdocs.github.io/application-hosting/blogs/2016-06-28-xr-app-hosting-architecture-quick-look/], you may already be aware that IOS XR runs in a container on top of a Linux kernel.  The gRPC server used by MDT lives in the IOS XR container (it's part of the IOS XR Linux shell) but it is not part of the XR Control Plane proper.  This means that gRPC uses the Linux networking stack (not the XR networking stack).  And this is where problems can happen.
 
 ## What Does gRPC see?
 
@@ -31,17 +31,15 @@ Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
 [xr-vm_node0_RP0_CPU0:~]$
 ```
 
-From this output, you can see that there is only a single route out the management interface.  If your gRPC collector lives on that subnet, the gRPC process will be able to find it.  So that's one reason some lucky people don't have to read this blog.  But if your collector is reachable through some other port, gRPC doesn't know how to get there.  One symptom is that your subscription will stay in the dreaded "NOT ACTIVE" state:
+From this output, you can see that there is only a single route out the management interface.  If your gRPC collector lives on that subnet, the gRPC process will be able to find it.  So that's one reason some lucky people don't have to read this blog.  But if your collector is reachable through some other port, gRPC doesn't know how to get there.  One symptom is that your subscription will stay in the dreaded "Not Active" state:
 
 ```
-RP/0/RP0/CPU0:SunC#show telemetry model-driven subscription 1
-Fri May  5 21:32:47.687 UTC
-Subscription:  1
--------------
-  State:       NOT ACTIVE
+RP/0/RP0/CPU0:SunC#show telem model destination DGroup1 | include State
+Fri May  5 22:16:48.995 UTC
+    State:                Not Active
 ```
 
-If you are doing gRPC dial-out, you will see this message:
+If you are doing gRPC dial-out, you will see this trace:
 ```
 RP/0/RP0/CPU0:SunC#show grpc trace ems
 Fri May  5 21:36:58.868 UTC
@@ -113,3 +111,7 @@ default dev fwdintf  scope link  src 5.5.5.5
 ```
 
 Traffic sent to the collector will have a source address of 5.5.5.5.  If your collector has a route back to 5.5.5.5 (e.g. you're distributing your loopback addresses in your IGP), then great.  If not, then the collector will drop the packet and you'll need the TPA config.
+
+## Conclusion
+
+I hope you didn't have to read this tutorial at all.  But if you did and even if you glazed over the bits about the Linux networking stack and XR Linux shell, just remember this: either configure a TPA source address or a routable Loopback and gRPC will work.
