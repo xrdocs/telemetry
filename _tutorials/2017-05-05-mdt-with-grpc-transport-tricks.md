@@ -52,7 +52,7 @@ RP/0/RP0/CPU0:SunC#
 
 ## Just Tell Me How to Fix It
 
-One way to fix this for both dial-in and dial-out is by configuring a Third-Party App (TPA) source address.  Configuring the TPA sets a src-hint for Linux applications, so that originating traffic from the applications can be tied to any reachable IP of XR.
+One way to fix this for both dial-in and dial-out is by configuring a Third-Party App (TPA) source address.  (Configuring the TPA sets a src-hint)[https://xrdocs.github.io/application-hosting/tutorials/2016-06-16-xr-toolbox-part-4-bring-your-own-container-lxc-app/#set-the-src-hint-for-application-traffic] for Linux applications, so that originating traffic from the applications can be tied to any reachable IP of XR.
 
 ```
 RP/0/RP0/CPU0:SunC(config)#tpa address-family ipv4 update-source GigabitEthernet 0/0/0/0
@@ -84,7 +84,7 @@ See that "src 172.30.8.53" ?  That's the source address that gRPC will use when 
 
 ## I Didn't Configure TPA But It Still Works, So There!
 
-So some lucky people who didn't configure TPA can still get gRPC to work!  Doesn't seem fair, does it?  Well, the reason is that they have a Loopback (any Loopback except Loopback 1 which is reserved) configured.  When a Loopback interface is configured, you also get a default route in the Linux stack:
+So some lucky people who didn't configure TPA can still get gRPC to work!  Doesn't seem fair, does it?  Well, the reason is that they have a Loopback (any Loopback except Loopback 1 which is reserved -- read (this)[https://xrdocs.github.io/application-hosting/blogs/2016-06-28-xr-app-hosting-architecture-quick-look/] for the gory details) configured.  When a Loopback interface is configured, you also get a default route in the Linux stack:
 
 ```
 RP/0/RP0/CPU0:SunC(config)#no tpa
