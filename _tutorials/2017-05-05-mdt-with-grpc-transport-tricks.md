@@ -1,8 +1,12 @@
 ---
-published: false
+published: true
 date: '2017-05-05 14:39 -0600'
 title: 'MDT with gRPC: Transport Tricks'
 author: Shelly Cadora
+excerpt: >-
+  Describes issues you may encounter when using MDT with gRPC over
+  non-management interfaces.
+position: hidden
 ---
 ## gRPC
 
