@@ -16,9 +16,9 @@ Note that you may not need to read this blog!  It is entirely likely that your g
 
 ## What is gRPC again?
 
-(gRPC)[http://www.grpc.io/] is an open source RPC framework that leverages HTTP/2 as a transport.  Compared to simple TCP transport, gRPC brings two important features to MDT: 1) Optional encryption with TLS and 2) Support for "dial-in" (from collector to router).
+[gRPC](http://www.grpc.io/) is an open source RPC framework that leverages HTTP/2 as a transport.  Compared to simple TCP transport, gRPC brings two important features to MDT: 1) Optional encryption with TLS and 2) Support for "dial-in" (from collector to router).
 
-Now bear with me for a moment, as this next bit get a little complicated.  If you are familiar with the 64 bit (IOS XR software architecture)[https://xrdocs.github.io/application-hosting/blogs/2016-06-28-xr-app-hosting-architecture-quick-look/], you may already be aware that IOS XR runs in a container on top of a Linux kernel.  The gRPC server used by MDT lives in the IOS XR container (it's part of the IOS XR Linux shell) but it is not part of the XR Control Plane proper.  This means that gRPC uses the Linux networking stack (not the XR networking stack).  And this is where problems can happen.
+Now bear with me for a moment, as this next bit get a little complicated.  If you are familiar with the 64 bit [IOS XR software architecture]([https://xrdocs.github.io/application-hosting/blogs/2016-06-28-xr-app-hosting-architecture-quick-look/), you may already be aware that IOS XR runs in a container on top of a Linux kernel.  The gRPC server used by MDT lives in the IOS XR container (it's part of the IOS XR Linux shell) but it is not part of the XR Control Plane proper.  This means that gRPC uses the Linux networking stack (not the XR networking stack).  And this is where problems can happen.
 
 ## What Does gRPC see?
 
@@ -54,7 +54,7 @@ RP/0/RP0/CPU0:SunC#
 
 ## Just Tell Me How to Fix It
 
-One way to fix this for both dial-in and dial-out is by configuring a Third-Party App (TPA) source address.  (Configuring the TPA sets a src-hint)[https://xrdocs.github.io/application-hosting/tutorials/2016-06-16-xr-toolbox-part-4-bring-your-own-container-lxc-app/#set-the-src-hint-for-application-traffic] for Linux applications, so that originating traffic from the applications can be tied to any reachable IP of XR.
+One way to fix this for both dial-in and dial-out is by configuring a Third-Party App (TPA) source address.  [Configuring the TPA sets a src-hint](https://xrdocs.github.io/application-hosting/tutorials/2016-06-16-xr-toolbox-part-4-bring-your-own-container-lxc-app/#set-the-src-hint-for-application-traffic) for Linux applications, so that originating traffic from the applications can be tied to any reachable IP of XR.
 
 ```
 RP/0/RP0/CPU0:SunC(config)#tpa address-family ipv4 update-source GigabitEthernet 0/0/0/0
@@ -86,7 +86,7 @@ See that "src 172.30.8.53" ?  That's the source address that gRPC will use when 
 
 ## I Didn't Configure TPA But It Still Works, So There!
 
-So some lucky people who didn't configure TPA can still get gRPC to work!  Doesn't seem fair, does it?  Well, the reason is that they have a Loopback (any Loopback except Loopback 1 which is reserved -- read (this)[https://xrdocs.github.io/application-hosting/blogs/2016-06-28-xr-app-hosting-architecture-quick-look/] for the gory details) configured.  When a Loopback interface is configured, you also get a default route in the Linux stack:
+So some lucky people who didn't configure TPA can still get gRPC to work!  Doesn't seem fair, does it?  Well, the reason is that they have a Loopback (any Loopback except Loopback 1 which is reserved -- read [this](https://xrdocs.github.io/application-hosting/blogs/2016-06-28-xr-app-hosting-architecture-quick-look/] for the gory details) configured.  When a Loopback interface is configured, you also get a default route in the Linux stack:
 
 ```
 RP/0/RP0/CPU0:SunC(config)#no tpa
