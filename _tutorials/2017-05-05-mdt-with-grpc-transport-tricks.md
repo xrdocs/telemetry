@@ -73,7 +73,7 @@ default         *               0.0.0.0         U         0 0          0 fwdintf
 
 So now, gRPC has a route back to the collector.  That's all you need for dial-in.
 
-For dial-out knows to use GigabitEthernet0/0/0/0 as a source address. You can see that here:
+For dial-out, gRPC now knows to use GigabitEthernet0/0/0/0 as a source address. You can see that here:
 
 ```
 [xr-vm_node0_RP0_CPU0:~]$ip route
