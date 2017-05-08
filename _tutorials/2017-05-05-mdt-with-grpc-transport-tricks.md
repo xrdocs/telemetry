@@ -18,7 +18,7 @@ Note that you may not need to read this blog!  It is entirely likely that your g
 
 [gRPC](http://www.grpc.io/) is an open source RPC framework that leverages HTTP/2 as a transport.  Compared to simple TCP transport, gRPC brings two important features to MDT: 1) Optional encryption with TLS and 2) Support for "dial-in" (from collector to router).
 
-Now bear with me for a moment, as this next bit get a little complicated.  If you are familiar with the 64 bit [IOS XR software architecture]([https://xrdocs.github.io/application-hosting/blogs/2016-06-28-xr-app-hosting-architecture-quick-look/), you may already be aware that IOS XR runs in a container on top of a Linux kernel.  The gRPC server used by MDT lives in the IOS XR container (it's part of the IOS XR Linux shell) but it is not part of the XR Control Plane proper.  This means that gRPC uses the Linux networking stack (not the XR networking stack).  And this is where problems can happen.
+Now bear with me for a moment, as this next bit get a little complicated.  If you are familiar with the 64 bit [IOS XR software architecture](https://xrdocs.github.io/application-hosting/blogs/2016-06-28-xr-app-hosting-architecture-quick-look/), you may already be aware that IOS XR runs in a container on top of a Linux kernel.  The gRPC server used by MDT lives in the IOS XR container (it's part of the IOS XR Linux shell) but it is not part of the XR Control Plane proper.  This means that gRPC uses the Linux networking stack (not the XR networking stack).  And this is where problems can happen.
 
 ## What Does gRPC see?
 
@@ -84,6 +84,10 @@ default dev fwdintf  scope link  src 172.30.8.53
 
 See that "src 172.30.8.53" ?  That's the source address that gRPC will use when sending MDT traffic in dial-out mode.
 
+Note that you can use any operational interface for the update-source, including Loopbacks.  If you've used update-source in other contexts (e.g. BGP neighbors configs), then you know that using a Loopback address is typically preferred since Loopbacks never goes down.  Just make sure that the Loopback you specify is return-path-routable from your collector!
+
+And speaking of Loopbacks...
+
 ## I Didn't Configure TPA But It Still Works, So There!
 
 So some lucky people who didn't configure TPA can still get gRPC to work!  Doesn't seem fair, does it?  Well, the reason is that they have a Loopback (any Loopback except Loopback 1 which is reserved -- gory detail fans read [this](https://xrdocs.github.io/application-hosting/blogs/2016-06-28-xr-app-hosting-architecture-quick-look)).  When a Loopback interface is configured, you also get a default route in the Linux stack:
@@ -118,4 +122,4 @@ Traffic sent to the collector will have a source address of 5.5.5.5.  If your co
 
 ## Conclusion
 
-I hope you didn't have to read this tutorial at all.  But if you did and even if you glazed over the bits about the Linux networking stack and XR Linux shell, just remember this: to make gRPC work, either configure a TPA source address or a routable Loopback.
+I hope you didn't have to read this tutorial at all.  But if you did and even if you glazed over the bits about the Linux networking stack and XR Linux shell, just remember this: to make gRPC work, use a routable Loopback or TPA update-source.
