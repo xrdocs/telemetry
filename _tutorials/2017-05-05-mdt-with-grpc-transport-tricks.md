@@ -84,7 +84,7 @@ default dev fwdintf  scope link  src 172.30.8.53
 
 See that "src 172.30.8.53" ?  That's the source address that gRPC will use when sending MDT traffic in dial-out mode.
 
-Note that you can use any operational interface for the update-source, including Loopbacks.  If you've used update-source in other contexts (e.g. BGP neighbors configs), then you know that using a Loopback address is typically preferred since Loopbacks never goes down.  Just make sure that the Loopback you specify is return-path-routable from your collector!
+Note that you can use any operational interface for the update-source, with the exception of dot1q-tagged VLAN sub-interfaces (as of IOS XR 6.2).  If you've used update-source in other contexts (e.g. BGP neighbors configs), then you know that using a Loopback address is typically preferred since Loopbacks never goes down.  Just make sure that the Loopback you specify is return-path-routable from your collector!
 
 And speaking of Loopbacks...
 
