@@ -9,6 +9,9 @@ excerpt: >-
 position: top
 tags:
   - iosxr
+  - MDT
+  - telemetry
+  - pipeline
 ---
 ## Using Pipeline 
 In an [earlier blog](http://blogs.cisco.com/sp/introducing-pipeline-a-model-driven-telemetry-collection-service), I introduced Pipeline, a multi-function telemetry collection service written in Go.  In this tutorial, I'll cover how to set up Pipeline for the simplest of tasks:  ingesting telemetry data over TCP and writing it to a file as a JSON object.
