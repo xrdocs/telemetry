@@ -6,6 +6,9 @@ author: Shelly Cadora
 excerpt: Describes how to configure Pipeline to relay telemetry data to InfluxDB.
 tags:
   - iosxr
+  - telemetry
+  - MDT
+  - pipeline
 position: null
 ---
 
