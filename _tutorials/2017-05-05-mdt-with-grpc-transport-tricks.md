@@ -118,7 +118,7 @@ default dev fwdintf  scope link  src 5.5.5.5
 [xr-vm_node0_RP0_CPU0:~]$
 ```
 
-Traffic sent to the collector will have a source address of 5.5.5.5.  If your collector has a route back to 5.5.5.5 (e.g. you're distributing your loopback addresses in your IGP), then great.  If not, then the collector will drop the packet and you'll need the TPA config.
+Traffic sent to the collector will have a source address of 5.5.5.5.  If your collector has a route back to 5.5.5.5 (e.g. you're distributing your loopback addresses in your IGP), then great.  If not, then the collector will drop the packet and you'll need the TPA config for an interface IP address that is routable from the collector.
 
 ## Conclusion
 
