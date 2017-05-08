@@ -6,7 +6,12 @@ author: Shelly Cadora
 excerpt: >-
   Describes issues you may encounter when using MDT with gRPC over
   non-management interfaces.
-position: hidden
+position: top
+tags:
+  - iosxr
+  - MDT
+  - Telemetry
+  - gRPC
 ---
 ## gRPC
 
