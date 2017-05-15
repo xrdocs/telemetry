@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 date: '2017-01-20 09:35 -0700'
 title: 'Model-Driven Telemetry: Dial-In or Dial-Out ?'
 author: Shelly Cadora
@@ -7,7 +7,8 @@ excerpt: Discusses the transport options for model-driven telemetry
 tags:
   - cisco
   - MDT
-position: hidden
+  - telemetry
+position: top
 ---
 ## Transport Options
 
