@@ -1,5 +1,5 @@
 ---
-published: true
+published: false
 date: '2017-01-20 09:35 -0700'
 title: 'Model-Driven Telemetry: Dial-In or Dial-Out ?'
 author: Shelly Cadora
@@ -19,7 +19,7 @@ When we say "dial-out," we are speaking from the router's perspective: the route
 
 ![DialOut2.png]({{site.baseurl}}/images/DialOut2.png)
 
-Anyone who has had to modify ACLs to enable a new SNMP manager to connect to the network can appreciate the value of the dial-out option.  Since the router initiates the connection, you don't have to worry about opening up ports for inbound management traffic.
+Anyone who has had to modify ACLs to enable a new SNMP manager to connect to the network can appreciate the value of the dial-out option.  Since the router initiates the connection, you don't have to worry about opening up ports for inbound management traffic.  Dial-out can also leverage Anycast addresses for HA and/or load-balancing.
 
 With dial-in, on the other hand, the router listens passively on a specified port until the collector "dials-in."  
 
@@ -39,19 +39,22 @@ gRPC is an open source communication framework built on top of HTTP/2.  It was o
 
 One of the main reasons that people enable gRPC dial-out is that gRPC allows you to do authentication and encryption via TLS.  If you're worried about sending operational data in the clear and/or you want to protect your collector with certificate-based authentication, enable gRPC with TLS.  
 
-gRPC is not quite as trivial from a developer's perspective, but one of its strengths is the plethora of idiomatic client libraries in multiple programming languages.  Go, Python, Ruby, Java, C developers -- grab your gRPC library from github and you'll be juggling gRPC sessions like a pro.
+Another bonus is that gRPC handles pesky details around async communications and the associated file descriptor handling. So you might actually find it easier to use than TCP as you scale to multiple routers.
+
+gRPC is not quite as trivial from a protocol perspective, but one of its strengths is the plethora of idiomatic client libraries in multiple programming languages.  Go, Python, Ruby, Java, C developers -- grab your gRPC library from github and you'll be juggling gRPC sessions like a pro.  
 
 ## gRPC Dial-In
-In addition to secure and efficient transport, gRPC provides bidirectional streaming  and connection multiplexing.  This means that you can "dial-in" to a router, push down new configs (including telemetry subscription configs) and have operational data streamed back -- all within a single, unified channel, all using the same underlying data models.  Cisco IOS XR has supported [configuration via gRPC](https://github.com/CiscoDevNet/grpc-getting-started) since 6.0.0 and dial-in telemetry over gRPC since 6.1.1.  
+In addition to secure and efficient transport, gRPC provides bidirectional streaming and connection multiplexing.  This means that you can "dial-in" to a router, push down new configs (including telemetry subscription configs) and have operational data streamed back -- all within a single, unified channel, all using the same underlying data models.  Cisco IOS XR has supported [configuration via gRPC](https://github.com/CiscoDevNet/grpc-getting-started) since 6.0.0 and dial-in telemetry over gRPC since 6.1.1.  
 
-Since the collector "dials-in" to the router, there's no need to specify each MDT destination in the configuration.  In fact, since you can configure MDT via gRPC, you don't have to configure telemetry at all.  Just enable the gRPC service on the router, connect your client, and dynamically enable the telemetry subscription you want.
+Since the collector "dials-in" to the router, there's no need to specify each MDT destination in the configuration.  Just enable the gRPC service on the router, connect your client, and dynamically enable the telemetry subscription you want.
+
+Of course, like all the other methods, there are trade-offs. A dial-in subscription is transient.  If you lose it, the client (the collector) is responsible for re-establishing it.  You will also have to think more carefully about how you want to do load-balancing.
 
 ## Decisions, Decisions
 So what transport should you use for MDT?  Here's a few quick heuristics:
 
-- If you're looking for a quick and simple solution, try TCP dial-out.  It's simple to configure, there are no new protocols to learn, and you won't have to worry about opening up inbound connections.  
-- If you need encryption, go for gRPC dial-out.  
+- If you're looking for a quick and simple solution for a single router and collector, try TCP dial-out.  It's simple to configure, there are no new protocols to learn, and you won't have to worry about opening up inbound connections.  
+- If you need encryption or you need help scaling out to many devices, take a look at gRPC dial-out.
 - If you're already using gRPC for configuration, consider gRPC dial-in.
-
 
 As you deploy MDT, you may find that your transport needs change or evolve.  No problem.  The most important thing to remember is that the push mechanism for telemetry data remains exactly the same, dial-in or dial-out, TCP or gRPC.  No matter what you choose, you'll get the same data, in the same data model, at the same speed.  That's the beauty of Model-Driven Telemetry.
