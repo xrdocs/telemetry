@@ -91,7 +91,7 @@ scadora@darcy:/etc/ssl/certs$
 
 Now use that key to self-sign the rootCA certificate.  It will ask you a bunch of questions that you can fill out as you want (I just used all defaults):
 ```
-scadora@darcy:/etc/ssl/certs$ openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 1024 -out rootCA.pem
+scadora@darcy:/etc/ssl/certs$ sudo openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 1024 -extensions v3_ca -config ../openssl.cnf -out rootCA.pem
 You are about to be asked to enter information that will be incorporated
 into your certificate request.
 What you are about to enter is what is called a Distinguished Name or a DN.
@@ -121,7 +121,7 @@ e is 65537 (0x10001)
 scadora@darcy:/etc/ssl/certs$
 ```
 
-Next, create a Certificate Signing Request (CSR) using the key you just generated.  In the following, I use all the defaults except for the Common Name:
+Next, create a Certificate Signing Request (CSR) using the key you just generated.  In the following, I use all the defaults except for the Common Name, which I set as darcy.cisco.com:
 
 ```scadora@darcy:/etc/ssl/certs$ openssl req -new -key darcy.key -out darcy.csr
 You are about to be asked to enter information that will be incorporated
@@ -148,13 +148,51 @@ scadora@darcy:/etc/ssl/certs$
 
 Finally, use your rootCA certificate to sign the CSR ("darcy.csr") you just generated and create a certificate for Pipeline ("darcy.pem"):
 ```
-scadora@darcy:/etc/ssl/certs$ sudo openssl x509 -req -in darcy.csr -CA rootCA.pem -CAkey rootCA.key -CAcreateserial -out darcy.pem -days 500 -sha256
+cadora@darcy:/etc/ssl/certs$ openssl x509 -req -in darcy.csr -CA rootCA.pem -CAkey rootCA.key -CAcreateserial -out darcy.pem -days 500 -sha256
 Signature ok
 subject=/C=AU/ST=Some-State/O=Internet Widgits Pty Ltd/CN=darcy.cisco.example
 Getting CA Private Key
 scadora@darcy:/etc/ssl/certs$
 ```
 
+#### 3. Copy rootCA Certificate to the router
+
+For the router to validate Pipeline's certificate, it needs to have a copy of the rootCA certificate in /misc/config/grpc/dialout/dialout.pem (the filename is important!).  Here is how to scp the rootCA.pem to the appropriate file and directory:
+```
+RP/0/RP0/CPU0:SunC#bash
+Tue May 16 18:06:04.592 UTC
+[xr-vm_node0_RP0_CPU0:~]$ scp scadora@172.30.8.4://etc/ssl/certs/rootCA.pem /misc/config/grpc/dialout/dialout.pem
+rootCA.pem                                    100% 1204     1.2KB/s   00:00
+[xr-vm_node0_RP0_CPU0:~]$
+```
+
+### Configuring the Router
+TLS is the default for MDT for gRPC, so the destination-group config just looks like this:
+
+```
+telemetry model-driven
+ destination-group DGroup2
+  address family ipv4 172.30.8.4 port 57500
+   encoding self-describing-gpb
+   protocol grpc 
+```
+
+### Configuring Pipeline for tls=true
+We can use the ```[gRPCDIalout]``` input stage in the default pipeline.conf.  The only change is the last 4 lines where we enable tls and set the pem, key and servername to the values corresponding to the Pipeline certificate we generated in 
+
+```
+scadora@darcy:~/bigmuddy-network-telemetry-pipeline$ grep -A30 "gRPCDialout" pipeline.conf | grep -v -e '^#' -e '^$'
+[gRPCDialout]
+ stage = xport_input
+ type = grpc
+ encap = gpb
+ listen = :57500
+ tls = true
+ tls_pem = /etc/ssl/certs/darcy.pem
+ tls_key = /etc/ssl/certs/darcy.key
+ tls_servername = darcy.cisco.example
+scadora@darcy:~/bigmuddy-network-telemetry-pipeline$
+```
 
 # gRPC Dialin
 [dial-in](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-in)
