@@ -111,7 +111,7 @@ scadora@darcy:/etc/ssl/certs$
 
 You should now have a rootCA certificate called rootCA.pem.
 
-#### 2. The Pipeline Certificate
+#### 2. The Pipeline Certificate<a name=pipelinecert></a>
 First, create a key pair for Pipeline.  In this case, I've called it "darcy.key" since darcy is the name of the server on which I am running Pipeline.
 ```scadora@darcy:/etc/ssl/certs$  sudo openssl genrsa -out darcy.key 2048
 Generating RSA private key, 2048 bit long modulus
@@ -178,7 +178,7 @@ telemetry model-driven
 ```
 
 ### Configuring Pipeline for tls=true
-We can use the ```[gRPCDIalout]``` input stage in the default pipeline.conf.  The only change is the last 4 lines where we enable tls and set the pem, key and servername to the values corresponding to the Pipeline certificate we generated in 
+We can use the ```[gRPCDIalout]``` input stage in the default pipeline.conf.  The only change is the last 4 lines where we enable tls and set the pem, key and servername to the values corresponding to the [Pipeline certificate we generated earlier](#pipelinecert). 
 
 ```
 scadora@darcy:~/bigmuddy-network-telemetry-pipeline$ grep -A30 "gRPCDialout" pipeline.conf | grep -v -e '^#' -e '^$'
@@ -192,6 +192,23 @@ scadora@darcy:~/bigmuddy-network-telemetry-pipeline$ grep -A30 "gRPCDialout" pip
  tls_key = /etc/ssl/certs/darcy.key
  tls_servername = darcy.cisco.example
 scadora@darcy:~/bigmuddy-network-telemetry-pipeline$
+```
+
+And that's it.  Run pipeline as usual and you'll see the router connect:
+```scadora@darcy:~/bigmuddy-network-telemetry-pipeline$ sudo bin/pipeline -config pipeline.conf -log= -debug | grep gRPC
+INFO[2017-05-16 13:00:40.976896] gRPC starting block                           encap=gpb name=grpcdialout server=:57500 tag=pipeline type="pipeline is SERVER"
+INFO[2017-05-16 13:00:40.977505] gRPC: Start accepting dialout sessions        encap=gpb name=grpcdialout server=:57500 tag=pipeline type="pipeline is SERVER"
+INFO[2017-05-16 13:01:09.775514] gRPC: Receiving dialout stream                encap=gpb name=grpcdialout peer="172.30.8.53:59865" server=:57500 tag=pipeline type="pipeline is SERVER"
+```
+
+On the router, the grpc trace will show you the server name of the received certificate.
+```
+RP/0/RP0/CPU0:SunC#show grpc trace ems
+Tue May 16 20:01:15.059 UTC
+2 wrapping entries (141632 possible, 320 allocated, 0 filtered, 2 total)
+May 16 20:01:06.757 ems/conf 0/RP0/CPU0 t26859 EMS-CONF:emsd_is_active_role get proc role (1)
+May 16 20:01:06.759 ems/info 0/RP0/CPU0 t26843 EMS_INFO: nsDialerCheckAddTLSOption:322 mdtDialout: TLS pem: /misc/config/grpc/dialout/dialout.pem, Server host: darcy.cisco.example
+RP/0/RP0/CPU0:SunC#
 ```
 
 # gRPC Dialin
