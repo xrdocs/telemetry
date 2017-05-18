@@ -222,8 +222,25 @@ RP/0/RP0/CPU0:SunC#
 ```
 
 # gRPC Dialin
-[dial-in](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-in)
 
-### Without TLS
+I'll re-use the rest of the MDT router config from the [gRPC dial-in example](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-in)  It should look like this:
 
-### With TLS
+```
+grpc
+ port 57500
+!
+telemetry model-driven
+ sensor-group SGroup3
+  sensor-path openconfig-interfaces:interfaces/interface
+ !
+ subscription Sub3
+  sensor-group-id SGroup3 sample-interval 30000
+``` 
+
+You will also need to configure a username and password with a privilege level
+
+## gRPC Dialin Without TLS
+If you don't use TLS, your MDT data won't be encrypted.  On the other hand, it's easier to configure and there's less fiddling with certificates. So if you're new to MDT and gRPC, this might be a good starting place.
+
+
+### gRPC Dialin With TLS
