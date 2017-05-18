@@ -284,6 +284,8 @@ username mdt
  secret 5 $1$kAbv$xNk9KA.mIC7K2wfdpGjzk1
 ```
 
+Next, you get to decide if you want to use TLS or not and forge ahead.
+
 ## gRPC Dialin Without TLS
 If you don't use TLS, your MDT data won't be encrypted.  On the other hand, there's less fiddling with certificates. So if you're trying to get gRPC dialin to work for the first time, this might be a good starting place.
 
@@ -385,4 +387,5 @@ Load config from [pipeline.conf_REWRITTEN], logging in [pipeline.log]
 Wait for ^C to shutdown
 ```
 
-### gRPC Dialin With TLS
+## gRPC Dialin With TLS
+In a dialin scenario, the router is the "server" in the gRPC connection and Pipeline is the "client."  Therefore, in the TLS handshake, the router will need to send a certificate to authenticate itself to the router.  Pipeline validates the router's certificate using the public certificate of the Root Certificate Authority (CA) that signed it.
