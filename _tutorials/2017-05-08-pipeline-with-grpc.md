@@ -157,12 +157,13 @@ Getting CA Private Key
 scadora@darcy:/etc/ssl/certs$
 ```
 
-Note: Some people issue certificates with a Common Name set to the IP address of the server instead of a FQDN.  Should you do this for the Pipeline certificate, bear in mind that the certificate will also need to have a Subject Alternative Name section that explicitly lists all valid IP addresses.  If you see the following message in your grpc trace, this could be your problem.
+Note: Some people issue certificates with a Common Name set to the IP address of the server instead of a FQDN.  Should you do this for the Pipeline certificate, bear in mind that the certificate will also need to have a Subject Alternative Name section that explicitly lists all valid IP addresses.    If you see the following message in your grpc trace, this could be your problem.
 ```RP/0/RP0/CPU0:SunC#show grpc trace ems
 Tue May 16 19:35:44.792 UTC
 3 wrapping entries (141632 possible, 320 allocated, 0 filtered, 3 total)
 May 16 19:35:40.240 ems/grpc 0/RP0/CPU0 t26842 EMS-GRPC: grpc: Conn.resetTransport failed to create client transport: connection error: desc = "transport: x509: cannot validate certificate for 172.30.8.4 because it doesn't contain any IP SANs"
 ```
+For more info, take a look at [this discussion](https://serverfault.com/questions/611120/failed-tls-handshake-does-not-contain-any-ip-sans).
 {: .notice--warning}
 
 #### 3. Copy rootCA Certificate to the router
@@ -389,3 +390,5 @@ Wait for ^C to shutdown
 
 ## gRPC Dialin With TLS
 In a dialin scenario, the router is the "server" in the gRPC connection and Pipeline is the "client."  Therefore, in the TLS handshake, the router will need to send a certificate to authenticate itself to the router.  Pipeline validates the router's certificate using the public certificate of the Root Certificate Authority (CA) that signed it.
+
+If your router has a certificate signed by your CA, then
