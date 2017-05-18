@@ -157,7 +157,7 @@ Getting CA Private Key
 scadora@darcy:/etc/ssl/certs$
 ```
 
-Note: Some people issue certificates with a Common Name set to the IP address of the server instead of a FQDN.  Should you do this for the Pipeline certificate, bear in mind that the certificate will also need to have a Subject Alternative Name section that explicitly lists all valid IP addresses.    If you see the following message in your grpc trace, this could be your problem.
+Note: Some people issue certificates with a Common Name set to the IP address of the server instead of a FQDN.  Should you do this for the Pipeline certificate, bear in mind that the certificate will also need to have a Subject Alternative Name section that explicitly lists all valid IP addresses.  If you see the following message in your grpc trace, this could be your problem.
 ```RP/0/RP0/CPU0:SunC#show grpc trace ems
 Tue May 16 19:35:44.792 UTC
 3 wrapping entries (141632 possible, 320 allocated, 0 filtered, 3 total)
