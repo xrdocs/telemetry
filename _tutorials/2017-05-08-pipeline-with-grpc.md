@@ -287,7 +287,7 @@ username mdt
 
 Next, you get to decide if you want to use TLS or not and forge ahead.
 
-## gRPC Dialin Without TLS
+## Pipeline for gRPC Dialin Without TLS
 If you don't use TLS, your MDT data won't be encrypted.  On the other hand, there's less fiddling with certificates. So if you're trying to get gRPC dialin to work for the first time, this might be a good starting place.
 
 You can use the ```[mymdtrouter]``` input stage in the default pipeline.conf.  Just uncomment the 8 lines shown below, changing the server line to match your router's IP address and configured gRPC port:
@@ -388,7 +388,106 @@ Load config from [pipeline.conf_REWRITTEN], logging in [pipeline.log]
 Wait for ^C to shutdown
 ```
 
-## gRPC Dialin With TLS
-In a dialin scenario, the router is the "server" in the gRPC connection and Pipeline is the "client."  Therefore, in the TLS handshake, the router will need to send a certificate to authenticate itself to the router.  Pipeline validates the router's certificate using the public certificate of the Root Certificate Authority (CA) that signed it.
+That's it, you're done.  No need to read the next section unless you want to do TLS.
 
-If your router has a certificate signed by your CA, then
+# gRPC Dialin With TLS
+In a dialin scenario, Pipeline acts as the "client" in the TLS handshake.  Therefore, the router will need to send a certificate to authenticate itself to Pipeline. 
+
+There are a couple ways to go about creating the router certificate. If you already have a root CA, you can issue a certificate for the router.  However, because this tutorial is far too long already, I'm going to take the easy way out and use a self-signed certificate.
+
+## Router Config for gRPC TLS Dial-In<a name=router-dialin-tls></a>
+
+The first thing we have to do is enable the gRPC service on the router for TLS like so:
+
+```
+grpc
+ port 57500
+ tls
+```
+
+Once you do this, the router automatically generates a self-signed cert:
+
+```
+RP/0/RP0/CPU0:SunC#bash
+Thu May 18 23:05:51.266 UTC
+
+[xr-vm_node0_RP0_CPU0:~]$cd /misc/config/grpc
+[xr-vm_node0_RP0_CPU0:/misc/config/grpc]$ls
+dialout  ems.key  ems.pem
+[xr-vm_node0_RP0_CPU0:/misc/config/grpc]$
+```
+
+If you take a look at the cert, you can use standard openssl commands:
+
+```
+[xr-vm_node0_RP0_CPU0:/misc/config/grpc]$openssl x509 -noout -text -in ems.pem
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 1789 (0x6fd)
+    Signature Algorithm: sha512WithRSAEncryption
+        Issuer: C=US, ST=CA, L=San Jose/street=3700 Cisco Way/postalCode=95134, O=Cisco Systems, Inc., OU=CSG, CN=ems.cisco.com/serialNumber=949DF85F746
+        Validity
+            Not Before: May 18 22:49:51 2017 GMT
+            Not After : May 18 22:49:51 2037 GMT
+        Subject: C=US, ST=CA, L=San Jose/street=3700 Cisco Way/postalCode=95134, O=Cisco Systems, Inc., OU=CSG, CN=ems.cisco.com/serialNumber=949DF85F746
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:cf:89:9e:7a:14:5f:6a:f4:8a:75:ce:69:07:00:
+                    38:2d:5d:1f:71:f5:cb:69:37:3b:6d:9b:20:ab:47:
+                    9e:2b:b6:4b:be:30:1e:54:81:76:4f:61:91:de:4e:
+                    47:80:b2:6d:0c:f3:2a:69:be:85:67:ca:a3:80:7f:
+                    bc:40:2e:63:5d:c9:ec:a4:fc:60:ae:b2:10:2a:f9:
+                    de:02:11:50:5a:1e:43:c9:3a:95:6b:9f:fa:3d:f4:
+                    db:1f:a9:6d:bd:7b:0b:d8:87:64:08:26:2b:54:82:
+                    42:2f:a2:7e:36:64:9b:42:9a:ff:bf:19:25:2f:42:
+                    3e:9d:94:af:fc:ea:62:ef:ec:57:20:57:d9:39:c5:
+                    bd:77:5c:a9:01:76:e1:2c:69:67:6f:b7:30:f8:f8:
+                    2c:d1:2c:25:de:66:46:fb:49:30:a7:c9:9c:14:b0:
+                    70:f4:3f:b2:62:8c:5c:c6:8f:a2:e3:de:75:c3:c3:
+                    e5:72:1f:4e:40:d4:bd:1b:2a:27:19:e7:80:b3:c9:
+                    cb:56:4e:5c:99:42:d6:97:23:04:6d:9c:9e:f0:d2:
+                    0e:8b:5c:02:09:d1:c8:31:04:23:b4:f1:b4:41:a2:
+                    44:b5:16:fd:c3:80:a5:3d:39:26:de:94:2b:db:22:
+                    d0:0b:07:92:2d:6a:24:37:d4:db:b2:29:23:f3:00:
+                    88:13
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: critical
+                CA:TRUE
+            X509v3 Subject Key Identifier:
+                1C:B6:98:EF:7F:A4:1D:07:0B:6F:73:01:08:E6:0C:8C:97:AC:E0:A2
+            X509v3 Authority Key Identifier:
+                keyid:1C:B6:98:EF:7F:A4:1D:07:0B:6F:73:01:08:E6:0C:8C:97:AC:E0:A2
+
+    Signature Algorithm: sha512WithRSAEncryption
+         60:97:b9:e2:cb:d5:1d:b0:48:d5:68:fa:aa:a6:36:de:e3:64:
+         1f:6a:7f:4b:3e:9c:42:e8:59:23:26:14:c1:b1:0e:f3:17:d5:
+         34:71:4c:79:6f:f7:62:94:21:a2:d7:d4:99:cc:9c:f2:29:2a:
+         38:79:19:83:fd:a9:16:df:0e:35:55:5e:11:b5:b7:3f:e6:10:
+         0d:71:c7:3d:2d:9b:41:44:09:9b:b3:98:64:ab:9e:33:f3:08:
+         a9:f0:6b:62:93:18:7e:ff:14:a7:ea:c2:c3:3b:ed:a6:b3:69:
+         25:07:04:41:23:82:c6:12:23:6d:e0:14:80:7c:10:dd:ea:06:
+         8e:e6:78:f5:42:a0:3e:21:81:7d:48:29:18:29:0a:ef:ce:a1:
+         7c:38:7b:e8:17:44:db:24:37:ba:1c:53:6d:9d:6f:d2:5c:2a:
+         69:b5:11:13:4d:7c:cc:3d:44:d2:96:fa:71:41:3a:b6:ab:6e:
+         e7:b1:ff:53:db:e8:95:5c:67:68:51:80:ab:24:e0:7e:8e:fe:
+         e1:af:36:8c:bc:b2:3a:69:3f:33:bc:b6:36:25:ad:78:49:d1:
+         2e:43:6f:f8:80:c3:1c:21:89:cd:da:9f:3d:62:ec:79:1b:b0:
+         77:0d:96:c8:c8:26:25:0b:94:ae:21:14:d1:1b:e0:f7:11:af:
+         61:ce:13:74
+[xr-vm_node0_RP0_CPU0:/misc/config/grpc]$
+```
+
+As you can see, this certificate has been issued for a CN=ems.cisco.com and is a CA certificate.
+
+Since this is also the CA cert (since it's self-signed), we'll transfer it to the server running Pipeline.
+
+```
+[xr-vm_node0_RP0_CPU0:/misc/config/grpc]$scp ems.pem scadora@172.30.8.4:
+scadora@172.30.8.4's password:
+ems.pem                                       100% 1513     1.5KB/s   00:00    
+[xr-vm_node0_RP0_CPU0:/misc/config/grpc]$
+```
