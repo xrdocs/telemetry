@@ -237,7 +237,67 @@ telemetry model-driven
   sensor-group-id SGroup3 sample-interval 30000
 ``` 
 
-You will also need to configure a username and password with a privilege level
+# gRPC Dialin
+In a dialin scenario, Pipeline sends the SYN packet and acts as the "client" in the gRPC session and TLS handshake.
+
+## Router Config for gRPC Dial-In
+For the gRPC example, I'll re-use the MDT router config from the [gRPC dial-in example](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-in)  It should look like this:
+
+```
+grpc
+ port 57500
+!
+telemetry model-driven
+ sensor-group SGroup3
+  sensor-path openconfig-interfaces:interfaces/interface
+ !
+ subscription Sub3
+  sensor-group-id SGroup3 sample-interval 30000
+``` 
+
+You will also need to configure a username and password that Pipeline can use when it dials in.  If you're just doing a quick test in the lab, assign the user to one of these default usergroups: sysadmin, netadmin, or root-lr.  
+
+```
+username mdt
+ group sysadmin
+ secret 5 $1$kAbv$xNk9KA.mIC7K2wfdpGjzk1
+```
+
+If you want to be more restrictive, here is the minimal taskgroup that you will need to support telemetry for gRPC dialin:
+
+```
+taskgroup mdt-grpc
+ task read li
+ task read acl
+ task read cdp
+ task read eem
+ task read boot
+ task read diag
+ task read ipv4
+ task read ipv6
+ task read snmp
+ task read vpdn
+ task read crypto
+ task read system
+ task read logging
+ task read fault-mgr
+ task read interface
+ task read ext-access
+ task read filesystem
+ task read tty-access
+ task read config-mgmt
+ task read ip-services
+ task read host-services
+ task read basic-services
+ task read config-services
+!
+usergroup mdt-grpc
+ taskgroup mdt-grpc
+!
+username mdt
+ group mdt-grpc
+ secret 5 $1$kAbv$xNk9KA.mIC7K2wfdpGjzk1
+```
 
 ## gRPC Dialin Without TLS
 If you don't use TLS, your MDT data won't be encrypted.  On the other hand, it's easier to configure and there's less fiddling with certificates. So if you're new to MDT and gRPC, this might be a good starting place.
