@@ -15,7 +15,9 @@ tags:
 
 In previous tutorials, I've shown how to use [Pipeline](http://blogs.cisco.com/sp/introducing-pipeline-a-model-driven-telemetry-collection-service) to dump Model Driven Telemetry (MDT) data into a [text file](https://xrdocs.github.io/telemetry/tutorials/2016-10-03-pipeline-to-text-tutorial/) and into [InfluxDB](https://xrdocs.github.io/telemetry/tutorials/2017-04-10-using-pipeline-integrating-with-influxdb/).  In each case, I configured the router to transport MDT data to Pipeline using TCP.  In this tutorial, I'll cover a few additional steps that are required to use Pipeline with [gRPC](http://www.grpc.io/).  I'll focus on only the changes needed in the router and Pipeline input stage configs here, so be sure to consult the other Pipeline tutorialis for important info about install, output stage, etc.
 
-# gRPC Dialout
+If you're going to use gRPC, the first thing to decide is whether you're going to [dial-out](#dialout) or [dial-in](#dialin).  If you don't know the difference or need help chosing, check out [my blog](https://xrdocs.github.io/telemetry/blogs/2017-01-20-model-driven-telemetry-dial-in-or-dial-out/) for some guidance.        
+
+# gRPC Dialout<a name=dialout></a>
 For gRPC dial-out, the big decision is whether to use TLS or not. This impacts the destination-group in the router config and the ingress stage of the Pipeline input stage.
 
 Aside the destination-group config, I'll re-use the rest of the MDT router config from the [gRPC dial-out example](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-out).  It should look something like this:
@@ -155,6 +157,14 @@ Getting CA Private Key
 scadora@darcy:/etc/ssl/certs$
 ```
 
+Note: Some people issue certificates with a Common Name set to the IP address of the server instead of a FQDN.  Should you do this for the Pipeline certificate, bear in mind that the certificate will also need to have a Subject Alternative Name section that explicitly lists all valid IP addresses.  If you see the following message in your grpc trace, this could be your problem.
+```RP/0/RP0/CPU0:SunC#show grpc trace ems
+Tue May 16 19:35:44.792 UTC
+3 wrapping entries (141632 possible, 320 allocated, 0 filtered, 3 total)
+May 16 19:35:40.240 ems/grpc 0/RP0/CPU0 t26842 EMS-GRPC: grpc: Conn.resetTransport failed to create client transport: connection error: desc = "transport: x509: cannot validate certificate for 172.30.8.4 because it doesn't contain any IP SANs"
+```
+{: .notice--warning}
+
 #### 3. Copy rootCA Certificate to the router
 
 For the router to validate Pipeline's certificate, it needs to have a copy of the rootCA certificate in /misc/config/grpc/dialout/dialout.pem (the filename is important!).  Here is how to scp the rootCA.pem to the appropriate file and directory:
@@ -201,7 +211,7 @@ INFO[2017-05-16 13:00:40.977505] gRPC: Start accepting dialout sessions        e
 INFO[2017-05-16 13:01:09.775514] gRPC: Receiving dialout stream                encap=gpb name=grpcdialout peer="172.30.8.53:59865" server=:57500 tag=pipeline type="pipeline is SERVER"
 ```
 
-On the router, the grpc trace will show you the server name of the received certificate.
+On the router, the grpc trace will show you the server name (darcy.cisco.example) of the received certificate.
 ```
 RP/0/RP0/CPU0:SunC#show grpc trace ems
 Tue May 16 20:01:15.059 UTC
