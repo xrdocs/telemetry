@@ -299,7 +299,6 @@ $ grep -A48 "mymdtrouter" pipeline.conf | grep -v -e '^#' -e '^$'
  server = 172.30.8.53:57500
  subscriptions = Sub3
  tls = false
- username = cisco
 ```
 
 Note that the subscription is "Sub3", which matches the subscription in the router configuration [above](#router-dialin).  Pipeline will request the pre-configured subscription from the router when it connects.
@@ -342,6 +341,48 @@ Subscription:  Sub3
     Total bytes sent:     5723
     Total packets sent:   4
     Last Sent time:       2017-05-18 20:46:28.2143492698 +0000
+```
+
+## Secure password storage
+Because Pipeline cares about your security, it won't let you store unencrypted router passwords in pipeline.conf.  If you dislike being prompted for a password every time you run it or you want to run pipeline in the background, you can have pipeline encrypt the password using the -pem option and store it in a new file as follows:
+
+```
+$ bin/pipeline -config pipeline.conf -pem ~/.ssh/id_rsa
+Startup pipeline
+Load config from [pipeline.conf], logging in [pipeline.log]
+
+CRYPT Client [mymdtrouter],[172.30.8.53:57500]
+ Enter username: mdt
+ Enter password:
+Generating sample config...A new configuration file [pipeline.conf_REWRITTEN] has been written including user name and encrypted password.
+In future, you can run pipeline non-interactively.
+Do remember to run pipeline with '-pem /home/scadora/.ssh/id_rsa -config pipeline.conf_REWRITTEN' options.
+Wait for ^C to shutdown
+```
+
+If you take a look at the ```[mymdtrouter]``` stage in pipeline.conf_REWRITTEN, you'll see that the username and encrypted password are included:
+
+```
+$ grep -A10 "mymdtrouter" pipeline.conf_REWRITTEN | grep -v -e '^#' -e '^$'
+[mymdtrouter]
+subscriptions=Sub3
+password=PZbS/IG4O+2lsok3xxBjQZwJ5CFyraixl//qdNy67IRMM1YMLlWqbbGHUXVGM1pX0HfKf7JU1beRivkOcwyANPff4hVmF5b7Ne1SBxnKS4VqSU+AMCN/e+FFHFrCA24m0ywTYB/Dt2PJZaUCQmYzxTwa71+Vxc7lHe2dtovH/DGutQfvRa2On6aHeqiQfMbBcEeKqwya4jtmexS11Dt1ai1QXqWgn2WiggvWTGcldANO4Nfkl4vICguVlrVEfNv16qNoPB/HerTNCuGLlBR0EBhxGPxCJteexAxadt68whG4UP/teTiD2qFZ2UFXCRnpnPvpic9LIZIaF4PgNg9AGw==
+server=172.30.8.53:57500
+type=grpc
+encoding=gpbkv
+encap=gpb
+tls=false
+username=mdt
+stage=xport_input
+```
+
+Now you can run pipeline with the rewritten .conf file and it won't prompt you for the username again:
+
+```
+$ sudo bin/pipeline -config pipeline.conf_REWRITTEN -pem ~/.ssh/id_rsa
+Startup pipeline
+Load config from [pipeline.conf_REWRITTEN], logging in [pipeline.log]
+Wait for ^C to shutdown
 ```
 
 ### gRPC Dialin With TLS
