@@ -221,27 +221,12 @@ May 16 20:01:06.759 ems/info 0/RP0/CPU0 t26843 EMS_INFO: nsDialerCheckAddTLSOpti
 RP/0/RP0/CPU0:SunC#
 ```
 
-# gRPC Dialin
+# gRPC Dialin<a name=dialin></a>
 
-I'll re-use the rest of the MDT router config from the [gRPC dial-in example](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-in)  It should look like this:
-
-```
-grpc
- port 57500
-!
-telemetry model-driven
- sensor-group SGroup3
-  sensor-path openconfig-interfaces:interfaces/interface
- !
- subscription Sub3
-  sensor-group-id SGroup3 sample-interval 30000
-``` 
-
-# gRPC Dialin
 In a dialin scenario, Pipeline sends the SYN packet and acts as the "client" in the gRPC session and TLS handshake.
 
-## Router Config for gRPC Dial-In
-For the gRPC example, I'll re-use the MDT router config from the [gRPC dial-in example](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-in)  It should look like this:
+## Router Config for gRPC Dial-In<a name=router-dialin></a>
+For this part of the tutorial, I'll re-use the MDT router config from the [gRPC dial-in example](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-in)  It should look like this:
 
 ```
 grpc
@@ -300,7 +285,63 @@ username mdt
 ```
 
 ## gRPC Dialin Without TLS
-If you don't use TLS, your MDT data won't be encrypted.  On the other hand, it's easier to configure and there's less fiddling with certificates. So if you're new to MDT and gRPC, this might be a good starting place.
+If you don't use TLS, your MDT data won't be encrypted.  On the other hand, there's less fiddling with certificates. So if you're trying to get gRPC dialin to work for the first time, this might be a good starting place.
 
+You can use the ```[mymdtrouter]``` input stage in the default pipeline.conf.  Just uncomment the 8 lines shown below, changing the server line to match your router's IP address and configured gRPC port:
+
+```
+$ grep -A48 "mymdtrouter" pipeline.conf | grep -v -e '^#' -e '^$'
+ [mymdtrouter]
+ stage = xport_input
+ type = grpc
+ encoding = gpbkv
+ encap = gpb
+ server = 172.30.8.53:57500
+ subscriptions = Sub3
+ tls = false
+ username = cisco
+```
+
+Note that the subscription is "Sub3", which matches the subscription in the router configuration [above](#router-dialin).  Pipeline will request the pre-configured subscription from the router when it connects.
+
+When you run pipeline, you will be prompted for a username and password.  This is the username and password that you configured on the router [above](#router-dialin).
+
+```
+$ bin/pipeline -config pipeline.conf
+Startup pipeline
+Load config from [pipeline.conf], logging in [pipeline.log]
+
+CRYPT Client [mymdtrouter],[172.30.8.53:57500]
+ Enter username: mdt
+ Enter password:
+Wait for ^C to shutdown
+```
+
+Pipeline will connect to the router and the router will stream the telemetry data in Sub3 back to pipeline.  To verify that the connection is established, check that the subscription Destination Group State is Active:
+
+```
+RP/0/RP0/CPU0:SunC#show telemetry model sub Sub3
+Thu May 18 20:46:38.658 UTC
+Subscription:  Sub3
+-------------
+  State:       ACTIVE
+  Sensor groups:
+  Id: SGroup3
+    Sample Interval:      30000 ms
+    Sensor Path:          openconfig-interfaces:interfaces/interface
+    Sensor Path State:    Resolved
+
+  Destination Groups:
+  Group Id: DialIn_1019
+    Destination IP:       172.30.8.4
+    Destination Port:     48667
+    Encoding:             self-describing-gpb
+    Transport:            dialin
+    State:                Active
+    No TLS
+    Total bytes sent:     5723
+    Total packets sent:   4
+    Last Sent time:       2017-05-18 20:46:28.2143492698 +0000
+```
 
 ### gRPC Dialin With TLS
