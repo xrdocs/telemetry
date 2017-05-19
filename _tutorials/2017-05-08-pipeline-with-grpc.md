@@ -342,7 +342,7 @@ Next, you get to decide if you want to use [TLS](#grpc-in-tls) or [not](#grpc-in
 
 ### gRPC Dialin Without TLS<a name="grpc-in-no-tls"></a>
 
-If you don't use TLS, your MDT data won't be encrypted.  On the other hand, there's less fiddling with certificates. So if you're trying to get gRPC dialin to work for the first time, this might be a good starting place. There's nothing you need to add to the router config for this beyond the [basic router config](#router-dialin) and [credentials](#router-creds) we did above. You just need to configure and run Pipeline as shown below. 
+If you don't use TLS, your MDT data won't be encrypted.  On the other hand, there's less fiddling with certificates. So if you're trying to get gRPC dialin to work for the first time, this might be a good starting place. There's nothing you need to add to the router config for this beyond the [common router config](#router-dialin) and [credentials](#router-creds) we did above. You just need to configure and run Pipeline as shown below. 
 
  You can use the ```[mymdtrouter]``` input stage in the default pipeline.conf.  Just uncomment the 8 lines shown below, changing the server line to match your router's IP address and configured gRPC port:
 
