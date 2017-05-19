@@ -283,7 +283,7 @@ Note that there is no destination-group for dialin.
 ## Dial-In Credentials<a name="router-creds"></a> 
 Regardless of whether you use TLS or not, Pipeline will have to provide a username and password when it first connects to the router. 
 
-On the router side, you need to configure a username and password that Pipeline can use when it dials in.  If you're just doing a quick test in the lab, assign the user to one of these default usergroups: sysadmin, netadmin, or root-lr.  
+On the router side, you need to configure a username and password that Pipeline can use when it dials in.  If you're just doing a quick test in the lab, assign the user to one of these default usergroups: sysadmin, netadmin, or root-lr.  For example:
 
 ```
 username mdt
@@ -332,6 +332,7 @@ When you run pipeline, it will prompt you for a username and password.  You will
 Next, you get to decide if you want to use [TLS](#grpc-in-no-tls) or [not](#grpc-in-tls).
 
 ## gRPC Dialin Without TLS<a name="grpc-in-no-tls"</a>
+
 If you don't use TLS, your MDT data won't be encrypted.  On the other hand, there's less fiddling with certificates. So if you're trying to get gRPC dialin to work for the first time, this might be a good starting place. There's nothing you need to add to the router config for this beyond the [basic router config](#router-dialin) and [credentials](#router-creds) we did above. You just need to configure and run Pipeline as shown below. 
 
  You can use the ```[mymdtrouter]``` input stage in the default pipeline.conf.  Just uncomment the 8 lines shown below, changing the server line to match your router's IP address and configured gRPC port:
