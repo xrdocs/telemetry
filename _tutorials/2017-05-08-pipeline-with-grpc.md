@@ -401,7 +401,7 @@ There are a couple ways to go about creating the router certificate. If you alre
 
 #### Router Config for gRPC TLS Dial-In<a name="router-dialin-tls"></a>
 
-The first thing we have to do is enable the gRPC service on the router for TLS like so:
+The first thing we have to do is enable the gRPC service on the router for TLS by adding "tls" to the grpc config on the router:
 
 ```
 grpc
@@ -409,17 +409,20 @@ grpc
  tls
 ```
 
-Once you do this, the router automatically generates a self-signed cert:
-
-```
+Once you do this, the router automatically generates a self-signed cert called "ems.pem":
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
 RP/0/RP0/CPU0:SunC#bash
 Thu May 18 23:05:51.266 UTC
 
 [xr-vm_node0_RP0_CPU0:~]$cd /misc/config/grpc
 [xr-vm_node0_RP0_CPU0:/misc/config/grpc]$ls
-dialout  ems.key  ems.pem
+dialout  ems.key  <b>ems.pem</b>
 [xr-vm_node0_RP0_CPU0:/misc/config/grpc]$
-```
+</code>
+</pre>
+</div>
 
 If you take a look at the cert, you can use standard openssl commands:
 
