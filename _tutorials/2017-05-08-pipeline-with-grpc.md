@@ -129,19 +129,25 @@ You should now have a rootCA certificate called rootCA.pem.
 #### 2. The Pipeline Certificate<a name="pipelinecert"></a>
 First, create a key pair for Pipeline.  In this case, I've called it "darcy.key" since darcy is the name of the server on which I am running Pipeline.
 
-```
-scadora@darcy:/etc/ssl/certs$  sudo openssl genrsa -out darcy.key 2048
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+scadora@darcy:/etc/ssl/certs$  <b>sudo openssl genrsa -out darcy.key 2048</b>
 Generating RSA private key, 2048 bit long modulus
 ................+++
 ..+++
 e is 65537 (0x10001)
 scadora@darcy:/etc/ssl/certs$
-```
+</code>
+</pre>
+</div>
 
 Next, create a Certificate Signing Request (CSR) using the key you just generated.  In the following, I use all the defaults except for the Common Name, which I set as darcy.cisco.com:
 
-```
-scadora@darcy:/etc/ssl/certs$ openssl req -new -key darcy.key -out darcy.csr
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+scadora@darcy:/etc/ssl/certs$ <b>openssl req -new -key darcy.key -out darcy.csr</b>
 You are about to be asked to enter information that will be incorporated
 into your certificate request.
 What you are about to enter is what is called a Distinguished Name or a DN.
@@ -162,17 +168,23 @@ to be sent with your certificate request
 A challenge password []:
 An optional company name []:
 scadora@darcy:/etc/ssl/certs$
-```
+</code>
+</pre>
+</div>
 
 Finally, use your rootCA certificate to sign the CSR ("darcy.csr") you just generated and create a certificate for Pipeline ("darcy.pem"):
 
-```
-scadora@darcy:/etc/ssl/certs$ openssl x509 -req -in darcy.csr -CA rootCA.pem -CAkey rootCA.key -CAcreateserial -out darcy.pem -days 500 -sha256
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+scadora@darcy:/etc/ssl/certs$ <b>openssl x509 -req -in darcy.csr -CA rootCA.pem -CAkey rootCA.key -CAcreateserial -out darcy.pem -days 500 -sha256</b>
 Signature ok
 subject=/C=AU/ST=Some-State/O=Internet Widgits Pty Ltd/CN=darcy.cisco.example
 Getting CA Private Key
 scadora@darcy:/etc/ssl/certs$
-```
+</code>
+</pre>
+</div>
 
 {% capture "output" %}
 Note: Some people issue certificates with a Common Name set to the IP address of the server instead of a FQDN.  Should you do this for the Pipeline certificate, bear in mind that the certificate will also need to have a Subject Alternative Name section that explicitly lists all valid IP addresses.  If you see the following message in your grpc trace, this could be your problem.
