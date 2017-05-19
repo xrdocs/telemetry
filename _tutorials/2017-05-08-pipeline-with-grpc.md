@@ -349,7 +349,6 @@ If you don't use TLS, your MDT data won't be encrypted.  On the other hand, ther
 <div class="highlighter-rouge">
 <pre class="highlight">
 <code>
-
 $ grep -A48 "mymdtrouter" pipeline.conf | grep -v -e '^#' -e '^$'
  [mymdtrouter]
  stage = xport_input
@@ -383,7 +382,9 @@ If you don't want to have to manually enter the username and password each time 
 
 To verify that the connection is established, check that the subscription Destination Group State is Active. Also note that the Destination Group Id has been dynamically created (since we don't configure a destination-group on the router for dialin) and beings with "DialIn_."
 
-```
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
 RP/0/RP0/CPU0:SunC#show telemetry model sub Sub3
 Thu May 18 20:46:38.658 UTC
 Subscription:  Sub3
@@ -396,17 +397,19 @@ Subscription:  Sub3
     Sensor Path State:    Resolved
 
   Destination Groups:
-  Group Id: DialIn_1019
+  <mark>Group Id: DialIn_1019</mark>
     Destination IP:       172.30.8.4
     Destination Port:     48667
     Encoding:             self-describing-gpb
     Transport:            dialin
-    State:                Active
+    <mark>State:                Active</mark>
     No TLS
     Total bytes sent:     5723
     Total packets sent:   4
     Last Sent time:       2017-05-18 20:46:28.2143492698 +0000
-```
+</code>
+</pre>
+</div>
 
 That's it, you're done.  No need to read the next section unless you want to do TLS.  
 
