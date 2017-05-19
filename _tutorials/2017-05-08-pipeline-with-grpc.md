@@ -424,7 +424,7 @@ dialout  ems.key  <b>ems.pem</b>
 </pre>
 </div>
 
-If you take a look at the cert, you can use standard openssl commands:
+You can use standard openssl commands to view the cert:
 
 <div class="highlighter-rouge">
 <pre class="highlight">
