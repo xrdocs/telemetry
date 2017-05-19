@@ -327,7 +327,7 @@ username mdt
  secret 5 $1$kAbv$xNk9KA.mIC7K2wfdpGjzk1
 ```
 
-Next, you get to decide if you want to use [TLS](#grpc-in-no-tls) or [not](#grpc-in-tls).
+Next, you get to decide if you want to use [TLS](#grpc-in-tls) or [not](#grpc-in-no-tls).
 
 ### gRPC Dialin Without TLS<a name="grpc-in-no-tls"></a>
 
@@ -399,7 +399,7 @@ In a dialin scenario, Pipeline acts as the "client" in the TLS handshake.  There
 
 There are a couple ways to go about creating the router certificate. If you already have a root CA, you can issue a certificate for the router.  However, because this tutorial is far too long already, I'm going to take the easy way out and use a self-signed certificate.
 
-#### Router Config for gRPC TLS Dial-In<a name=router-dialin-tls></a>
+#### Router Config for gRPC TLS Dial-In<a name="router-dialin-tls"></a>
 
 The first thing we have to do is enable the gRPC service on the router for TLS like so:
 
