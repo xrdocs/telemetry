@@ -94,6 +94,7 @@ scadora@darcy:/etc/ssl/certs$
 ```
 
 Now use that key to self-sign the rootCA certificate.  It will ask you a bunch of questions that you can fill out as you want (I just used all defaults):
+
 ```
 scadora@darcy:/etc/ssl/certs$ sudo openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 1024 -extensions v3_ca -config ../openssl.cnf -out rootCA.pem
 You are about to be asked to enter information that will be incorporated
