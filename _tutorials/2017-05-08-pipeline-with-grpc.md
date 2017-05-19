@@ -120,7 +120,8 @@ You should now have a rootCA certificate called rootCA.pem.
 #### 2. The Pipeline Certificate<a name="pipelinecert"></a>
 First, create a key pair for Pipeline.  In this case, I've called it "darcy.key" since darcy is the name of the server on which I am running Pipeline.
 
-```scadora@darcy:/etc/ssl/certs$  sudo openssl genrsa -out darcy.key 2048
+```
+scadora@darcy:/etc/ssl/certs$  sudo openssl genrsa -out darcy.key 2048
 Generating RSA private key, 2048 bit long modulus
 ................+++
 ..+++
@@ -130,7 +131,8 @@ scadora@darcy:/etc/ssl/certs$
 
 Next, create a Certificate Signing Request (CSR) using the key you just generated.  In the following, I use all the defaults except for the Common Name, which I set as darcy.cisco.com:
 
-```scadora@darcy:/etc/ssl/certs$ openssl req -new -key darcy.key -out darcy.csr
+```
+scadora@darcy:/etc/ssl/certs$ openssl req -new -key darcy.key -out darcy.csr
 You are about to be asked to enter information that will be incorporated
 into your certificate request.
 What you are about to enter is what is called a Distinguished Name or a DN.
@@ -155,13 +157,15 @@ scadora@darcy:/etc/ssl/certs$
 
 Finally, use your rootCA certificate to sign the CSR ("darcy.csr") you just generated and create a certificate for Pipeline ("darcy.pem"):
 
-```scadora@darcy:/etc/ssl/certs$ openssl x509 -req -in darcy.csr -CA rootCA.pem -CAkey rootCA.key -CAcreateserial -out darcy.pem -days 500 -sha256
+```
+scadora@darcy:/etc/ssl/certs$ openssl x509 -req -in darcy.csr -CA rootCA.pem -CAkey rootCA.key -CAcreateserial -out darcy.pem -days 500 -sha256
 Signature ok
 subject=/C=AU/ST=Some-State/O=Internet Widgits Pty Ltd/CN=darcy.cisco.example
 Getting CA Private Key
 scadora@darcy:/etc/ssl/certs$
 ```
 
+{% capture "output" %}
 Note: Some people issue certificates with a Common Name set to the IP address of the server instead of a FQDN.  Should you do this for the Pipeline certificate, bear in mind that the certificate will also need to have a Subject Alternative Name section that explicitly lists all valid IP addresses.  If you see the following message in your grpc trace, this could be your problem.
 
 ```RP/0/RP0/CPU0:SunC#show grpc trace ems
@@ -170,7 +174,10 @@ Tue May 16 19:35:44.792 UTC
 May 16 19:35:40.240 ems/grpc 0/RP0/CPU0 t26842 EMS-GRPC: grpc: Conn.resetTransport failed to create client transport: connection error: desc = "transport: x509: cannot validate certificate for 172.30.8.4 because it doesn't contain any IP SANs"
 ```
 For more info, take a look at [this discussion](https://serverfault.com/questions/611120/failed-tls-handshake-does-not-contain-any-ip-sans).
-
+{% endcapture %}
+<div class="notice--warning">
+{{ output | markdownify }}
+</div>
 
 #### 3. Copy rootCA Certificate to the router
 
