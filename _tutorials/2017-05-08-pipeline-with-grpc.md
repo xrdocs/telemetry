@@ -329,7 +329,7 @@ username mdt
 
 Next, you get to decide if you want to use [TLS](#grpc-in-no-tls) or [not](#grpc-in-tls).
 
-## gRPC Dialin Without TLS<a name="grpc-in-no-tls"></a>
+### gRPC Dialin Without TLS<a name="grpc-in-no-tls"></a>
 
 If you don't use TLS, your MDT data won't be encrypted.  On the other hand, there's less fiddling with certificates. So if you're trying to get gRPC dialin to work for the first time, this might be a good starting place. There's nothing you need to add to the router config for this beyond the [basic router config](#router-dialin) and [credentials](#router-creds) we did above. You just need to configure and run Pipeline as shown below. 
 
@@ -394,12 +394,12 @@ Subscription:  Sub3
 
 That's it, you're done.  No need to read the next section unless you want to do TLS.  
 
-## gRPC Dialin With TLS<a name="grpc-in-tls"></a>
+### gRPC Dialin With TLS<a name="grpc-in-tls"></a>
 In a dialin scenario, Pipeline acts as the "client" in the TLS handshake.  Therefore, the router will need to send a certificate to authenticate itself to Pipeline. 
 
 There are a couple ways to go about creating the router certificate. If you already have a root CA, you can issue a certificate for the router.  However, because this tutorial is far too long already, I'm going to take the easy way out and use a self-signed certificate.
 
-## Router Config for gRPC TLS Dial-In<a name=router-dialin-tls></a>
+#### Router Config for gRPC TLS Dial-In<a name=router-dialin-tls></a>
 
 The first thing we have to do is enable the gRPC service on the router for TLS like so:
 
@@ -496,7 +496,7 @@ ems.pem                                       100% 1513     1.5KB/s   00:00
 [xr-vm_node0_RP0_CPU0:/misc/config/grpc]$
 ```
 
-## Pipeline for gRPC Dialin with TLS
+#### Pipeline for gRPC Dialin with TLS
 
 All that's left is to configure pipeline.conf for TLS.
 
