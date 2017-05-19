@@ -12,13 +12,11 @@ tags:
   - pipeline
 postion: hidden
 ---
-# Using Pipeline with gRPC
-
 In previous tutorials, I've shown how to use [Pipeline](http://blogs.cisco.com/sp/introducing-pipeline-a-model-driven-telemetry-collection-service) to dump Model Driven Telemetry (MDT) data into a [text file](https://xrdocs.github.io/telemetry/tutorials/2016-10-03-pipeline-to-text-tutorial/) and into [InfluxDB](https://xrdocs.github.io/telemetry/tutorials/2017-04-10-using-pipeline-integrating-with-influxdb/).  In each case, I configured the router to transport MDT data to Pipeline using TCP.  In this tutorial, I'll cover a few additional steps that are required to use Pipeline with [gRPC](http://www.grpc.io/).  I'll focus on only the changes needed in the router and Pipeline input stage configs here, so be sure to consult the other Pipeline tutorialis for important info about install, output stage, etc.
 
 If you're going to use gRPC, the first thing to decide is whether you're going to [dial-out](#dialout) or [dial-in](#dialin).  If you don't know the difference or need help chosing, check out [my blog](https://xrdocs.github.io/telemetry/blogs/2017-01-20-model-driven-telemetry-dial-in-or-dial-out/) for some guidance.        
 
-# gRPC Dialout<a name=dialout></a>
+# gRPC Dialout<a name="dialout"></a>
 For gRPC dial-out, the big decision is whether to use TLS or not. This impacts the destination-group in the router config and the ingress stage of the Pipeline input stage.
 
 Aside the destination-group config, I'll re-use the rest of the MDT router config from the [gRPC dial-out example](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-out).  It should look something like this:
