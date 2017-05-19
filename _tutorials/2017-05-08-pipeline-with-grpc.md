@@ -71,7 +71,7 @@ INFO[2017-05-08 11:26:03.572534] gRPC: Receiving dialout stream                e
 And that's it.  You're done.  Telemetry data is streaming into pipeline and you can do with it what you want.  You can stop reading now unless you want to experiment with TLS.
 
 ## gRPC Dialout With TLS
-In a dialout scenario, the router is the "client" in the gRPC connection and Pipeline is the "server."  Therefore, in the TLS handshake, Pipeline will need to send a certificate to authenticate itself to the router.  The router validates Pipeline's certificate using the public certificate of the Root Certificate Authority (CA) that signed it and then generates sesssion keys to encrypt the the session.
+In a dialout scenario, the router is the "client" and Pipeline is the "server."  Therefore, in the TLS handshake, Pipeline will need to send a certificate to authenticate itself to the router.  The router validates Pipeline's certificate using the public certificate of the Root Certificate Authority (CA) that signed it and then generates sesssion keys to encrypt the session.
 
 To make this all work, you need the following:
 1. A Root CA certificate
@@ -84,6 +84,7 @@ For the purpose of this tutorial, I will use [openssl](https://www.openssl.org/)
 
 #### 1. The rootCA Key and Certificate
 For simplicity, I'll generate the rootCA on the same server that I am running Pipeline.  First, create a rootCA key-pair (may require sudo):
+
 ```scadora@darcy:/etc/ssl/certs$ openssl genrsa -out rootCA.key 2048
 Generating RSA private key, 2048 bit long modulus
 ...........+++
