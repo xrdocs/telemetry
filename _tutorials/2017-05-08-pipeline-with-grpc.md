@@ -3,7 +3,7 @@ published: true
 date: '2017-05-08 11:03 -0600'
 title: Pipeline with gRPC
 author: Shelly Cadora
-excerpt: Descibres how to use Model-Driven Telemetry with Pipeline and gRPC
+excerpt: Describes how to use Model-Driven Telemetry with Pipeline and gRPC
 tags:
   - iosxr
   - telemetry
