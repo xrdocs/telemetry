@@ -426,7 +426,9 @@ dialout  ems.key  <b>ems.pem</b>
 
 If you take a look at the cert, you can use standard openssl commands:
 
-```
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
 [xr-vm_node0_RP0_CPU0:/misc/config/grpc]$openssl x509 -noout -text -in ems.pem
 Certificate:
     Data:
@@ -437,7 +439,7 @@ Certificate:
         Validity
             Not Before: May 18 22:49:51 2017 GMT
             Not After : May 18 22:49:51 2037 GMT
-        Subject: C=US, ST=CA, L=San Jose/street=3700 Cisco Way/postalCode=95134, O=Cisco Systems, Inc., OU=CSG, CN=ems.cisco.com/serialNumber=949DF85F746
+        Subject: C=US, ST=CA, L=San Jose/street=3700 Cisco Way/postalCode=95134, O=Cisco Systems, Inc., OU=CSG, <b>CN=ems.cisco.com</b>/serialNumber=949DF85F746
         Subject Public Key Info:
             Public Key Algorithm: rsaEncryption
                 Public-Key: (2048 bit)
@@ -463,7 +465,7 @@ Certificate:
                 Exponent: 65537 (0x10001)
         X509v3 extensions:
             X509v3 Basic Constraints: critical
-                CA:TRUE
+            <b>CA:TRUE</b>
             X509v3 Subject Key Identifier:
                 1C:B6:98:EF:7F:A4:1D:07:0B:6F:73:01:08:E6:0C:8C:97:AC:E0:A2
             X509v3 Authority Key Identifier:
@@ -486,7 +488,9 @@ Certificate:
          77:0d:96:c8:c8:26:25:0b:94:ae:21:14:d1:1b:e0:f7:11:af:
          61:ce:13:74
 [xr-vm_node0_RP0_CPU0:/misc/config/grpc]$
-```
+</code>
+</pre>
+</div>
 
 As you can see, this certificate has been issued for a CN=ems.cisco.com and is a CA certificate.
 
