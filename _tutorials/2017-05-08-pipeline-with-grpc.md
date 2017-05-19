@@ -486,8 +486,12 @@ As you can see, this certificate has been issued for a CN=ems.cisco.com and is a
 Since this is also the CA cert (since it's self-signed), we'll transfer it to the server running Pipeline.
 
 ```
-[xr-vm_node0_RP0_CPU0:/misc/config/grpc]$scp ems.pem scadora@172.30.8.4:
+[xr-vm_node0_RP0_CPU0:/misc/config/grpc]$ scp ems.pem scadora@172.30.8.4:
 scadora@172.30.8.4's password:
 ems.pem                                       100% 1513     1.5KB/s   00:00    
 [xr-vm_node0_RP0_CPU0:/misc/config/grpc]$
 ```
+
+## Pipeline for gRPC Dialin with TLS
+
+All that's left is to configure pipeline.conf for TLS.
