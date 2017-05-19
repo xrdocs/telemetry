@@ -53,6 +53,8 @@ telemetry model-driven
    protocol grpc no-tls
 ```
 
+Add that to the subscription and sensor-path configuration in the [commmon router config above](#dialout) and your router config for gRPC dialout with TLS is done.
+
 ### Pipeline.conf: tls = false
 
 You can use the ```[gRPCDIalout]``` input stage in the default pipeline.conf.  Just uncomment the 6 lines shown below.
@@ -216,7 +218,7 @@ rootCA.pem                                    100% 1204     1.2KB/s   00:00
 ```
 
 ### Configuring the Router for gRPC Dialout with TLS
-In addition to the sensor-group and subscription configuration that we configured on the router at the beginning of the [Dialout section](dialout), we also need a destination-group. TLS is the default for MDT for gRPC, so the destination-group config just looks like this:
+In addition to the common sensor-group and subscription configuration that we configured on the router at the beginning of the [Dialout section](dialout), we also need a destination-group. TLS is the default for MDT for gRPC, so the destination-group config just looks like this:
 
 ```
 telemetry model-driven
