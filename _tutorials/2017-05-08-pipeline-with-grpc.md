@@ -68,7 +68,7 @@ INFO[2017-05-08 11:25:50.046902] gRPC: Start accepting dialout sessions        e
 INFO[2017-05-08 11:26:03.572534] gRPC: Receiving dialout stream                encap=gpb name=grpcdialout peer="172.30.8.53:61857" server=:57500 tag=pipeline type="pipeline is SERVER"
 ```
 
-And that's it.  You're done.  Telemetry data is streaming into pipeline and you can do with it what you want.
+And that's it.  You're done.  Telemetry data is streaming into pipeline and you can do with it what you want.  You can stop reading now unless you want to experiment with TLS.
 
 ## gRPC Dialout With TLS
 In a dialout scenario, the router is the "client" in the gRPC connection and Pipeline is the "server."  Therefore, in the TLS handshake, Pipeline will need to send a certificate to authenticate itself to the router.  The router validates Pipeline's certificate using the public certificate of the Root Certificate Authority (CA) that signed it and then generates sesssion keys to encrypt the the session.
