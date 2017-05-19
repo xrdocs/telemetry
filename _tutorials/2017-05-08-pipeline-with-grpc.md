@@ -24,9 +24,9 @@ If you don't know the difference between dialin and dialout or need help chosing
 </div>
 
 # gRPC Dialout<a name="dialout"></a>
-For gRPC dial-out, the big decision is whether to use TLS or not. This impacts the destination-group in the router config and the ingress stage of the Pipeline input stage.
+For gRPC dialout, the big decision is whether to use TLS or not. This impacts the destination-group in the router config and the ingress stage of the Pipeline input stage.
 
-Aside the destination-group config, I'll re-use the rest of the MDT router config from the [gRPC dial-out example](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-out).  It will look like this:
+Aside the destination-group config, I'll re-use the rest of the MDT router config from the [gRPC dialout example](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-out).  It will look like this:
 
 ```
 telemetry model-driven
@@ -272,8 +272,8 @@ That's it.  You're done with gRPC Dialout with TLS.  No need to read further.
 
 In a dialin scenario, Pipeline sends the TCP SYN packet and acts as the "client" in the gRPC session and TLS handshake.
 
-## Basic Router Config for gRPC Dial-In<a name="router-dialin"></a>
-For this part of the tutorial, I'll re-use the MDT router config from the [gRPC dial-in example](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-in)  It should look like this:
+## Basic Router Config for gRPC DialIn<a name="router-dialin"></a>
+For this part of the tutorial, I'll re-use the MDT router config from the [gRPC dialin example](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-in)  It should look like this:
 
 ```
 grpc
@@ -289,7 +289,7 @@ telemetry model-driven
 
 Note that there is no destination-group for dialin.  
 
-## Dial-In Credentials<a name="router-creds"></a> 
+## DialIn Credentials<a name="router-creds"></a> 
 Regardless of whether you use TLS or not, Pipeline will have to provide a username and password when it first connects to the router. 
 
 On the router side, you need to configure a username and password that Pipeline can use when it dials in.  If you're just doing a quick test in the lab, assign the user to one of these default usergroups: sysadmin, netadmin, or root-lr.  For example:
@@ -374,7 +374,7 @@ Wait for ^C to shutdown
 If you don't want to have to manually enter the username and password each time you run Pipeline, check out the section below on [secure password storage in pipeline](#secure-passwords).
 {: .notice--warning}
 
-To verify that the connection is established, check that the subscription Destination Group State is Active. Also note that the Destination Group Id has been dynamically created (since we don't configure a destination-group on the router for dial-in) and beings with "DialIn_."
+To verify that the connection is established, check that the subscription Destination Group State is Active. Also note that the Destination Group Id has been dynamically created (since we don't configure a destination-group on the router for dialin) and beings with "DialIn_."
 
 ```
 RP/0/RP0/CPU0:SunC#show telemetry model sub Sub3
@@ -408,7 +408,7 @@ In a dialin scenario, Pipeline acts as the "client" in the TLS handshake.  There
 
 There are a couple ways to go about creating the router certificate. If you already have a root CA, you can issue a certificate for the router.  However, because this tutorial is far too long already, I'm going to take the easy way out and use a self-signed certificate.
 
-#### Router Config for gRPC TLS Dial-In<a name="router-dialin-tls"></a>
+#### Router Config for gRPC TLS DialIn<a name="router-dialin-tls"></a>
 
 The first thing we have to do is enable the gRPC service on the router for TLS by adding "tls" to the grpc config on the router:
 
@@ -559,7 +559,7 @@ Wait for ^C to shutdown
 If you don't want to have to manually enter the username and password each time you run Pipeline, check out the section below on [secure password storage in pipeline](#secure-passwords).
 {: .notice--warning}
 
-To verify that the connection is established, check that the subscription Destination Group State is Active. Also note that the Destination Group Id has been dynamically created (since we don't configure a destination-group on the router for dial-in) and beings with "DialIn_."
+To verify that the connection is established, check that the subscription Destination Group State is Active. Also note that the Destination Group Id has been dynamically created (since we don't configure a destination-group on the router for dialin) and beings with "DialIn_."
 
 <div class="highlighter-rouge">
 <pre class="highlight">
