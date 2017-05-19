@@ -25,7 +25,8 @@ If you don't know the difference between dialin and dialout or need help chosing
 
 Once you've made that decision, go the appropriate section of this tutorial.  
 
-[dial-out](#dialout) [dial-in](#dialin){: .text-justify}
+[dial-out](#dialout) [dial-in](#dialin)
+{: .text-justify}
 
 For each section, there will be some "common" router and Pipeline config setps and well as some specific steps you need depending on whether or not you enable TLS.
 
