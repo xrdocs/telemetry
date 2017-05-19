@@ -55,7 +55,7 @@ telemetry model-driven
    protocol grpc no-tls
 ```
 
-Add that to the subscription and sensor-path configuration in the [commmon router config above](#dialout) and your router config for gRPC dialout with TLS is done.
+Add that to the subscription and sensor-path configuration in the [commmon router config above](#dialout) and your router config for gRPC dialout without TLS is done.
 
 ### Pipeline.conf: tls = false
 
