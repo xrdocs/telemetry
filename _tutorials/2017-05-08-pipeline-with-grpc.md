@@ -97,7 +97,6 @@ scadora@darcy:/etc/ssl/certs$
 </pre>
 </div>
 
-
 Now use that key to self-sign the rootCA certificate.  It will ask you a bunch of questions that you can fill out as you want (I just used all defaults):
 <div class="highlighter-rouge">
 <pre class="highlight">
@@ -139,7 +138,6 @@ scadora@darcy:/etc/ssl/certs$
 </code>
 </pre>
 </div>
-
 Next, create a Certificate Signing Request (CSR) using the key you just generated.  In the following, I use all the defaults except for the Common Name, which I set as darcy.cisco.com:
 
 <div class="highlighter-rouge">
@@ -212,7 +210,7 @@ rootCA.pem                                    100% 1204     1.2KB/s   00:00
 ```
 
 ### Configuring the Router
-TLS is the default for MDT for gRPC, so the destination-group config just looks like this:
+In addition to the sensor-group and subscription configuration that we configured on the router at the beginning of the [Dialout section](dialout), we also need a destination-group. TLS is the default for MDT for gRPC, so the destination-group config just looks like this:
 
 ```
 telemetry model-driven
