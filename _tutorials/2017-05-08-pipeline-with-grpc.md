@@ -552,7 +552,9 @@ If you don't want to have to manually enter the username and password each time 
 
 To verify that the connection is established, check that the subscription Destination Group State is Active. Also note that the Destination Group Id has been dynamically created (since we don't configure a destination-group on the router for dial-in) and beings with "DialIn_."
 
-```
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
 RP/0/RP0/CPU0:SunC#show telemetry model-driven subscription Sub3
 Fri May 19 16:48:22.396 UTC
 Subscription:  Sub3
@@ -565,19 +567,21 @@ Subscription:  Sub3
     Sensor Path State:    Resolved
 
   Destination Groups:
-  Group Id: DialIn_1030
+  <mark>Group Id: DialIn_1030</mark>
     Destination IP:       172.30.8.4
     Destination Port:     57590
     Encoding:             self-describing-gpb
     Transport:            dialin
-    State:                Active
+    <mark>State:                Active</mark>
     No TLS
     Total bytes sent:     11446
     Total packets sent:   8
     Last Sent time:       2017-05-19 16:48:12.1233215666 +0000
-```
+</code>
+</pre>
+</div>
 
-That's it, you're done.  
+That's it, you're done.  Have fun with your telemetry data!
 
 
 # Secure password storage<a name="secure-passwords"></a>
