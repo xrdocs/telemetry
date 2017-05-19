@@ -36,7 +36,7 @@ telemetry model-driven
   destination-id DGroup2
 ``` 
 
-The big decision is whether to use [TLS](#dialout-tls) or [not](#dialout-no-tls). This impacts the destination-group in the router config and the ingress stage of the Pipeline input stage as you'll see below.
+Now the big decision is whether to use [TLS](#dialout-tls) or [not](#dialout-no-tls). This impacts the destination-group in the router config and the ingress stage of the Pipeline input stage as you'll see below.
 
 ## gRPC Dialout Without TLS<a name="dialout-no-tls"></a>
 If you don't use TLS, your MDT data won't be encrypted.  On the other hand, it's easy to configure. So if you're new to MDT and gRPC, this might be a good starting place.
