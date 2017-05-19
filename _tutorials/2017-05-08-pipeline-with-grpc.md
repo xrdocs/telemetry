@@ -509,9 +509,9 @@ All that's left is to configure pipeline.conf for TLS.
 
 You can use the ```[mymdtrouter]``` input stage in the default pipeline.conf.  Uncomment the 10 lines shown below and do the following:
 
--change the server line to match your router's IP address and configured gRPC port.
--set tls to "true"
--set tls_pem to the full path and filename of the ems.pem file you copied from the router [above](#copy-router-cert).
+- change the server line to match your router's IP address and configured gRPC port.
+- set tls to "true"
+- set tls_pem to the full path and filename of the ems.pem file you copied from the router [above](#copy-router-cert).
 - set tls_pem to the CN of the router's certificate ("ems.cisco.com")
 
 <div class="highlighter-rouge">
