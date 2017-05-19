@@ -291,7 +291,7 @@ telemetry model-driven
 
 Note that there is no destination-group for dialin.  
 
-## Common DialIn Credentials<a name="router-creds"></a> 
+## Common Dialin Credentials<a name="router-creds"></a> 
 Regardless of whether you use TLS or not, Pipeline will have to provide a username and password when it first connects to the router. 
 
 On the router side, you need to configure a username and password that Pipeline can use when it dials in.  If you're just doing a quick test in the lab, assign the user to one of these default usergroups: sysadmin, netadmin, or root-lr.  For example:
@@ -346,17 +346,22 @@ If you don't use TLS, your MDT data won't be encrypted.  On the other hand, ther
 
  You can use the ```[mymdtrouter]``` input stage in the default pipeline.conf.  Just uncomment the 8 lines shown below, changing the server line to match your router's IP address and configured gRPC port:
 
-```
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+
 $ grep -A48 "mymdtrouter" pipeline.conf | grep -v -e '^#' -e '^$'
  [mymdtrouter]
  stage = xport_input
  type = grpc
  encoding = gpbkv
  encap = gpb
- server = 172.30.8.53:57500
+ <b>server = 172.30.8.53:57500</b>
  subscriptions = Sub3
  tls = false
-```
+</code>
+</pre>
+</div>
 
 Note that the subscription is "Sub3", which matches the subscription in the router configuration [above](#router-dialin).  Pipeline will request the pre-configured subscription from the router when it connects.
 
