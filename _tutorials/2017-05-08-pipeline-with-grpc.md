@@ -327,8 +327,6 @@ username mdt
  secret 5 $1$kAbv$xNk9KA.mIC7K2wfdpGjzk1
 ```
 
-When you run pipeline, it will prompt you for a username and password.  You will enter the username and password that you've configured on the router in this step.
-
 Next, you get to decide if you want to use [TLS](#grpc-in-no-tls) or [not](#grpc-in-tls).
 
 ## gRPC Dialin Without TLS<a name="grpc-in-no-tls"></a>
