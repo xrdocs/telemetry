@@ -586,7 +586,7 @@ Subscription:  Sub3
 That's it, you're done.  Have fun with your telemetry data!
 
 
-# Secure password storage<a name="secure-passwords"></a>
+### Appendix: Secure Password Storage for Dialin<a name="secure-passwords"></a>
 Because Pipeline cares about your security, it won't let you store unencrypted router passwords in pipeline.conf.  If you dislike being prompted for a password every time you run it or you want to run pipeline in the background, you can have pipeline encrypt the password using the -pem option and store it in a new file as follows:
 
 ```
