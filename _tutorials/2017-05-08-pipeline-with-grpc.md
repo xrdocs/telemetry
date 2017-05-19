@@ -494,7 +494,7 @@ Certificate:
 
 As you can see, this certificate has been issued for a CN=ems.cisco.com and is a CA certificate.
 
-Since this is also the CA cert (since it's self-signed), we'll transfer it to the server running Pipeline.<a name=copy-router-cert></a>
+Since this is also the CA cert (since it's self-signed), we'll transfer it to the server running Pipeline.<a name="copy-router-cert"></a>
 
 ```
 [xr-vm_node0_RP0_CPU0:/misc/config/grpc]$ scp ems.pem scadora@172.30.8.4:
