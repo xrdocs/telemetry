@@ -418,7 +418,7 @@ Thu May 18 23:05:51.266 UTC
 
 [xr-vm_node0_RP0_CPU0:~]$cd /misc/config/grpc
 [xr-vm_node0_RP0_CPU0:/misc/config/grpc]$ls
-dialout  ems.key  <b>ems.pem</b>
+dialout  ems.key  <mark>ems.pem</mark>
 [xr-vm_node0_RP0_CPU0:/misc/config/grpc]$
 </code>
 </pre>
@@ -429,7 +429,7 @@ You can use standard openssl commands to view the cert:
 <div class="highlighter-rouge">
 <pre class="highlight">
 <code>
-[xr-vm_node0_RP0_CPU0:/misc/config/grpc]$openssl x509 -noout -text -in ems.pem
+[xr-vm_node0_RP0_CPU0:/misc/config/grpc]$<b>openssl x509 -noout -text -in ems.pem</b>
 Certificate:
     Data:
         Version: 3 (0x2)
@@ -439,7 +439,7 @@ Certificate:
         Validity
             Not Before: May 18 22:49:51 2017 GMT
             Not After : May 18 22:49:51 2037 GMT
-        Subject: C=US, ST=CA, L=San Jose/street=3700 Cisco Way/postalCode=95134, O=Cisco Systems, Inc., OU=CSG, <b>CN=ems.cisco.com</b>/serialNumber=949DF85F746
+        Subject: C=US, ST=CA, L=San Jose/street=3700 Cisco Way/postalCode=95134, O=Cisco Systems, Inc., OU=CSG, <mark>CN=ems.cisco.com</mark>/serialNumber=949DF85F746
         Subject Public Key Info:
             Public Key Algorithm: rsaEncryption
                 Public-Key: (2048 bit)
@@ -465,7 +465,7 @@ Certificate:
                 Exponent: 65537 (0x10001)
         X509v3 extensions:
             X509v3 Basic Constraints: critical
-            <b>CA:TRUE</b>
+            <mark>CA:TRUE</mark>
             X509v3 Subject Key Identifier:
                 1C:B6:98:EF:7F:A4:1D:07:0B:6F:73:01:08:E6:0C:8C:97:AC:E0:A2
             X509v3 Authority Key Identifier:
