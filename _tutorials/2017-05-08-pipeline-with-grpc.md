@@ -85,14 +85,19 @@ For the purpose of this tutorial, I will use [openssl](https://www.openssl.org/)
 #### 1. The rootCA Key and Certificate
 For simplicity, I'll generate the rootCA on the same server that I am running Pipeline.  First, create a rootCA key-pair (may require sudo):
 
-```
-scadora@darcy:/etc/ssl/certs$ openssl genrsa -out rootCA.key 2048
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+scadora@darcy:/etc/ssl/certs$ <b>openssl genrsa -out rootCA.key 2048</b>
 Generating RSA private key, 2048 bit long modulus
 ...........+++
 ................................+++
 e is 65537 (0x10001)
 scadora@darcy:/etc/ssl/certs$
-```
+</code>
+</pre>
+</div>
+
 
 Now use that key to self-sign the rootCA certificate.  It will ask you a bunch of questions that you can fill out as you want (I just used all defaults):
 
@@ -173,7 +178,9 @@ Tue May 16 19:35:44.792 UTC
 3 wrapping entries (141632 possible, 320 allocated, 0 filtered, 3 total)
 May 16 19:35:40.240 ems/grpc 0/RP0/CPU0 t26842 EMS-GRPC: grpc: Conn.resetTransport failed to create client transport: connection error: desc = "transport: x509: cannot validate certificate for 172.30.8.4 because it doesn't contain any IP SANs"
 ```
-For more info, take a look at [this discussion](https://serverfault.com/questions/611120/failed-tls-handshake-does-not-contain-any-ip-sans).
+
+For more info on certificates with IP Addresses, take a look at [this discussion](https://serverfault.com/questions/611120/failed-tls-handshake-does-not-contain-any-ip-sans).
+
 {% endcapture %}
 <div class="notice--warning">
 {{ output | markdownify }}
