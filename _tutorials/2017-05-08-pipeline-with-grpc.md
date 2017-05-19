@@ -166,7 +166,7 @@ Tue May 16 19:35:44.792 UTC
 May 16 19:35:40.240 ems/grpc 0/RP0/CPU0 t26842 EMS-GRPC: grpc: Conn.resetTransport failed to create client transport: connection error: desc = "transport: x509: cannot validate certificate for 172.30.8.4 because it doesn't contain any IP SANs"
 ```
 For more info, take a look at [this discussion](https://serverfault.com/questions/611120/failed-tls-handshake-does-not-contain-any-ip-sans).
-{: .notice--warning}
+
 
 #### 3. Copy rootCA Certificate to the router
 
@@ -326,7 +326,10 @@ CRYPT Client [mymdtrouter],[172.30.8.53:57500]
 Wait for ^C to shutdown
 ```
 
-Pipeline will connect to the router and the router will stream the telemetry data in Sub3 back to pipeline.  To verify that the connection is established, check that the subscription Destination Group State is Active:
+If you don't want to have to manually enter the username and password each time you run Pipeline, check out the section below on [secure password storage in pipeline](#secure-passwords).
+{: .notice--warning}
+
+To verify that the connection is established, check that the subscription Destination Group State is Active. Also note that the Destination Group Id has been dynamically created (since we don't configure a destination-group on the router for dial-in) and beings with "DialIn_."
 
 ```
 RP/0/RP0/CPU0:SunC#show telemetry model sub Sub3
@@ -353,10 +356,9 @@ Subscription:  Sub3
     Last Sent time:       2017-05-18 20:46:28.2143492698 +0000
 ```
 
-That's it, you're done!  
 
 
-That's it, you're done.  No need to read the next section unless you want to do TLS.
+That's it, you're done.  No need to read the next section unless you want to do TLS.  
 
 # gRPC Dialin With TLS
 In a dialin scenario, Pipeline acts as the "client" in the TLS handshake.  Therefore, the router will need to send a certificate to authenticate itself to Pipeline. 
@@ -451,7 +453,7 @@ Certificate:
 
 As you can see, this certificate has been issued for a CN=ems.cisco.com and is a CA certificate.
 
-Since this is also the CA cert (since it's self-signed), we'll transfer it to the server running Pipeline.
+Since this is also the CA cert (since it's self-signed), we'll transfer it to the server running Pipeline.<a name=copy-router-cert></a>
 
 ```
 [xr-vm_node0_RP0_CPU0:/misc/config/grpc]$ scp ems.pem scadora@172.30.8.4:
@@ -463,6 +465,72 @@ ems.pem                                       100% 1513     1.5KB/s   00:00
 ## Pipeline for gRPC Dialin with TLS
 
 All that's left is to configure pipeline.conf for TLS.
+
+You can use the ```[mymdtrouter]``` input stage in the default pipeline.conf.  Uncomment the 10 lines shown below and do the following:
+-change the server line to match your router's IP address and configured gRPC port.
+-set tls to "true"
+-set tls_pem to the full path and filename of the ems.pem file you copied from the router [above](#copy-router-cert).
+- set tls_pem to the CN of the router's certificate ("ems.cisco.com")
+```
+$ grep -A48 "mymdtrouter" pipeline.conf | grep -v -e '^#' -e '^$'
+[mymdtrouter]
+ stage = xport_input
+ type = grpc
+ encoding = gpbkv
+ encap = gpb
+ server = 172.30.8.53:57500
+ subscriptions = Sub3
+ tls = true
+ tls_pem = /home/scadora/ems.pem
+ tls_servername = ems.cisco.com
+```
+
+Note that the subscription is "Sub3", which matches the subscription in the router configuration [above](#router-dialin).  Pipeline will request the pre-configured subscription from the router when it connects.
+
+When you run pipeline, you will be prompted for a username and password.  This is the username and password that you configured on the router [above](#router-creds).
+
+```
+$ bin/pipeline -config pipeline.conf
+Startup pipeline
+Load config from [pipeline.conf], logging in [pipeline.log]
+
+CRYPT Client [mymdtrouter],[172.30.8.53:57500]
+ Enter username: mdt
+ Enter password:
+Wait for ^C to shutdown
+```
+
+If you don't want to have to manually enter the username and password each time you run Pipeline, check out the section below on [secure password storage in pipeline](#secure-passwords).
+{: .notice--warning}
+
+To verify that the connection is established, check that the subscription Destination Group State is Active. Also note that the Destination Group Id has been dynamically created (since we don't configure a destination-group on the router for dial-in) and beings with "DialIn_."
+
+```
+RP/0/RP0/CPU0:SunC#show telemetry model-driven subscription Sub3
+Fri May 19 16:48:22.396 UTC
+Subscription:  Sub3
+-------------
+  State:       ACTIVE
+  Sensor groups:
+  Id: SGroup3
+    Sample Interval:      30000 ms
+    Sensor Path:          openconfig-interfaces:interfaces/interface
+    Sensor Path State:    Resolved
+
+  Destination Groups:
+  Group Id: DialIn_1030
+    Destination IP:       172.30.8.4
+    Destination Port:     57590
+    Encoding:             self-describing-gpb
+    Transport:            dialin
+    State:                Active
+    No TLS
+    Total bytes sent:     11446
+    Total packets sent:   8
+    Last Sent time:       2017-05-19 16:48:12.1233215666 +0000
+```
+
+That's it, you're done.  
 
 
 # Secure password storage<a name=secure-passwords></a>
