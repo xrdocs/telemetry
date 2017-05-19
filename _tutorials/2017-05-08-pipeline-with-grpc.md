@@ -79,7 +79,7 @@ INFO[2017-05-08 11:26:03.572534] gRPC: Receiving dialout stream                e
 
 And that's it.  You're done.  Telemetry data is streaming into pipeline and you can do with it what you want.  You can stop reading now unless you want to experiment with TLS.
 
-## gRPC Dialout With TLS
+## gRPC Dialout With TLS<a name="dialout-tls"></a>
 In a dialout scenario, the router is the "client" and Pipeline is the "server."  Therefore, in the TLS handshake, Pipeline will need to send a certificate to authenticate itself to the router.  The router validates Pipeline's certificate using the public certificate of the Root Certificate Authority (CA) that signed it and then generates sesssion keys to encrypt the session.
 
 To make this all work, you need the following:
