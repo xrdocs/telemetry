@@ -24,7 +24,7 @@ If you don't know the difference between dialin and dialout or need help chosing
 </div>
 
 # gRPC Dialout<a name="dialout"></a>
-For gRPC Dialout, the the subscription and sensor-group config is the same whether you use TLS or not, so I'll re-use those parts of the MDT router config from the [gRPC dialout example](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-out).  It will look like this:
+For gRPC Dialout, the subscription and sensor-group config are the same whether you use TLS or not, so I'll re-use those parts of the MDT router config from the [gRPC dialout example](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-out).  It will look like this:
 
 ```
 telemetry model-driven
