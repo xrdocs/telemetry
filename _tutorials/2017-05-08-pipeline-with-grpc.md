@@ -24,9 +24,7 @@ If you don't know the difference between dialin and dialout or need help chosing
 </div>
 
 # gRPC Dialout<a name="dialout"></a>
-For gRPC dialout, the big decision is whether to use TLS or not. This impacts the destination-group in the router config and the ingress stage of the Pipeline input stage.
-
-Aside the destination-group config, I'll re-use the rest of the MDT router config from the [gRPC dialout example](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-out).  It will look like this:
+For gRPC Dialout, the the subscription and sensor-group config is the same whether you use TLS or not, so I'll re-use those parts of the MDT router config from the [gRPC dialout example](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-out).  It will look like this:
 
 ```
 telemetry model-driven
@@ -38,7 +36,9 @@ telemetry model-driven
   destination-id DGroup2
 ``` 
 
-## gRPC Dialout Without TLS
+The big decision is whether to use [TLS](#dialout-tls) or [not](#dialout-no-tls). This impacts the destination-group in the router config and the ingress stage of the Pipeline input stage as you'll see below.
+
+## gRPC Dialout Without TLS<a name="dialout-no-tls"></a>
 If you don't use TLS, your MDT data won't be encrypted.  On the other hand, it's easy to configure. So if you're new to MDT and gRPC, this might be a good starting place.
 
 ### Router Config: no-tls
