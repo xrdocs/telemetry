@@ -85,7 +85,8 @@ For the purpose of this tutorial, I will use [openssl](https://www.openssl.org/)
 #### 1. The rootCA Key and Certificate
 For simplicity, I'll generate the rootCA on the same server that I am running Pipeline.  First, create a rootCA key-pair (may require sudo):
 
-```scadora@darcy:/etc/ssl/certs$ openssl genrsa -out rootCA.key 2048
+```
+scadora@darcy:/etc/ssl/certs$ openssl genrsa -out rootCA.key 2048
 Generating RSA private key, 2048 bit long modulus
 ...........+++
 ................................+++
@@ -95,7 +96,8 @@ scadora@darcy:/etc/ssl/certs$
 
 Now use that key to self-sign the rootCA certificate.  It will ask you a bunch of questions that you can fill out as you want (I just used all defaults):
 
-```scadora@darcy:/etc/ssl/certs$ sudo openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 1024 -extensions v3_ca -config ../openssl.cnf -out rootCA.pem
+```
+scadora@darcy:/etc/ssl/certs$ sudo openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 1024 -extensions v3_ca -config ../openssl.cnf -out rootCA.pem
 You are about to be asked to enter information that will be incorporated
 into your certificate request.
 What you are about to enter is what is called a Distinguished Name or a DN.
