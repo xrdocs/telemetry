@@ -116,8 +116,9 @@ scadora@darcy:/etc/ssl/certs$
 
 You should now have a rootCA certificate called rootCA.pem.
 
-#### 2. The Pipeline Certificate<a name=pipelinecert></a>
+#### 2. The Pipeline Certificate<a name="pipelinecert"></a>
 First, create a key pair for Pipeline.  In this case, I've called it "darcy.key" since darcy is the name of the server on which I am running Pipeline.
+
 ```scadora@darcy:/etc/ssl/certs$  sudo openssl genrsa -out darcy.key 2048
 Generating RSA private key, 2048 bit long modulus
 ................+++
@@ -152,6 +153,7 @@ scadora@darcy:/etc/ssl/certs$
 ```
 
 Finally, use your rootCA certificate to sign the CSR ("darcy.csr") you just generated and create a certificate for Pipeline ("darcy.pem"):
+
 ```
 cadora@darcy:/etc/ssl/certs$ openssl x509 -req -in darcy.csr -CA rootCA.pem -CAkey rootCA.key -CAcreateserial -out darcy.pem -days 500 -sha256
 Signature ok
