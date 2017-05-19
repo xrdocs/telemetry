@@ -24,8 +24,8 @@ If you don't know the difference between dialin and dialout or need help chosing
 </div>
 
 Once you've made that decision, go the appropriate section of this tutorial.  For each section, there will be some "common" router and Pipeline config setps and well as some specific steps you need depending on whether or not you enable TLS.
-## - [DialOut](#dialout)
-## - [DialIn](#dialin)
+## -[DialOut](#dialout)
+## -[DialIn](#dialin)
 
 
 
