@@ -23,6 +23,13 @@ If you don't know the difference between dialin and dialout or need help chosing
 {{ output | markdownify }}
 </div>
 
+Once you've made that decision, go the appropriate section of this tutorial.  
+
+[dial out](#dialout){: .text-left} [dial in](#dialin){: .text-right}
+
+For each section, there will be some "common" router and Pipeline config setps and well as some specific steps you need depending on whether or not you enable TLS.
+
+
 # gRPC Dialout<a name="dialout"></a>
 For gRPC Dialout, the subscription and sensor-group config are the same whether you use TLS or not, so I'll re-use those parts of the MDT router config from the [gRPC dialout example](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-out).  It will look like this:
 
