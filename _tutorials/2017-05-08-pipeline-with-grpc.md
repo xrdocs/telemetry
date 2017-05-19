@@ -80,11 +80,10 @@ To make this all work, you need the following:
 
 For the purpose of this tutorial, I will use [openssl](https://www.openssl.org/) (an open-source TLS toolkit) for the root CA and Pipeline certificate.  If your organization has an existing PKI, you can skip the first two steps and just copy the Root CA certificate to the router.
 
-### Creating Certificates
+### Certificates for TLS Dialout
 
 #### 1. The rootCA Key and Certificate
 For simplicity, I'll generate the rootCA on the same server that I am running Pipeline.  First, create a rootCA key-pair (may require sudo):
-
 <div class="highlighter-rouge">
 <pre class="highlight">
 <code>
@@ -100,7 +99,6 @@ scadora@darcy:/etc/ssl/certs$
 
 
 Now use that key to self-sign the rootCA certificate.  It will ask you a bunch of questions that you can fill out as you want (I just used all defaults):
-
 <div class="highlighter-rouge">
 <pre class="highlight">
 <code>
