@@ -209,7 +209,7 @@ rootCA.pem                                    100% 1204     1.2KB/s   00:00
 [xr-vm_node0_RP0_CPU0:~]$
 ```
 
-### Configuring the Router
+### Configuring the Router for gRPC Dialout with TLS
 In addition to the sensor-group and subscription configuration that we configured on the router at the beginning of the [Dialout section](dialout), we also need a destination-group. TLS is the default for MDT for gRPC, so the destination-group config just looks like this:
 
 ```
@@ -238,13 +238,16 @@ scadora@darcy:~/bigmuddy-network-telemetry-pipeline$
 ```
 
 And that's it.  Run pipeline as usual and you'll see the router connect:
-```scadora@darcy:~/bigmuddy-network-telemetry-pipeline$ sudo bin/pipeline -config pipeline.conf -log= -debug | grep gRPC
+
+```
+scadora@darcy:~/bigmuddy-network-telemetry-pipeline$ sudo bin/pipeline -config pipeline.conf -log= -debug | grep gRPC
 INFO[2017-05-16 13:00:40.976896] gRPC starting block                           encap=gpb name=grpcdialout server=:57500 tag=pipeline type="pipeline is SERVER"
 INFO[2017-05-16 13:00:40.977505] gRPC: Start accepting dialout sessions        encap=gpb name=grpcdialout server=:57500 tag=pipeline type="pipeline is SERVER"
 INFO[2017-05-16 13:01:09.775514] gRPC: Receiving dialout stream                encap=gpb name=grpcdialout peer="172.30.8.53:59865" server=:57500 tag=pipeline type="pipeline is SERVER"
 ```
 
 On the router, the grpc trace will show you the server name (darcy.cisco.example) of the received certificate.
+
 ```
 RP/0/RP0/CPU0:SunC#show grpc trace ems
 Tue May 16 20:01:15.059 UTC
@@ -253,6 +256,8 @@ May 16 20:01:06.757 ems/conf 0/RP0/CPU0 t26859 EMS-CONF:emsd_is_active_role get 
 May 16 20:01:06.759 ems/info 0/RP0/CPU0 t26843 EMS_INFO: nsDialerCheckAddTLSOption:322 mdtDialout: TLS pem: /misc/config/grpc/dialout/dialout.pem, Server host: darcy.cisco.example
 RP/0/RP0/CPU0:SunC#
 ```
+
+That's it.  You're done with gRPC Dialout with TLS.  No need to read further.
 
 # gRPC Dialin<a name=dialin></a>
 
