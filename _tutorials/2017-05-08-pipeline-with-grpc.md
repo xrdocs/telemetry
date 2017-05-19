@@ -380,7 +380,7 @@ Wait for ^C to shutdown
 If you don't want to have to manually enter the username and password each time you run Pipeline, check out the section below on [secure password storage in pipeline](#secure-passwords).
 {: .notice--warning}
 
-To verify that the connection is established, check that the subscription Destination Group State is Active. Also note that the Destination Group Id has been dynamically created (since we don't configure a destination-group on the router for dialin) and beings with "DialIn_."
+To verify that the connection is established, check that the subscription Destination Group State is Active. Also note that the Destination Group Id has been dynamically created (since we don't configure a destination-group on the router for dialin) and begins with "DialIn_."
 
 <div class="highlighter-rouge">
 <pre class="highlight">
