@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 date: '2017-05-08 11:03 -0600'
 title: Pipeline with gRPC
 author: Shelly Cadora
@@ -10,6 +10,7 @@ tags:
   - gRPC
   - MDT
   - pipeline
+postion: hidden
 ---
 # Using Pipeline with gRPC
 
