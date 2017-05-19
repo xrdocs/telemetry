@@ -192,7 +192,6 @@ May 16 19:35:40.240 ems/grpc 0/RP0/CPU0 t26842 EMS-GRPC: grpc: Conn.resetTranspo
 ```
 
 For more info on certificates with IP Addresses, take a look at [this discussion](https://serverfault.com/questions/611120/failed-tls-handshake-does-not-contain-any-ip-sans).
-
 {% endcapture %}
 <div class="notice--warning">
 {{ output | markdownify }}
@@ -223,19 +222,22 @@ telemetry model-driven
 ### Configuring Pipeline for tls=true
 We can use the ```[gRPCDIalout]``` input stage in the default pipeline.conf.  The only change is the last 4 lines where we enable tls and set the pem, key and servername to the values corresponding to the [Pipeline certificate we generated earlier](#pipelinecert). 
 
-```
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
 scadora@darcy:~/bigmuddy-network-telemetry-pipeline$ grep -A30 "gRPCDialout" pipeline.conf | grep -v -e '^#' -e '^$'
 [gRPCDialout]
  stage = xport_input
  type = grpc
  encap = gpb
  listen = :57500
- tls = true
+ <b>tls = true
  tls_pem = /etc/ssl/certs/darcy.pem
  tls_key = /etc/ssl/certs/darcy.key
- tls_servername = darcy.cisco.example
-scadora@darcy:~/bigmuddy-network-telemetry-pipeline$
-```
+ tls_servername = darcy.cisco.example</b>
+</code>
+</pre>
+</div>
 
 And that's it.  Run pipeline as usual and you'll see the router connect:
 
