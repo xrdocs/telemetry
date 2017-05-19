@@ -69,6 +69,8 @@ INFO[2017-05-08 11:25:50.046902] gRPC: Start accepting dialout sessions        e
 INFO[2017-05-08 11:26:03.572534] gRPC: Receiving dialout stream                encap=gpb name=grpcdialout peer="172.30.8.53:61857" server=:57500 tag=pipeline type="pipeline is SERVER"
 ```
 
+And that's it.  You're done.  Telemetry data is streaming into pipeline and you can do with it what you want.
+
 ## gRPC Dialout With TLS
 In a dialout scenario, the router is the "client" in the gRPC connection and Pipeline is the "server."  Therefore, in the TLS handshake, Pipeline will need to send a certificate to authenticate itself to the router.  The router validates Pipeline's certificate using the public certificate of the Root Certificate Authority (CA) that signed it and then generates sesssion keys to encrypt the the session.
 
@@ -226,7 +228,7 @@ RP/0/RP0/CPU0:SunC#
 
 In a dialin scenario, Pipeline sends the SYN packet and acts as the "client" in the gRPC session and TLS handshake.
 
-## Router Config for gRPC Dial-In<a name=router-dialin></a>
+## Basic Router Config for gRPC Dial-In<a name=router-dialin></a>
 For this part of the tutorial, I'll re-use the MDT router config from the [gRPC dial-in example](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-in)  It should look like this:
 
 ```
@@ -241,7 +243,10 @@ telemetry model-driven
   sensor-group-id SGroup3 sample-interval 30000
 ``` 
 
-You will also need to configure a username and password that Pipeline can use when it dials in.  If you're just doing a quick test in the lab, assign the user to one of these default usergroups: sysadmin, netadmin, or root-lr.  
+## Dial-In Credentials<a name=router-creds></a> 
+Regardless of whether you use TLS or not, Pipeline will have to provide a username and password when it first connects to the router. 
+
+On the router side, you need to configure a username and password that Pipeline can use when it dials in.  If you're just doing a quick test in the lab, assign the user to one of these default usergroups: sysadmin, netadmin, or root-lr.  
 
 ```
 username mdt
@@ -285,6 +290,8 @@ username mdt
  secret 5 $1$kAbv$xNk9KA.mIC7K2wfdpGjzk1
 ```
 
+When you run pipeline, it will prompt you for a username and password.  You will enter the username and password that you've configured on the router in this step.
+
 Next, you get to decide if you want to use TLS or not and forge ahead.
 
 ## Pipeline for gRPC Dialin Without TLS
@@ -306,7 +313,7 @@ $ grep -A48 "mymdtrouter" pipeline.conf | grep -v -e '^#' -e '^$'
 
 Note that the subscription is "Sub3", which matches the subscription in the router configuration [above](#router-dialin).  Pipeline will request the pre-configured subscription from the router when it connects.
 
-When you run pipeline, you will be prompted for a username and password.  This is the username and password that you configured on the router [above](#router-dialin).
+When you run pipeline, you will be prompted for a username and password.  This is the username and password that you configured on the router [above](#router-creds).
 
 ```
 $ bin/pipeline -config pipeline.conf
@@ -346,47 +353,8 @@ Subscription:  Sub3
     Last Sent time:       2017-05-18 20:46:28.2143492698 +0000
 ```
 
-## Secure password storage
-Because Pipeline cares about your security, it won't let you store unencrypted router passwords in pipeline.conf.  If you dislike being prompted for a password every time you run it or you want to run pipeline in the background, you can have pipeline encrypt the password using the -pem option and store it in a new file as follows:
+That's it, you're done!  
 
-```
-$ bin/pipeline -config pipeline.conf -pem ~/.ssh/id_rsa
-Startup pipeline
-Load config from [pipeline.conf], logging in [pipeline.log]
-
-CRYPT Client [mymdtrouter],[172.30.8.53:57500]
- Enter username: mdt
- Enter password:
-Generating sample config...A new configuration file [pipeline.conf_REWRITTEN] has been written including user name and encrypted password.
-In future, you can run pipeline non-interactively.
-Do remember to run pipeline with '-pem /home/scadora/.ssh/id_rsa -config pipeline.conf_REWRITTEN' options.
-Wait for ^C to shutdown
-```
-
-If you take a look at the ```[mymdtrouter]``` stage in pipeline.conf_REWRITTEN, you'll see that the username and encrypted password are included:
-
-```
-$ grep -A10 "mymdtrouter" pipeline.conf_REWRITTEN | grep -v -e '^#' -e '^$'
-[mymdtrouter]
-subscriptions=Sub3
-password=PZbS/IG4O+2lsok3xxBjQZwJ5CFyraixl//qdNy67IRMM1YMLlWqbbGHUXVGM1pX0HfKf7JU1beRivkOcwyANPff4hVmF5b7Ne1SBxnKS4VqSU+AMCN/e+FFHFrCA24m0ywTYB/Dt2PJZaUCQmYzxTwa71+Vxc7lHe2dtovH/DGutQfvRa2On6aHeqiQfMbBcEeKqwya4jtmexS11Dt1ai1QXqWgn2WiggvWTGcldANO4Nfkl4vICguVlrVEfNv16qNoPB/HerTNCuGLlBR0EBhxGPxCJteexAxadt68whG4UP/teTiD2qFZ2UFXCRnpnPvpic9LIZIaF4PgNg9AGw==
-server=172.30.8.53:57500
-type=grpc
-encoding=gpbkv
-encap=gpb
-tls=false
-username=mdt
-stage=xport_input
-```
-
-Now you can run pipeline with the rewritten .conf file and it won't prompt you for the username again:
-
-```
-$ sudo bin/pipeline -config pipeline.conf_REWRITTEN -pem ~/.ssh/id_rsa
-Startup pipeline
-Load config from [pipeline.conf_REWRITTEN], logging in [pipeline.log]
-Wait for ^C to shutdown
-```
 
 That's it, you're done.  No need to read the next section unless you want to do TLS.
 
@@ -495,3 +463,46 @@ ems.pem                                       100% 1513     1.5KB/s   00:00
 ## Pipeline for gRPC Dialin with TLS
 
 All that's left is to configure pipeline.conf for TLS.
+
+
+# Secure password storage<a name=secure-passwords></a>
+Because Pipeline cares about your security, it won't let you store unencrypted router passwords in pipeline.conf.  If you dislike being prompted for a password every time you run it or you want to run pipeline in the background, you can have pipeline encrypt the password using the -pem option and store it in a new file as follows:
+
+```
+$ bin/pipeline -config pipeline.conf -pem ~/.ssh/id_rsa
+Startup pipeline
+Load config from [pipeline.conf], logging in [pipeline.log]
+
+CRYPT Client [mymdtrouter],[172.30.8.53:57500]
+ Enter username: mdt
+ Enter password:
+Generating sample config...A new configuration file [pipeline.conf_REWRITTEN] has been written including user name and encrypted password.
+In future, you can run pipeline non-interactively.
+Do remember to run pipeline with '-pem /home/scadora/.ssh/id_rsa -config pipeline.conf_REWRITTEN' options.
+Wait for ^C to shutdown
+```
+
+If you take a look at the ```[mymdtrouter]``` stage in pipeline.conf_REWRITTEN, you'll see that the username and encrypted password are included:
+
+```
+$ grep -A10 "mymdtrouter" pipeline.conf_REWRITTEN | grep -v -e '^#' -e '^$'
+[mymdtrouter]
+subscriptions=Sub3
+password=PZbS/IG4O+2lsok3xxBjQZwJ5CFyraixl//qdNy67IRMM1YMLlWqbbGHUXVGM1pX0HfKf7JU1beRivkOcwyANPff4hVmF5b7Ne1SBxnKS4VqSU+AMCN/e+FFHFrCA24m0ywTYB/Dt2PJZaUCQmYzxTwa71+Vxc7lHe2dtovH/DGutQfvRa2On6aHeqiQfMbBcEeKqwya4jtmexS11Dt1ai1QXqWgn2WiggvWTGcldANO4Nfkl4vICguVlrVEfNv16qNoPB/HerTNCuGLlBR0EBhxGPxCJteexAxadt68whG4UP/teTiD2qFZ2UFXCRnpnPvpic9LIZIaF4PgNg9AGw==
+server=172.30.8.53:57500
+type=grpc
+encoding=gpbkv
+encap=gpb
+tls=false
+username=mdt
+stage=xport_input
+```
+
+Now you can run pipeline with the rewritten .conf file and it won't prompt you for the username again:
+
+```
+$ sudo bin/pipeline -config pipeline.conf_REWRITTEN -pem ~/.ssh/id_rsa
+Startup pipeline
+Load config from [pipeline.conf_REWRITTEN], logging in [pipeline.log]
+Wait for ^C to shutdown
+```
