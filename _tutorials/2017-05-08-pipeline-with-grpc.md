@@ -57,7 +57,7 @@ Add that to the subscription and sensor-path configuration in the [commmon route
 
 ### Pipeline.conf: tls = false
 
-You can use the ```[gRPCDIalout]``` input stage in the default pipeline.conf.  Just uncomment the 6 lines shown below.
+You can use the ```[gRPCDIalout]``` input stage in the default pipeline.conf from github.  Just uncomment the 6 lines shown below.
 
 ```
 $ grep -A25 "gRPCDialout" pipeline.conf | grep -v -e '^#' -e '^$'
@@ -272,9 +272,9 @@ That's it.  You're done with gRPC Dialout with TLS.  No need to read further.
 
 # gRPC Dialin<a name="dialin"></a>
 
-In a dialin scenario, Pipeline sends the TCP SYN packet and acts as the "client" in the gRPC session and TLS handshake.
+In a dialin scenario, Pipeline sends the TCP SYN packet and acts as the "client" in the gRPC session and TLS handshake (if you're configuring TLS).
 
-## Basic Router Config for gRPC DialIn<a name="router-dialin"></a>
+## Common Router Config for gRPC DialIn<a name="router-dialin"></a>
 For this part of the tutorial, I'll re-use the MDT router config from the [gRPC dialin example](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-in)  It should look like this:
 
 ```
@@ -291,7 +291,7 @@ telemetry model-driven
 
 Note that there is no destination-group for dialin.  
 
-## DialIn Credentials<a name="router-creds"></a> 
+## Common DialIn Credentials<a name="router-creds"></a> 
 Regardless of whether you use TLS or not, Pipeline will have to provide a username and password when it first connects to the router. 
 
 On the router side, you need to configure a username and password that Pipeline can use when it dials in.  If you're just doing a quick test in the lab, assign the user to one of these default usergroups: sysadmin, netadmin, or root-lr.  For example:
