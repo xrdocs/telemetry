@@ -508,23 +508,29 @@ ems.pem                                       100% 1513     1.5KB/s   00:00
 All that's left is to configure pipeline.conf for TLS.
 
 You can use the ```[mymdtrouter]``` input stage in the default pipeline.conf.  Uncomment the 10 lines shown below and do the following:
+
 -change the server line to match your router's IP address and configured gRPC port.
 -set tls to "true"
 -set tls_pem to the full path and filename of the ems.pem file you copied from the router [above](#copy-router-cert).
 - set tls_pem to the CN of the router's certificate ("ems.cisco.com")
-```
+
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
 $ grep -A48 "mymdtrouter" pipeline.conf | grep -v -e '^#' -e '^$'
 [mymdtrouter]
  stage = xport_input
  type = grpc
  encoding = gpbkv
  encap = gpb
- server = 172.30.8.53:57500
+ <b>server = 172.30.8.53:57500</b>
  subscriptions = Sub3
- tls = true
+ <b>tls = true
  tls_pem = /home/scadora/ems.pem
- tls_servername = ems.cisco.com
-```
+ tls_servername = ems.cisco.com</b>
+</code>
+</pre>
+</div>
 
 Note that the subscription is "Sub3", which matches the subscription in the router configuration [above](#router-dialin).  Pipeline will request the pre-configured subscription from the router when it connects.
 
