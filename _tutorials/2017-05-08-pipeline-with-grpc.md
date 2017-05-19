@@ -101,8 +101,10 @@ scadora@darcy:/etc/ssl/certs$
 
 Now use that key to self-sign the rootCA certificate.  It will ask you a bunch of questions that you can fill out as you want (I just used all defaults):
 
-```
-scadora@darcy:/etc/ssl/certs$ sudo openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 1024 -extensions v3_ca -config ../openssl.cnf -out rootCA.pem
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+scadora@darcy:/etc/ssl/certs$ <b>sudo openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 1024 -extensions v3_ca -config ../openssl.cnf -out rootCA.pem </b>
 You are about to be asked to enter information that will be incorporated
 into your certificate request.
 What you are about to enter is what is called a Distinguished Name or a DN.
@@ -118,7 +120,9 @@ Organizational Unit Name (eg, section) []:
 Common Name (e.g. server FQDN or YOUR name) []:
 Email Address []:
 scadora@darcy:/etc/ssl/certs$
-```
+</code>
+</pre>
+</div>
 
 You should now have a rootCA certificate called rootCA.pem.
 
