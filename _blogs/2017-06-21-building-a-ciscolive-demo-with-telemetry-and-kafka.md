@@ -141,9 +141,10 @@ if __name__ == "__main__":
 ```
 
 ## A Few Loose Ends
-And that's pretty much it.  There was a little more code to write to detect the BGP Established state and execute a ping via YDK, but there really wasn't much.  To recap, the main pieces were:
+There was a little more code to write to tie everything together, but not much.  The whole demo app ended up being about 100 lines of code.  And from a telemetry perspective, it was really quite trivial to integrate into the demo by using Kafka.  To recap, the main pieces were:
 - Configure the router to stream BGP session state
-- Configure and run pipeline
+- Configure (basically uncomment some lines in the default pipeline.conf) and run pipeline to input MDT from the router and output to Kafka
 - Download and run Kafka and Zookeeper
-- Use the kafka-python package to listen to Kafka.
+- Use the kafka-python package in a Python script to acquire and process the session state from the telemetry topic on Kafka.
 
+Although I didn't get the deep learning experience that comes from having really complicated things go deeply wrong, it was a fun little exercise.  If you're in Las Vegas for CiscoLive next week, stop by our booth and talk to us about what you want to do in a model-driven network.
