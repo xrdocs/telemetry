@@ -7,9 +7,9 @@ title: Building a CiscoLive Demo with Telemetry and Kafka
 
 Every year at Cisco Live, my team helps put together the demos that go into the World of Solutions. Geeks that we are, we get a thrill out of showing off the art of the possible. But the real purpose of a demo is to start a conversation with the network engineers and operators who stop by our booth.     
 
-This year, my colleague asked me to help integrate telemetry into a demo called "Continuous Automation." The goal of the demo is to illustrate how model-driven telemetry (MDT) can be used with model-driven APIs to automate a simple provisioning and validation task (it's based a real customer use case that we're currently working on).  
+This year, a colleague asked me to help integrate telemetry into a demo called "Continuous Automation." The goal of the demo is to illustrate how model-driven telemetry (MDT) can be used with model-driven APIs to automate a simple provisioning and validation task (it's based a real customer use case that we're currently working on).  
 
-Pieces of the demo were already in place: a small Python app that utilized the YDK Python APIs to configure a BGP neighbor and execute a connectivity test (ping) from the router when the neighbor came up.  The problem was that the app had no way to know when the neighbor came up.  Enter MDT!
+Pieces of the demo were already in place: a small Python app that utilized the (YDK Python APIs)[https://github.com/CiscoDevNet/ydk-py] to configure a BGP neighbor and execute a connectivity test (ping) from the router when the neighbor came up.  The problem was that the app had no way to know when the neighbor came up.  Enter MDT!
 
 ## The Easy Part: Data Model and Router Config
 The operational data that we needed was the BGP neighbor session state.  This is easily available in the OpenConfig BGP model:
@@ -47,7 +47,9 @@ telemetry model-driven
  But then what?  How do you get data from a TCP stream into a Python app?
  
  ## The Other Easy Part: Pipeline and Kafka
-My go-to tool for consuming MDT data is pipeline, an open source utility that I've written about before.  If you've read my [previous tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-10-03-pipeline-to-text-tutorial/), you'll recognize the  ```[testbed]``` input stage in the default pipeline.conf.  This will work "as-is" with the destination-group above.
+My go-to tool for consuming MDT data is [pipeline](https://github.com/cisco/bigmuddy-network-telemetry-pipeline), an open source utility that I've written about before.  If you're not familiar with pipeline, have a read through my [previous tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-10-03-pipeline-to-text-tutorial/).  
+
+For this demo, I again used the  ```[testbed]``` input stage in the default pipeline.conf.  This will work "as-is" with the destination-group above.
 
 {% capture "output" %}
 
@@ -89,5 +91,59 @@ topic = telemetry
 {{ output | markdownify }}
 </div>
 
-# The Easiest Part
+With those two entries in the pipeline.conf file, I kicked off pipeline as usual:
+
+{% capture "output" %}
+
+```
+$ bin/pipeline &
+[1] 21975
+Startup pipeline
+Load config from [pipeline.conf], logging in [pipeline.log]
+Wait for ^C to shutdown
+$
+```  
+{% endcapture %}
+
+<div class="notice--warning">
+{{ output | markdownify }}
+</div>
+
+## The Easiest Part
 Since I haven't installed Kafka before, I thought it might be hard.  But it couldn't have been easier.  I followed the first two steps in the [Apache Kafka Quickstart](https://kafka.apache.org/quickstart) guide.  Boom.  Done.  Didn't even have to alter the default properties files for Kafka and Zookeeper.
+
+## A Quick Python Script
+With Kafka, Zookeeper and Pipeline running and the router streaming MDT, all I lacked was a little Python code to subscribe to the telemetry topic on Kafka and listen for updates. With the (kafka-python client)[https://pypi.python.org/pypi/kafka-python], there wasn't much to it.  Here are a few lines of code I used to test it out:
+
+```
+from kafka import KafkaConsumer
+import json
+import time
+
+if __name__ == "__main__":
+
+    session_state = "UNKNOWN"
+    consumer = KafkaConsumer('telemetry', bootstrap_servers=["10.30.111.4:9092"])
+
+    for msg in consumer:
+        telemetry_msg =  msg.value
+        telemetry_msg_json = json.loads(telemetry_msg)
+
+        if "Rows" in telemetry_msg_json:
+            content_rows = telemetry_msg_json["Rows"]
+            for row in content_rows:
+                if row["Keys"]["neighbor-address"] == '10.8.0.1':
+                    new_session_state = row["Content"]["session-state"]
+                    if session_state != new_session_state:
+                        print("\nSession state changed from {0:s} to {1:s} at epoch time {2:d}"
+                              .format(session_state, new_session_state, row["Timestamp"]))
+                        session_state = new_session_state
+```
+
+## A Few Loose Ends
+And that's pretty much it.  There was a little more code to write to detect the BGP Established state and execute a ping via YDK, but there really wasn't much.  To recap, the main pieces were:
+- Configure the router to stream BGP session state
+- Configure and run pipeline
+- Download and run Kafka and Zookeeper
+- Use the kafka-python package to listen to Kafka.
+
