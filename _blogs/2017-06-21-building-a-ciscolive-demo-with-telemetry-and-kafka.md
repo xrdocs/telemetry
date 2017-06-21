@@ -47,11 +47,47 @@ telemetry model-driven
  But then what?  How do you get data from a TCP stream into a Python app?
  
  ## The Other Easy Part: Pipeline and Kafka
-My go-to tool for consuming MDT data is pipeline, an open source utility that I've written about before.  Pipeline can injest any kind of telemetry data and output it to various places:
+My go-to tool for consuming MDT data is pipeline, an open source utility that I've written about before.  If you've read my [previous tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-10-03-pipeline-to-text-tutorial/), you'll recognize the  ```[testbed]``` input stage in the default pipeline.conf.  This will work "as-is" with the destination-group above.
+
+{% capture "output" %}
+
+```
+[testbed]
+stage = xport_input
+type = tcp
+encap = st
+listen = :5432
+```  
+{% endcapture %}
+
+<div class="notice--warning">
+{{ output | markdownify }}
+</div>
+
+That's good for input, but what about output?  Pipeline can write data to three destinations:
 - a file
 - time series databases like InfluxDB
 - Kafka
 
-Writing to a file would probably work (Python has extensive file handling capabilities) but it seemed clumsy.  Writing to InfluxDB would also have worked (I could use Python REST packages to query the database) but seemed too heavy weight for a simple demo.  That left me with Kafka.  I've been wanting to do a Kafka demo for a while and there are Python packages to work with Kafka. Having not done it before, I was a little worried about how much work it would take with the deadline looming, but if nothing else, I would learn something new!
+Writing to a file would probably work (Python has extensive file handling capabilities) but it seemed clumsy.  Writing to InfluxDB would also have worked (I could use Python REST packages to query the database) but seemed too heavy weight for a simple demo.  That left me with Kafka.  I've been wanting to do a Kafka demo for a while and there are Python packages to work with Kafka, so I figured...why not?  If nothing else, I'll learn something new.
 
-The problem is, I didn't end up learning very much.  Getting a small Kafka instance running was just too easy!
+For pipeline to output to Kafka, all you have to do is uncomment the following lines in the ```[mykafka]``` section of the default pipeline.conf. In the example below, I'm running Pipeline and Kafka on the same machine, so I used the broker address of "localhost" and the topic called "telemetry."
+
+{% capture "output" %}
+
+```
+[mykafka]
+stage = xport_output
+type = kafka
+encoding = json
+brokers = localhost:9092
+topic = telemetry
+```  
+{% endcapture %}
+
+<div class="notice--warning">
+{{ output | markdownify }}
+</div>
+
+# The Easiest Part
+Since I haven't installed Kafka before, I thought it might be hard.  But it couldn't have been easier.  I followed the first two steps in the [Apache Kafka Quickstart](https://kafka.apache.org/quickstart) guide.  Boom.  Done.  Didn't even have to alter the default properties files for Kafka and Zookeeper.
