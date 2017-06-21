@@ -1,7 +1,17 @@
 ---
-published: false
+published: true
 date: '2017-06-21 10:22 -0600'
 title: Building a CiscoLive Demo with Telemetry and Kafka
+author: Shelly Cadora
+excerpt: Gives the background of a CiscoLive Telemetry and Kafka Demo
+tags:
+  - iosxr
+  - cisco
+  - Telemetry
+  - MDT
+  - YDK
+  - Kafka
+position: hidden
 ---
 ## Behind the Scenes of Continuous Automation
 
