@@ -17,14 +17,15 @@ position: hidden
 
 Every year at Cisco Live, my team helps put together the demos that go into the World of Solutions. Geeks that we are, we get a thrill out of showing off the art of the possible. But the real purpose of a demo is to start a conversation with the network engineers and operators who stop by our booth.     
 
-This year, a colleague asked me to help integrate telemetry into a demo called "Continuous Automation." The goal of the demo is to illustrate how model-driven telemetry (MDT) can be used with model-driven APIs to automate a simple provisioning and validation task (it's based a real customer use case that we're currently working on).  
+This year, a colleague asked me to help integrate telemetry into a Service Provider demo called "Continuous Automation." The goal of the demo is to illustrate how model-driven telemetry (MDT) can be used with model-driven APIs to automate a simple provisioning and validation task (it's based a real customer use case that we're currently working on).  
 
-Pieces of the demo were already in place: a small Python app that utilized the (YDK Python APIs)[https://github.com/CiscoDevNet/ydk-py] to configure a BGP neighbor and execute a connectivity test (ping) from the router when the neighbor came up.  The problem was that the app had no way to know when the neighbor came up.  Enter MDT!
+Pieces of the demo were already in place: a small Python app that utilized the [YDK Python APIs[(https://github.com/CiscoDevNet/ydk-py) to configure a BGP neighbor and execute a connectivity test (ping) from the router when the neighbor came up.  The problem was that the app had no way to know _when_ the neighbor came up.  Enter MDT!
 
 ## The Easy Part: Data Model and Router Config
 The operational data that we needed was the BGP neighbor session state.  This is easily available in the OpenConfig BGP model:
 
-```module: openconfig-bgp
+```
+module: openconfig-bgp
    +--rw bgp
       +--rw neighbors
          +--rw neighbor* [neighbor-address]
