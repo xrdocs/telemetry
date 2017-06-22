@@ -167,4 +167,6 @@ There was a little more code to write to tie everything together and tidy it up,
 - Download and run Kafka and Zookeeper
 - Use the kafka-python package in a Python script to acquire and process the session state from the telemetry topic on Kafka.
 
-Although I didn't get the learning experience that comes from having really complicated things go deeply wrong, this was a fun little exercise.  If you're in Las Vegas for CiscoLive next week, stop by our booth and talk to us about what you want to do in a model-driven network.
+Although I didn't get the learning experience that comes from having really complicated things go deeply wrong, this was a fun little exercise.  
+
+If you're in Las Vegas for CiscoLive next week, stop by our booth and talk to us about what you want to do in a model-driven network!
