@@ -129,9 +129,11 @@ $
 Since I haven't installed Kafka before, I was concerned that it might be the long pole in my demo prep.  But it couldn't have been easier.  I followed the first two steps in the [Apache Kafka Quickstart](https://kafka.apache.org/quickstart) guide.  Boom.  Done.  Didn't even have to alter the default properties files for Kafka and Zookeeper.
 
 ## A Quick Python Script
-With Kafka, Zookeeper and Pipeline running and the router streaming MDT, all I lacked was a little Python code to subscribe to the telemetry topic on Kafka and listen for updates. With the [kafka-python client](https://pypi.python.org/pypi/kafka-python), there wasn't much to it.  Here are a few lines of code I used to test it out:
+With Kafka, Zookeeper and Pipeline running and the router streaming MDT, all I lacked was a little Python code to subscribe to the ```telemetry``` topic on Kafka and listen for updates. With the [kafka-python client](https://pypi.python.org/pypi/kafka-python), there wasn't much to it.  Here are a few lines of code I used to test it out:
 
-```
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
 from kafka import KafkaConsumer
 import json
 import time
@@ -139,7 +141,7 @@ import time
 if __name__ == "__main__":
 
     session_state = "UNKNOWN"
-    consumer = KafkaConsumer('telemetry', bootstrap_servers=["10.30.111.4:9092"])
+    consumer = KafkaConsumer('<mark>telemetry</mark>', bootstrap_servers=[<mark>"10.30.111.4:9092"<\mark>])
 
     for msg in consumer:
         telemetry_msg =  msg.value
@@ -148,13 +150,15 @@ if __name__ == "__main__":
         if "Rows" in telemetry_msg_json:
             content_rows = telemetry_msg_json["Rows"]
             for row in content_rows:
-                if row["Keys"]["neighbor-address"] == '10.8.0.1':
+            if row["Keys"]["neighbor-address"] == '<mark>10.8.0.1</mark>':
                     new_session_state = row["Content"]["session-state"]
                     if session_state != new_session_state:
                         print("\nSession state changed from {0:s} to {1:s} at epoch time {2:d}"
                               .format(session_state, new_session_state, row["Timestamp"]))
                         session_state = new_session_state
-```
+</code>
+</pre>
+</div>
 
 ## In Sum
 There was a little more code to write to tie everything together and tidy it up, but my part of the demo was basically done.  From a telemetry perspective, it was trivial to integrate into the demo by using Kafka.  To recap, the main pieces were:
