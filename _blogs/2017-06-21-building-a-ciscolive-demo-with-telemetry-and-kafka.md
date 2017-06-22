@@ -41,7 +41,7 @@ telemetry model-driven
   sensor-path openconfig-bgp:bgp/neighbors/neighbor/state
 ```
 
-For a detailed explanation of MDT router configurations, see my [basic MDT tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/)).{: .notice--warning}
+For a detailed explanation of MDT router configurations, see my [basic MDT tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/)).{: .notice--success}
 
 Adding a destination group and a subscription starts the router streaming out the needed data in a Google Protocol Buffer (GPB) over TCP:
 
