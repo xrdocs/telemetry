@@ -141,7 +141,7 @@ import time
 if __name__ == "__main__":
 
     session_state = "UNKNOWN"
-    consumer = KafkaConsumer('<mark>telemetry</mark>', bootstrap_servers=[<mark>"10.30.111.4:9092"<\mark>])
+    consumer = KafkaConsumer('<mark>telemetry</mark>', bootstrap_servers=<mark>["10.30.111.4:9092"]</mark>)
 
     for msg in consumer:
         telemetry_msg =  msg.value
