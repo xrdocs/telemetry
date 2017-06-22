@@ -45,7 +45,7 @@ For a detailed explanation of MDT router configurations, see my [basic MDT tutor
 <div class="notice--primary"> 
 {{ output | markdownify }}
 </div>
-Adding a destination group and a subscription starts the router streaming out the needed data in a Google Protocol Buffer (GPB) over TCP:
+Adding a destination-group and a subscription starts the router streaming out the needed data:
 
 ```
 telemetry model-driven
