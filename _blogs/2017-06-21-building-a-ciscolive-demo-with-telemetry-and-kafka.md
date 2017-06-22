@@ -63,7 +63,7 @@ telemetry model-driven
  
 ## The Other Easy Part: Pipeline and Kafka
 
-My go-to tool for consuming MDT data is [pipeline](https://github.com/cisco/bigmuddy-network-telemetry-pipeline), an open source utility that I've written about before.  If you're not familiar with pipeline, have a read through my [previous tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-10-03-pipeline-to-text-tutorial/).  
+My go-to tool for consuming MDT data is [pipeline](https://github.com/cisco/bigmuddy-network-telemetry-pipeline), an open source utility that I've [written about before](http://blogs.cisco.com/sp/introducing-pipeline-a-model-driven-telemetry-collection-service).  If you're not familiar with pipeline, have a read through my [previous tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-10-03-pipeline-to-text-tutorial/).  
 
 For this demo, I used the  ```[testbed]``` input stage in the default pipeline.conf.  This will work "as-is" with the destination-group above.
 
