@@ -42,7 +42,7 @@ telemetry model-driven
 ```
 
 For a detailed explanation of MDT router configurations, see my [basic MDT tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/)). 
-<div class="notice--primary"> 
+<div class="notice"> 
 {{ output | markdownify }}
 </div>
 Adding a destination-group and a subscription starts the router streaming out the needed data:
