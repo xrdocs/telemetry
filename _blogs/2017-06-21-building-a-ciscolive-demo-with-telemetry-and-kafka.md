@@ -136,7 +136,6 @@ With Kafka, Zookeeper and Pipeline running and the router streaming MDT, all I l
 <code>
 from kafka import KafkaConsumer
 import json
-import time
 
 if __name__ == "__main__":
 
