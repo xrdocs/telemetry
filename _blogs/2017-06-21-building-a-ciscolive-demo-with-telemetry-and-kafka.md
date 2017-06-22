@@ -131,7 +131,7 @@ $
 Since I haven't installed Kafka before, I was concerned that it might be the long pole in my demo prep.  But it couldn't have been easier.  I followed the first two steps in the [Apache Kafka Quickstart](https://kafka.apache.org/quickstart) guide.  Boom.  Done.  Didn't even have to alter the default properties files for Kafka and Zookeeper.
 
 ## A Quick Python Script
-With Kafka, Zookeeper and Pipeline running and the router streaming MDT, all I lacked was a little Python code to subscribe to the topic on Kafka and listen for updates. With the [kafka-python client](https://pypi.python.org/pypi/kafka-python), there wasn't much to it.  Here are a few lines of code I used to test it out for the topic ```telemetry``` with the Pipeline/Kafka stack running on ```10.30.111.4```:
+With Kafka, Zookeeper and Pipeline running and the router streaming MDT, all I lacked was a little Python code to subscribe to the topic on Kafka and parse some JSON (by default, pipeline transforms the GPB from the router into a JSON object when it publishes to Kafka). With the [kafka-python client](https://pypi.python.org/pypi/kafka-python), there wasn't much to it.  Here are a few lines of code I used for a quick test (note that the topic is ```telemetry``` and the Pipeline/Kafka stack is running on ```10.30.111.4```):
 
 <div class="highlighter-rouge">
 <pre class="highlight">
