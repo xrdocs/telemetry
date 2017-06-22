@@ -11,7 +11,7 @@ tags:
   - MDT
   - YDK
   - Kafka
-position: hidden
+position: top
 ---
 ## Behind the Scenes of Continuous Automation
 
