@@ -41,7 +41,10 @@ telemetry model-driven
   sensor-path openconfig-bgp:bgp/neighbors/neighbor/state
 ```
 
-For a detailed explanation of MDT router configurations, see my [basic MDT tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/)).{: .notice--success}
+For a detailed explanation of MDT router configurations, see my [basic MDT tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/)). 
+<div class="notice--success">
+{{ output | markdownify }}
+</div>
 
 Adding a destination group and a subscription starts the router streaming out the needed data in a Google Protocol Buffer (GPB) over TCP:
 
@@ -63,7 +66,7 @@ telemetry model-driven
 
 My go-to tool for consuming MDT data is [pipeline](https://github.com/cisco/bigmuddy-network-telemetry-pipeline), an open source utility that I've written about before.  If you're not familiar with pipeline, have a read through my [previous tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-10-03-pipeline-to-text-tutorial/).  
 
-For this demo, I again used the  ```[testbed]``` input stage in the default pipeline.conf.  This will work "as-is" with the destination-group above.
+For this demo, I used the  ```[testbed]``` input stage in the default pipeline.conf.  This will work "as-is" with the destination-group above.
 
 {% capture "output" %}
 
@@ -87,7 +90,7 @@ That's good for input, but what about output?  Pipeline can write data to three 
 
 Writing to a file would probably work (Python has extensive file handling capabilities) but it seemed clumsy.  Writing to InfluxDB would also have worked (I could use Python REST packages to query the database) but seemed too heavy weight for a simple demo.  That left me with Kafka.  I've been wanting to do a Kafka demo for a while and there are Python packages to work with Kafka, so I figured...why not?  If nothing else, I'll learn something new.
 
-For pipeline to output to Kafka, all you have to do is uncomment the following lines in the ```[mykafka]``` section of the default pipeline.conf. In the example below, I'm running Pipeline and Kafka on the same machine, so I used the broker address of "localhost" and the topic called "telemetry."
+For pipeline to output to Kafka, all you have to do is uncomment the following lines in the ```[mykafka]``` section of the default pipeline.conf. In the example below, I'm running pipeline and Kafka on the same machine, so I used the broker address of "localhost" and the topic called "telemetry."
 
 {% capture "output" %}
 
@@ -124,10 +127,10 @@ $
 </div>
 
 ## The Easiest Part
-Since I haven't installed Kafka before, I thought it might be hard.  But it couldn't have been easier.  I followed the first two steps in the [Apache Kafka Quickstart](https://kafka.apache.org/quickstart) guide.  Boom.  Done.  Didn't even have to alter the default properties files for Kafka and Zookeeper.
+Since I haven't installed Kafka before, I was concerned that it might be the long pole in my demo prep.  But it couldn't have been easier.  I followed the first two steps in the [Apache Kafka Quickstart](https://kafka.apache.org/quickstart) guide.  Boom.  Done.  Didn't even have to alter the default properties files for Kafka and Zookeeper.
 
 ## A Quick Python Script
-With Kafka, Zookeeper and Pipeline running and the router streaming MDT, all I lacked was a little Python code to subscribe to the telemetry topic on Kafka and listen for updates. With the (kafka-python client)[https://pypi.python.org/pypi/kafka-python], there wasn't much to it.  Here are a few lines of code I used to test it out:
+With Kafka, Zookeeper and Pipeline running and the router streaming MDT, all I lacked was a little Python code to subscribe to the telemetry topic on Kafka and listen for updates. With the [kafka-python client](https://pypi.python.org/pypi/kafka-python), there wasn't much to it.  Here are a few lines of code I used to test it out:
 
 ```
 from kafka import KafkaConsumer
@@ -155,7 +158,7 @@ if __name__ == "__main__":
 ```
 
 ## A Few Loose Ends
-There was a little more code to write to tie everything together, but not much.  The whole demo app ended up being about 100 lines of code.  And from a telemetry perspective, it was really quite trivial to integrate into the demo by using Kafka.  To recap, the main pieces were:
+There was a little more code to write to tie everything together and tidy it up, but my part of the demo was basically done.  From a telemetry perspective, it was trivial to integrate into the demo by using Kafka.  To recap, the main pieces were:
 - Configure the router to stream BGP session state
 - Configure (basically uncomment some lines in the default pipeline.conf) and run pipeline to input MDT from the router and output to Kafka
 - Download and run Kafka and Zookeeper
