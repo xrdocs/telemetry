@@ -163,9 +163,9 @@ if __name__ == "__main__":
 
 ## In Sum
 There was a little more code to write to tie everything together and tidy it up, but my part of the demo was basically done.  From a telemetry perspective, it was trivial to integrate into the demo by using Kafka.  To recap, the main pieces were:
-- Configure the router to stream BGP session state
-- Configure (basically uncomment some lines in the default pipeline.conf) and run pipeline to input MDT from the router and output to Kafka
-- Download and run Kafka and Zookeeper
+- Configure the router to stream BGP session state.
+- Configure (basically uncomment some lines in the default pipeline.conf) and run pipeline.
+- Download and run Kafka and Zookeeper.
 - Use the kafka-python package in a Python script to acquire and process the session state from the telemetry topic on Kafka.
 
 Although I didn't get the learning experience that comes from having really complicated things go deeply wrong, this was a fun little exercise.  
