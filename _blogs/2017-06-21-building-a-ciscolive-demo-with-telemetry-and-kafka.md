@@ -129,7 +129,7 @@ $
 Since I haven't installed Kafka before, I was concerned that it might be the long pole in my demo prep.  But it couldn't have been easier.  I followed the first two steps in the [Apache Kafka Quickstart](https://kafka.apache.org/quickstart) guide.  Boom.  Done.  Didn't even have to alter the default properties files for Kafka and Zookeeper.
 
 ## A Quick Python Script
-With Kafka, Zookeeper and Pipeline running and the router streaming MDT, all I lacked was a little Python code to subscribe to the ```telemetry``` topic on Kafka and listen for updates. With the [kafka-python client](https://pypi.python.org/pypi/kafka-python), there wasn't much to it.  Here are a few lines of code I used to test it out:
+With Kafka, Zookeeper and Pipeline running and the router streaming MDT, all I lacked was a little Python code to subscribe to the topic on Kafka and listen for updates. With the [kafka-python client](https://pypi.python.org/pypi/kafka-python), there wasn't much to it.  Here are a few lines of code I used to test it out for the topic ```telemetry``` with the Pipeline/Kafka stack running on ```10.30.111.4```:
 
 <div class="highlighter-rouge">
 <pre class="highlight">
@@ -150,7 +150,7 @@ if __name__ == "__main__":
         if "Rows" in telemetry_msg_json:
             content_rows = telemetry_msg_json["Rows"]
             for row in content_rows:
-            if row["Keys"]["neighbor-address"] == '<mark>10.8.0.1</mark>':
+            if row["Keys"]["neighbor-address"] == '10.8.0.1':
                     new_session_state = row["Content"]["session-state"]
                     if session_state != new_session_state:
                         print("\nSession state changed from {0:s} to {1:s} at epoch time {2:d}"
