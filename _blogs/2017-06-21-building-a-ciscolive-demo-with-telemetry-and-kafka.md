@@ -17,9 +17,9 @@ position: top
 
 Every year at Cisco Live, my team helps put together the demos that go into the World of Solutions. Geeks that we are, we get a thrill out of showing off the art of the possible. But the real purpose of a demo is to start a conversation with the folks who stop by our booth.     
 
-This year, a colleague asked me to help integrate model-driven telemetry (MDT) into a Service Provider demo called "Continuous Automation." The goal of the demo is to illustrate how MDT can be used with model-driven APIs to automate a simple provisioning and validation task (it's loosely based a real customer use case that he's actively working on).  
+This year, a colleague asked me to help integrate model-driven telemetry (MDT) into a Service Provider demo called "Continuous Automation." The goal of the demo is to illustrate how MDT can be used with model-driven APIs to automate a simple provisioning and validation task (it's loosely based on a real customer use case that he's actively working on).  
 
-Pieces of the demo were already in place: a small Python app that utilized the [YDK Python APIs](https://github.com/CiscoDevNet/ydk-py) to configure a BGP neighbor and execute a connectivity test from the router when the neighbor came up.  The problem was that the app had no way to know _when_ the neighbor came up.  Enter MDT!
+Pieces of the demo were already in place: a small Python app that utilized the [YDK Python APIs](http://ydk.io) to configure a BGP neighbor and execute a connectivity test from the router when the neighbor came up.  The problem was that the app had no way to know _when_ the neighbor came up.  Enter MDT!
 
 ## The Easy Part: Data Model and Router Config
 The operational data that we needed was the BGP neighbor session state.  This is easily available in the OpenConfig BGP model:
@@ -41,10 +41,10 @@ telemetry model-driven
   sensor-path openconfig-bgp:bgp/neighbors/neighbor/state
 ```
 
-**Note:** For a detailed explanation of MDT router configurations, see my [basic MDT tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/)). 
+**Note:** For a detailed explanation of MDT router configurations, see my [basic MDT tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/)).
 {: .notice--warning}
 
-<div class="notice--"> 
+<div class="notice--">
 {{ output | markdownify }}
 </div>
 Adding a destination-group and a subscription starts the router streaming out the needed data:
@@ -62,7 +62,7 @@ telemetry model-driven
 ```
 
  But then what?  How do you get data from a TCP stream into a Python app?
- 
+
 ## The Other Easy Part: Pipeline and Kafka
 
 My go-to tool for consuming MDT data is [pipeline](https://github.com/cisco/bigmuddy-network-telemetry-pipeline), an open source utility that I've [written about before](http://blogs.cisco.com/sp/introducing-pipeline-a-model-driven-telemetry-collection-service).  If you're not familiar with installing and configuring pipeline, have a read through my [previous tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-10-03-pipeline-to-text-tutorial/).  
