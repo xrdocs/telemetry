@@ -289,6 +289,9 @@ prose:
   ignore:
     - index.md
     - _config.yml
+    - /_sass
+    - _config.pdf.yml
+    - /_techdocs
     - /_layouts
     - /_includes
     - /_posts
