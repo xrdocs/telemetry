@@ -1,6 +1,6 @@
 ---
 layout: archive
-title: "Tutorials by Date"
+title: "Tutorials"
 permalink: /tutorials/
 author_profile: true
 author: "Cisco Web Team"
@@ -11,10 +11,12 @@ author: "Cisco Web Team"
 
 {% assign sorted = (site.tutorials | sort: 'date') | reverse %}
 {% for post in sorted %}
+{% if post.position == "top" %}
   {% capture year %}{{ post.date | date: '%B %Y' }}{% endcapture %}
   {% if year != written_year %}
     <h2 id="{{ year | slugify }}" class="archive__subtitle">{{ year }}</h2>
     {% capture written_year %}{{ year }}{% endcapture %}
   {% endif %}
   {% include archive-techdocs.html %}
+{% endif %}
 {% endfor %}

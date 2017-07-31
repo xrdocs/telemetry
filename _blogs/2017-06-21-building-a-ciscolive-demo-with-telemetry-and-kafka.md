@@ -13,6 +13,10 @@ tags:
   - Kafka
 position: top
 ---
+
+{% include toc icon="table" title="Enhancing Demos with Telemetry" %}
+{% include base_path %}
+
 ## Behind the Scenes of Continuous Automation
 
 Every year at Cisco Live, my team helps put together the demos that go into the World of Solutions. Geeks that we are, we get a thrill out of showing off the art of the possible. But the real purpose of a demo is to start a conversation with the folks who stop by our booth.     

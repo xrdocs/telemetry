@@ -36,10 +36,9 @@ main:
 
   - title: "Tags"
     url: /tags/
-
+    
   - title: "Archive"
-    url: /collection-archive/
-
+    url: /collection-archive/  
 
 
 

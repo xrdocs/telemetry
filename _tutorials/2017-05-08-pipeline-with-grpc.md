@@ -12,6 +12,10 @@ tags:
   - pipeline
 postion: top
 ---
+
+{% include toc icon="table" title="Pipeline with gRPC" %}
+{% include base_path %}
+
 In previous tutorials, I've shown how to use [Pipeline](http://blogs.cisco.com/sp/introducing-pipeline-a-model-driven-telemetry-collection-service) to dump Model Driven Telemetry (MDT) data into a [text file](https://xrdocs.github.io/telemetry/tutorials/2016-10-03-pipeline-to-text-tutorial/) and into [InfluxDB](https://xrdocs.github.io/telemetry/tutorials/2017-04-10-using-pipeline-integrating-with-influxdb/).  In each case, I configured the router to transport MDT data to Pipeline using TCP.  In this tutorial, I'll cover a few additional steps that are required to use Pipeline with [gRPC](http://www.grpc.io/).  I'll focus on only the changes needed in the router and Pipeline input stage configs here, so be sure to consult the other Pipeline tutorials for important info about install, output stage, etc.
 
 If you're going to use gRPC, the first thing to decide is whether you're going to **dial out** from the router or **dial in** to the router.  
@@ -19,13 +23,14 @@ If you're going to use gRPC, the first thing to decide is whether you're going t
 {% capture "output" %}
 If you don't know the difference between dialin and dialout or need help chosing, check out [my blog](https://xrdocs.github.io/telemetry/blogs/2017-01-20-model-driven-telemetry-dial-in-or-dial-out/) for some guidance. 
 {% endcapture %}
+
 <div class="notice--warning">
 {{ output | markdownify }}
 </div>
 
 Once you've made that decision, go the appropriate section of this tutorial: [gRPC Dialout](#dialout) or [gRPC Dialin](#dialin).  For each section, there will be some "common" router and Pipeline config setps and well as some specific steps you need depending on whether or not you enable TLS.
 
-# gRPC Dialout<a name="dialout"></a>
+# gRPC Dialout
 For gRPC Dialout, the subscription and sensor-group config are the same whether you use TLS or not, so I'll re-use those parts of the MDT router config from the [gRPC dialout example](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-out).  It will look like this:
 
 ```
@@ -40,7 +45,7 @@ telemetry model-driven
 
 Now the big decision is whether to use [TLS](#dialout-tls) or [not](#dialout-no-tls). This impacts the destination-group in the router config and the ingress stage of the Pipeline input stage as you'll see below.
 
-## gRPC Dialout Without TLS<a name="dialout-no-tls"></a>
+## gRPC Dialout Without TLS
 If you don't use TLS, your MDT data won't be encrypted.  On the other hand, it's easy to configure. So if you're new to MDT and gRPC, this might be a good starting place.
 
 ### Router Config: no-tls
@@ -71,7 +76,8 @@ $ grep -A25 "gRPCDialout" pipeline.conf | grep -v -e '^#' -e '^$'
  tls = false
 ```
 
-If you now run pipeline with the debug option, you should see these lines when Pipeline starts and the router (at 172.30.8.53) connects:
+If you now run pipeline with the debug option, you should see these lines when Pipeline starts and the router (at 172.30.8.53) connects:  
+
 ```
 $ bin/pipeline -config pipeline.conf -log= -debug | grep gRPC
 INFO[2017-05-08 11:25:50.046573] gRPC starting block                           encap=gpb name=grpcdialout server=:57500 tag=pipeline type="pipeline is SERVER"
@@ -81,7 +87,7 @@ INFO[2017-05-08 11:26:03.572534] gRPC: Receiving dialout stream                e
 
 And that's it.  You're done.  Telemetry data is streaming into pipeline and you can do with it what you want.  You can stop reading now unless you want to experiment with TLS.
 
-## gRPC Dialout With TLS<a name="dialout-tls"></a>
+## gRPC Dialout With TLS
 In a dialout scenario, the router is the "client" and Pipeline is the "server."  Therefore, in the TLS handshake, Pipeline will need to send a certificate to authenticate itself to the router.  The router validates Pipeline's certificate using the public certificate of the Root Certificate Authority (CA) that signed it and then generates sesssion keys to encrypt the session.
 
 To make this all work, you need the following:
@@ -134,7 +140,7 @@ scadora@darcy:/etc/ssl/certs$
 
 You should now have a rootCA certificate called rootCA.pem.
 
-#### 2. The Pipeline Certificate<a name="pipelinecert"></a>
+#### 2. The Pipeline Certificate
 First, create a key pair for Pipeline.  In this case, I've called it "darcy.key" since darcy is the name of the server on which I am running Pipeline.
 
 <div class="highlighter-rouge">
@@ -196,27 +202,32 @@ scadora@darcy:/etc/ssl/certs$
 {% capture "output" %}
 Note: Some people issue certificates with a Common Name set to the IP address of the server instead of a FQDN.  Should you do this for the Pipeline certificate, bear in mind that the certificate will also need to have a Subject Alternative Name section that explicitly lists all valid IP addresses.  If you see the following message in your grpc trace, this could be your problem.
 
-```RP/0/RP0/CPU0:SunC#show grpc trace ems
+```  
+RP/0/RP0/CPU0:SunC#show grpc trace ems
 Tue May 16 19:35:44.792 UTC
 3 wrapping entries (141632 possible, 320 allocated, 0 filtered, 3 total)
 May 16 19:35:40.240 ems/grpc 0/RP0/CPU0 t26842 EMS-GRPC: grpc: Conn.resetTransport failed to create client transport: connection error: desc = "transport: x509: cannot validate certificate for 172.30.8.4 because it doesn't contain any IP SANs"
+
 ```
 
 For more info on certificates with IP Addresses, take a look at [this discussion](https://serverfault.com/questions/611120/failed-tls-handshake-does-not-contain-any-ip-sans).
-{% endcapture %}
+{% endcapture %}  
+
 <div class="notice--warning">
 {{ output | markdownify }}
 </div>
 
 #### 3. Copy rootCA Certificate to the router
 
-For the router to validate Pipeline's certificate, it needs to have a copy of the rootCA certificate in /misc/config/grpc/dialout/dialout.pem (the filename is important!).  Here is how to scp the rootCA.pem to the appropriate file and directory:
+For the router to validate Pipeline's certificate, it needs to have a copy of the rootCA certificate in /misc/config/grpc/dialout/dialout.pem (the filename is important!).  Here is how to scp the rootCA.pem to the appropriate file and directory:  
+
 ```
 RP/0/RP0/CPU0:SunC#bash
 Tue May 16 18:06:04.592 UTC
 [xr-vm_node0_RP0_CPU0:~]$ scp scadora@172.30.8.4://etc/ssl/certs/rootCA.pem /misc/config/grpc/dialout/dialout.pem
 rootCA.pem                                    100% 1204     1.2KB/s   00:00
 [xr-vm_node0_RP0_CPU0:~]$
+
 ```
 
 ### Configuring the Router for gRPC Dialout with TLS
@@ -272,11 +283,11 @@ RP/0/RP0/CPU0:SunC#
 
 That's it.  You're done with gRPC Dialout with TLS.  No need to read further.
 
-# gRPC Dialin<a name="dialin"></a>
+# gRPC Dialin
 
 In a dialin scenario, Pipeline sends the TCP SYN packet and acts as the "client" in the gRPC session and TLS handshake (if you're configuring TLS).
 
-## Common Router Config for gRPC DialIn<a name="router-dialin"></a>
+## Common Router Config for gRPC DialIn
 For this part of the tutorial, I'll re-use the MDT router config from the [gRPC dialin example](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-in)  It should look like this:
 
 ```
@@ -293,7 +304,7 @@ telemetry model-driven
 
 Note that there is no destination-group for dialin.  
 
-## Common Dialin Credentials<a name="router-creds"></a> 
+## Common Dialin Credentials 
 Regardless of whether you use TLS or not, Pipeline will have to provide a username and password when it first connects to the router. 
 
 On the router side, you need to configure a username and password that Pipeline can use when it dials in.  If you're just doing a quick test in the lab, assign the user to one of these default usergroups: sysadmin, netadmin, or root-lr.  For example:
@@ -342,7 +353,7 @@ username mdt
 
 Next, you get to decide if you want to use [TLS](#grpc-in-tls) or [not](#grpc-in-no-tls).
 
-### gRPC Dialin Without TLS<a name="grpc-in-no-tls"></a>
+### gRPC Dialin Without TLS
 
 If you don't use TLS, your MDT data won't be encrypted.  On the other hand, there's less fiddling with certificates. So if you're trying to get gRPC dialin to work for the first time, this might be a good starting place. There's nothing you need to add to the router config for this beyond the [common router config](#router-dialin) and [credentials](#router-creds) we did above. You just need to configure and run Pipeline as shown below. 
 
@@ -415,12 +426,12 @@ Subscription:  Sub3
 
 That's it, you're done.  No need to read the next section unless you want to do TLS.  
 
-### gRPC Dialin With TLS<a name="grpc-in-tls"></a>
+### gRPC Dialin With TLS
 In a dialin scenario, Pipeline acts as the "client" in the TLS handshake.  Therefore, the router will need to send a certificate to authenticate itself to Pipeline. 
 
 There are a couple ways to go about creating the router certificate. If you already have a root CA, you can issue a certificate for the router.  However, because this tutorial is far too long already, I'm going to take the easy way out and use a self-signed certificate.
 
-#### Router Certificate and Config for gRPC TLS DialIn<a name="router-dialin-tls"></a>
+#### Router Certificate and Config for gRPC TLS DialIn
 
 The first thing we have to do is enable the gRPC service on the router for TLS by adding "tls" to the grpc config on the router:
 
@@ -430,7 +441,8 @@ grpc
  tls
 ```
 
-Once you do this, the router automatically generates a self-signed cert called "ems.pem":
+Once you do this, the router automatically generates a self-signed cert called "ems.pem":  
+
 <div class="highlighter-rouge">
 <pre class="highlight">
 <code>
@@ -605,7 +617,8 @@ Subscription:  Sub3
 That's it, you're done.  Have fun with your telemetry data!
 
 
-### Appendix: Secure Password Storage for Dialin<a name="secure-passwords"></a>
+### Appendix: Secure Password Storage for Dialin  
+
 Because Pipeline cares about your security, it won't let you store unencrypted router passwords in pipeline.conf.  If you dislike being prompted for a password every time you run it or you want to run pipeline in the background, you can have pipeline encrypt the password using the -pem option and store it in a new file as follows:
 
 ```

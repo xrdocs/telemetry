@@ -10,6 +10,11 @@ tags:
   - telemetry
 position: top
 ---
+
+
+{% include toc icon="table" title="Dial-In or Dial-Out?" %}
+{% include base_path %}
+
 ## Transport Options
 
 In one of my first tutorials on [configuring Model-Driven Telemetry (MDT)](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/), I blithely referred to three options for transport: TCP dial-out, gRPC dial-out and gRPC dial-in.  It's all well and good to know how to configure each one, but what's the difference and which one should you choose?  This blog tackles those questions.

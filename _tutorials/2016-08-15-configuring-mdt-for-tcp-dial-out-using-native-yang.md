@@ -7,6 +7,9 @@ tags:
 postion: top
 ---
 
+{% include toc icon="table" title="Configuring MDT dial-out using Native YANG" %}
+{% include base_path %}
+
 ## Getting the Most out of MDT with Native YANG
 
 In an [earlier tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-25-configuring-model-driven-telemetry-mdt-with-yang/), I wrote about how to configure an MDT for gRPC dial-in using the OpenConfig Telemetry YANG model.  In this tutorial, I'll describe how to use the IOS XR Native YANG model to configure MDT with TCP and gRPC dialout.  I will use [ncclient](https://github.com/ncclient/ncclient) as a simple Python NETCONF client, but you can use whatever client you want.

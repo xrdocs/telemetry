@@ -8,6 +8,7 @@ tags:
   - iosxr
   - telemetry
 ---
+
 Due to some general security improvements in 6.0.1, it's not possible to sftp/scp files directly to the /telemetry/policies directory from the outside.  If you try, you might see something like this:  
 
 <div class="highlighter-rouge">

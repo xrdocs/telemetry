@@ -7,9 +7,17 @@ excerpt: >-
   neighbor counts
 tags:
   - iosxr
+  - bgp
+  - yang
+  - mdt
+  - telemetry
 author: Shelly Cadora
 position: top
 ---
+
+{% include toc icon="table" title="Streaming BGP Stats with MDT" %}
+{% include base_path %}
+
 ## BGP Performance Indicators
 
 The number of BGP routes and neighbor at any given time can be good, high-level indicators of network health.  Being able to stream those numbers periodically is a good use of model-driven telemetry (MDT) but the associated YANG models are large and can be intimidating, so this tutorial shows how to drill down for these specific stats. 

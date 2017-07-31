@@ -11,6 +11,9 @@ tags:
   - MDT
 position: top
 ---
+{% include toc icon="table" title="Configuring MDT with OpenConfig YANG" %}
+{% include base_path %}
+
 ## Model-Driven Configuration for Model-Driven Telemetry
 
 In an [earlier tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/), I wrote about how to configure MDT using CLI.  But if the router is using YANG models to structure the operational data it streams, shouldn't we also be able to use models to configure the telemetry feature itself?  The answer is yes!  In this tutorial, we'll look at the OpenConfig YANG model for telemetry and how to configure it.  I will use [ncclient](https://github.com/ncclient/ncclient) as a simple Python NETCONF client, but you can use whatever client you want.  

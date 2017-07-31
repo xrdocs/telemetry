@@ -9,6 +9,10 @@ tags:
   - Telemetry
   - MDT
 ---
+
+{% include toc icon="table" title="Streaming IF-MIB Data" %}
+{% include base_path %}
+
 ## Data from the IF-MIB
 
 One of the most commonly polled MIBs is the Interfaces MIB (IF-MIB).  Pretty much everyone needs to know how many packets and bytes were sent and received on a given interface.  So it's not surprising that one of the first questions we get is how to get the IF-MIB data from MDT.  

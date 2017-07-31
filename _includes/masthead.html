@@ -13,11 +13,21 @@
               {% else %}
               {% assign domain = base_path %}
             {% endif %}
-            {% if link.title contains 'Search' %}
-              <li class="masthead__menu-item"><a href="{{ domain }}{{ link.url }}">{{ link.title }} <i class="fa fa-search" aria-hidden="true"></i></a></li>
+            {% if page.url contains link.url %}
+                {% if link.title contains 'Search' %}
+                    <li class="masthead__menu-item greedy-nav-active"><a href="{{ domain }}{{ link.url }}">{{ link.title }} <i class="fa fa-search" aria-hidden="true"></i></a></li>
+                {% else %}
+                    <li class="masthead__menu-item greedy-nav-active"><a href="{{ domain }}{{ link.url }}">{{ link.title }}</a></li>
+                {% endif %}
             {% else %}
-              <li class="masthead__menu-item"><a href="{{ domain }}{{ link.url }}">{{ link.title }}</a></li>
+                {% if link.title contains 'Search' %}
+                    <li class="masthead__menu-item"><a href="{{ domain }}{{ link.url }}">{{ link.title }} <i class="fa fa-search" aria-hidden="true"></i></a></li>
+                {% else %}
+                    <li class="masthead__menu-item"><a href="{{ domain }}{{ link.url }}">{{ link.title }}</a></li>
+                {% endif %}
             {% endif %}
+
+
           {% endfor %}
         </ul>
         <ul class="hidden-links hidden"></ul>

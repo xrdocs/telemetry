@@ -12,6 +12,8 @@ tags:
 position: null
 ---
 
+{% include toc icon="table" title="Integrating Pipeline with InfluxDB" %}
+{% include base_path %}
 
 ## Using Pipeline 
 

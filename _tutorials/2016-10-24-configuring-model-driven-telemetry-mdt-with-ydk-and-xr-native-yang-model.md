@@ -10,6 +10,10 @@ tags:
   - YANG
   - Telemetry
 ---
+
+{% include toc icon="table" title="Configuring MDT with YDK + XR native YANG" %}
+{% include base_path %}
+
 ## Getting a complete MDT configuration with Native YANG and YDK
 
 In an [earlier tutorial](https://xrdocs.github.io/telemetry/tutorials/2016-08-08-configuring-model-driven-telemetry-with-ydk/), Shelly introduces a methodology to configure MDT using YDK and the OpenConfig Telemetry YANG model.

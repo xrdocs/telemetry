@@ -13,6 +13,10 @@ tags:
   - Telemetry
   - gRPC
 ---
+
+{% include toc icon="table" title="MDT with gRPC: Transport Tricks" %}
+{% include base_path %}
+
 ## gRPC
 
 In previous tutorials, I've covered how to configure a router for Model-Driven Telemetry (MDT) with gRPC [dial-out](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-out) and [dial-in](https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/#grpc-dial-in).  In this tutorial, I'll discuss some advanced topics and gotchas that you might encounter as you work with gRPC.

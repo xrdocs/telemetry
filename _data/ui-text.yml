@@ -21,7 +21,7 @@ en: &DEFAULT_EN
   comments_label        : "Leave a Comment"
   more_label            : "Learn More"
   coming_soon_label     : "Documentation Coming Soon!"
-  related_label         : "You May Also Enjoy"
+  related_label         : "You may also be interested in:"
   follow_label          : "Follow:"
   feed_label            : "Feed"
   powered_by            : "Powered by"

@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+
+	<channel>
+		<title>IOS XR Streaming Telemetry @xrdocs</title>
+		<description>Documentation, Blogs and Tutorials on the Streaming Telemetry Infrastructure in IOS-XR</description>
+		<link>http://localhost:4000</link>
+		<atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
+		
+      
+			<item>
+				<title>Filtering Telemetry for RSVP-TE Auto-Bandwidth Demo</title>
+				
+					<dc:creator>Shelly Cadora</dc:creator>
+				
+				
+					<description>An introduction to filtering with streaming telemetry</description>
+				
+				<pubDate>Fri, 13 May 2016 22:30:00 +0000</pubDate>
+				<link>http://localhost:4000/blogs/filtering_autobw</link>
+				<guid isPermaLink="true">http://localhost:4000/blogs/filtering_autobw</guid>
+			</item>
+      
+		
+      
+			<item>
+				<title>Model-Driven Telemetry: Dial-In or Dial-Out ?</title>
+				
+					<dc:creator>Shelly Cadora</dc:creator>
+				
+				
+					<description>Discusses the transport options for model-driven telemetry</description>
+				
+				<pubDate>Fri, 20 Jan 2017 16:35:00 +0000</pubDate>
+				<link>http://localhost:4000/blogs/2017-01-20-model-driven-telemetry-dial-in-or-dial-out/</link>
+				<guid isPermaLink="true">http://localhost:4000/blogs/2017-01-20-model-driven-telemetry-dial-in-or-dial-out/</guid>
+			</item>
+      
+		
+      
+			<item>
+				<title>Enhancing a CiscoLive Demo with Telemetry and Kafka</title>
+				
+					<dc:creator>Shelly Cadora</dc:creator>
+				
+				
+					<description>Gives the background of a CiscoLive Telemetry and Kafka Demo</description>
+				
+				<pubDate>Wed, 21 Jun 2017 16:22:00 +0000</pubDate>
+				<link>http://localhost:4000/blogs/2017-06-21-building-a-ciscolive-demo-with-telemetry-and-kafka/</link>
+				<guid isPermaLink="true">http://localhost:4000/blogs/2017-06-21-building-a-ciscolive-demo-with-telemetry-and-kafka/</guid>
+			</item>
+      
+		
+    
+      
+      <item>
+        <title>Copying Telemetry Policy Files in IOS XR 6.0.1</title>
+        
+          <dc:creator>Shelly Cadora</dc:creator>
+        
+        
+          <description>How to copy telemetry policy files to IOS XR in 6.0.1</description>
+        
+        <pubDate>Thu, 23 Jun 2016 17:03:00 +0000</pubDate>
+        <link>http://localhost:4000/tutorials/2016-06-23-copying-telemetry-policy-files-in-ios-xr-6-0-1/</link>
+        <guid isPermaLink="true">http://localhost:4000/tutorials/2016-06-23-copying-telemetry-policy-files-in-ios-xr-6-0-1/</guid>
+      </item>
+      
+    
+      
+      <item>
+        <title>Configuring Model-Driven Telemetry (MDT)</title>
+        
+          <dc:creator>Shelly Cadora</dc:creator>
+        
+        
+          <description>Quick Start for MDT Configuration</description>
+        
+        <pubDate>Thu, 21 Jul 2016 15:06:00 +0000</pubDate>
+        <link>http://localhost:4000/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/</link>
+        <guid isPermaLink="true">http://localhost:4000/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/</guid>
+      </item>
+      
+    
+      
+      <item>
+        <title>Configuring Model-Driven Telemetry (MDT) with OpenConfig YANG</title>
+        
+          <dc:creator>Shelly Cadora</dc:creator>
+        
+        
+          <description>Describes how to configure MDT with YANG models</description>
+        
+        <pubDate>Mon, 25 Jul 2016 17:42:00 +0000</pubDate>
+        <link>http://localhost:4000/tutorials/2016-07-25-configuring-model-driven-telemetry-mdt-with-yang/</link>
+        <guid isPermaLink="true">http://localhost:4000/tutorials/2016-07-25-configuring-model-driven-telemetry-mdt-with-yang/</guid>
+      </item>
+      
+    
+      
+      <item>
+        <title>Configuring Model-Driven Telemetry (MDT) with YDK</title>
+        
+          <dc:creator>Shelly Cadora</dc:creator>
+        
+        
+          <description>&lt;aside class=&quot;sidebar__right&quot;&gt;
+&lt;nav class=&quot;toc&quot;&gt;
+    &lt;header&gt;&lt;h4 class=&quot;nav__title&quot;&gt;&lt;i class=&quot;fa fa-table&quot;&gt;&lt;/i&gt; Configuring MDT with YDK&lt;/h4&gt;&lt;/header&gt;
+
+  &lt;/nav&gt;
+&lt;/aside&gt;
+
+</description>
+        
+        <pubDate>Mon, 08 Aug 2016 23:52:00 +0000</pubDate>
+        <link>http://localhost:4000/tutorials/2016-08-08-configuring-model-driven-telemetry-with-ydk/</link>
+        <guid isPermaLink="true">http://localhost:4000/tutorials/2016-08-08-configuring-model-driven-telemetry-with-ydk/</guid>
+      </item>
+      
+    
+      
+      <item>
+        <title>Configuring Model-Driven-Telemetry (MDT) for Dial-out Using Native YANG</title>
+        
+        
+          <description>&lt;aside class=&quot;sidebar__right&quot;&gt;
+&lt;nav class=&quot;toc&quot;&gt;
+    &lt;header&gt;&lt;h4 class=&quot;nav__title&quot;&gt;&lt;i class=&quot;fa fa-table&quot;&gt;&lt;/i&gt; Configuring MDT dial-out using Native YANG&lt;/h4&gt;&lt;/header&gt;
+
+  &lt;/nav&gt;
+&lt;/aside&gt;
+
+</description>
+        
+        <pubDate>Mon, 15 Aug 2016 20:05:00 +0000</pubDate>
+        <link>http://localhost:4000/tutorials/2016-08-15-configuring-mdt-for-tcp-dial-out-using-native-yang/</link>
+        <guid isPermaLink="true">http://localhost:4000/tutorials/2016-08-15-configuring-mdt-for-tcp-dial-out-using-native-yang/</guid>
+      </item>
+      
+    
+      
+      <item>
+        <title>Using Model-Driven Telemetry (MDT) for IF-MIB Data</title>
+        
+          <dc:creator>Shelly Cadora</dc:creator>
+        
+        
+          <description>Describes the MDT configuration needed to get the same data as you get via the IF-MIB with SNMP</description>
+        
+        <pubDate>Thu, 13 Oct 2016 22:16:00 +0000</pubDate>
+        <link>http://localhost:4000/tutorials/2016-10-13-using-model-driven-telemetry-mdt-for-if-mib-data/</link>
+        <guid isPermaLink="true">http://localhost:4000/tutorials/2016-10-13-using-model-driven-telemetry-mdt-for-if-mib-data/</guid>
+      </item>
+      
+    
+      
+      <item>
+        <title>Configuring Model-Driven Telemetry (MDT) with YDK and XR Native YANG model</title>
+        
+          <dc:creator>Marco Umer</dc:creator>
+        
+        
+          <description>Configuring Model-Driven Telemetry with YDK and XR Native YANG model</description>
+        
+        <pubDate>Mon, 24 Oct 2016 05:39:00 +0000</pubDate>
+        <link>http://localhost:4000/tutorials/2016-10-24-configuring-model-driven-telemetry-mdt-with-ydk-and-xr-native-yang-model/</link>
+        <guid isPermaLink="true">http://localhost:4000/tutorials/2016-10-24-configuring-model-driven-telemetry-mdt-with-ydk-and-xr-native-yang-model/</guid>
+      </item>
+      
+    
+      
+      <item>
+        <title>Streaming BGP Route and Neighbor Counts with MDT</title>
+        
+          <dc:creator>Shelly Cadora</dc:creator>
+        
+        
+          <description>Describes how to configure sensor-paths to stream BGP route counts and neighbor counts</description>
+        
+        <pubDate>Fri, 23 Dec 2016 16:45:00 +0000</pubDate>
+        <link>http://localhost:4000/tutorials/2016-12-23-streaming-bgp-route-and-neighbor-counts-with-mdt/</link>
+        <guid isPermaLink="true">http://localhost:4000/tutorials/2016-12-23-streaming-bgp-route-and-neighbor-counts-with-mdt/</guid>
+      </item>
+      
+    
+      
+      <item>
+        <title>Using Pipeline: TCP to textfile</title>
+        
+          <dc:creator>Shelly Cadora</dc:creator>
+        
+        
+          <description>Describes how to use the open source pipeline utility to collect and transform telemetry data for consumption by various applications</description>
+        
+        <pubDate>Fri, 03 Mar 2017 18:13:00 +0000</pubDate>
+        <link>http://localhost:4000/tutorials/2016-10-03-pipeline-to-text-tutorial/</link>
+        <guid isPermaLink="true">http://localhost:4000/tutorials/2016-10-03-pipeline-to-text-tutorial/</guid>
+      </item>
+      
+    
+      
+      <item>
+        <title>Using Pipeline: Integrating with InfluxDB</title>
+        
+          <dc:creator>Shelly Cadora</dc:creator>
+        
+        
+          <description>Describes how to configure Pipeline to relay telemetry data to InfluxDB.</description>
+        
+        <pubDate>Mon, 10 Apr 2017 20:19:00 +0000</pubDate>
+        <link>http://localhost:4000/tutorials/2017-04-10-using-pipeline-integrating-with-influxdb/</link>
+        <guid isPermaLink="true">http://localhost:4000/tutorials/2017-04-10-using-pipeline-integrating-with-influxdb/</guid>
+      </item>
+      
+    
+      
+      <item>
+        <title>MDT with gRPC: Transport Tricks</title>
+        
+          <dc:creator>Shelly Cadora</dc:creator>
+        
+        
+          <description>Describes issues you may encounter when using MDT with gRPC over non-management interfaces.</description>
+        
+        <pubDate>Fri, 05 May 2017 20:39:00 +0000</pubDate>
+        <link>http://localhost:4000/tutorials/2017-05-05-mdt-with-grpc-transport-tricks/</link>
+        <guid isPermaLink="true">http://localhost:4000/tutorials/2017-05-05-mdt-with-grpc-transport-tricks/</guid>
+      </item>
+      
+    
+      
+      <item>
+        <title>Pipeline with gRPC</title>
+        
+          <dc:creator>Shelly Cadora</dc:creator>
+        
+        
+          <description>Describes how to use Model-Driven Telemetry with Pipeline and gRPC</description>
+        
+        <pubDate>Mon, 08 May 2017 17:03:00 +0000</pubDate>
+        <link>http://localhost:4000/tutorials/2017-05-08-pipeline-with-grpc/</link>
+        <guid isPermaLink="true">http://localhost:4000/tutorials/2017-05-08-pipeline-with-grpc/</guid>
+      </item>
+      
+    
+	</channel>
+</rss>

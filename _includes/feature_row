@@ -20,19 +20,29 @@
       <div class="archive__item">
         {% if f.image_path %}
           <div class="archive__item-teaser">
-            <img src=
+          {% if f.url %}
+            <a href="{{ f_url }}"><img src=
+              {% if f.image_path contains "http" %}
+                "{{ f.image_path }}"
+              {% else %}
+                "{{ f.image_path | prepend: "/images/" | prepend: base_path }}"
+              {% endif %}
+            alt="{% if f.alt %}{{ f.alt }}{% endif %}"></a>
+         {% else %}
+             <img src=
               {% if f.image_path contains "http" %}
                 "{{ f.image_path }}"
               {% else %}
                 "{{ f.image_path | prepend: "/images/" | prepend: base_path }}"
               {% endif %}
             alt="{% if f.alt %}{{ f.alt }}{% endif %}">
+         {% endif %}
           </div>
         {% endif %}
 
         <div class="archive__item-body">
           {% if f.title %}
-            <h2 class="archive__item-title">{{ f.title }}</h2>
+            <h2 class="archive__item-title"><a href="{{ f_url }}">{{ f.title }}</a></h2>
           {% endif %}
 
           {% if f.excerpt %}
@@ -41,8 +51,8 @@
             </div>
           {% endif %}
 
-          {% if f.url %}
-            <p><a href="{{ f_url }}" class="btn {{ f.btn_class }}">{{ f.btn_label | default: site.data.ui-text[site.locale].more_label }}</a></p>
+          {% if f.url %} 
+          <p><a href="{{ f_url }}" class="btn {{ f.btn_class }}">{{ f.btn_label | default: site.data.ui-text[site.locale].more_label }}</a></p>
           {% endif %}
         </div>
       </div>
