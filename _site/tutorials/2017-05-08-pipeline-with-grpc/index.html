@@ -342,6 +342,44 @@ if (!(window.location.host.startsWith("127.0.0.1") || window.location.host.start
       
 
     
+      
+        
+
+
+
+
+
+<div class="breadcrumbs">
+  <ol itemscope itemtype="http://schema.org/BreadcrumbList" style="margin:0;padding:0;">
+    
+    
+    
+      
+        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem" style="margin:0;padding:0;">
+          <a href="http://localhost:4000/" itemprop="item"><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1">
+        </li>
+        <span class="sep">/</span>
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem" style="margin:0;padding:0;">
+          <a href="http://localhost:4000/tutorials" itemprop="item"><span itemprop="name">Tutorials</span></a>
+          <meta itemprop="position" content="2">
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        <li class="current" style="margin:0;padding:0;">Pipeline with gRPC</li>
+      
+    
+  </ol>
+</div>
+
+      
+    
 
 
       <section class="page__content" itemprop="text">
@@ -351,6 +389,7 @@ if (!(window.location.host.startsWith("127.0.0.1") || window.location.host.start
     <header><h4 class="nav__title">
 <i class="fa fa-table"></i> Pipeline with gRPC</h4></header>
 <ul class="toc__menu" id="markdown-toc">
+  <li><a href="#introduction" id="markdown-toc-introduction">Introduction</a></li>
   <li>
 <a href="#grpc-dialout" id="markdown-toc-grpc-dialout">gRPC Dialout</a>    <ul>
       <li>
@@ -384,6 +423,8 @@ if (!(window.location.host.startsWith("127.0.0.1") || window.location.host.start
 
   </nav>
 </aside>
+
+<h2 id="introduction">Introduction</h2>
 
 <p>In previous tutorials, I’ve shown how to use <a href="http://blogs.cisco.com/sp/introducing-pipeline-a-model-driven-telemetry-collection-service">Pipeline</a> to dump Model Driven Telemetry (MDT) data into a <a href="https://xrdocs.github.io/telemetry/tutorials/2016-10-03-pipeline-to-text-tutorial/">text file</a> and into <a href="https://xrdocs.github.io/telemetry/tutorials/2017-04-10-using-pipeline-integrating-with-influxdb/">InfluxDB</a>.  In each case, I configured the router to transport MDT data to Pipeline using TCP.  In this tutorial, I’ll cover a few additional steps that are required to use Pipeline with <a href="http://www.grpc.io/">gRPC</a>.  I’ll focus on only the changes needed in the router and Pipeline input stage configs here, so be sure to consult the other Pipeline tutorials for important info about install, output stage, etc.</p>
 

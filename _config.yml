@@ -16,7 +16,7 @@ url                      : "https://xrdocs.github.io" # the base hostname & prot
 baseurl                  : "/telemetry" # the subpath of your site, e.g. "/blog"
 gh_repo                  : "https://github.com/xrdocs/telemetry"
 teaser                   : # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"
-# breadcrumbs            : false # true, false (default)
+breadcrumbs              : true
 words_per_minute         : 200
 comments:
   provider               : "disqus" # false (default), "disqus", "facebook", "google-plus", custom"
@@ -36,7 +36,7 @@ yandex_site_verification :
 
 # Social Sharing
 twitter:
-  username               : &twitter "CiscoDevNet"
+  username               : &twitter "xrdocs"
 facebook:
   username               :
   app_id                 :
