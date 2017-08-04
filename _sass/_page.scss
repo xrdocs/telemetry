@@ -51,7 +51,7 @@
 .page__content {
 
   font-size: $type-size-4;
-  h2 {
+  h1, h2, h3 {
     padding-bottom: 0.5em;
     border-bottom: 1px solid $border-color;
   }
