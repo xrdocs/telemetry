@@ -21,7 +21,7 @@ layout: null
 				{% else %}
 					<description>{{ post.content | xml_escape }}</description>
 				{% endif %}
-                                <enclosure url='{{ base_path }}/images/{{ site.author.avatar }}'></enclosure>
+                                <enclosure url='{{ base_path }}/images/avatars/{{ site.author.avatar }}'></enclosure>
 				<pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
 				<link>{{ base_path }}{{ post.url }}</link>
 				<guid isPermaLink="true">{{ base_path }}{{ post.url }}</guid>
@@ -40,7 +40,7 @@ layout: null
         {% else %}
           <description>{{ post.content | xml_escape }}</description>
         {% endif %}
-        <enclosure url='{{ base_path }}/images/{{ site.author.avatar }}'></enclosure>
+        <enclosure url='{{ base_path }}/images/avatars/{{ site.author.avatar }}'></enclosure>
         <pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
         <link>{{ base_path }}{{ post.url }}</link>
         <guid isPermaLink="true">{{ base_path }}{{ post.url }}</guid>
