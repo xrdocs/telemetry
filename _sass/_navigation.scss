@@ -425,12 +425,6 @@
        background: $lighter-gray;
   }
    
-  > li:last-child {
-    a {
-      border-bottom: none;
-    }
-  }
-
   li ul > li a {
     padding-left: 2rem;
     font-weight: normal;
