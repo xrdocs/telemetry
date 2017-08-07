@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 date: '2017-08-07 16:11 -0700'
 title: Multithreading in MDT
 author: Viktor Osipchuk
