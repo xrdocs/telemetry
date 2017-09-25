@@ -23,12 +23,6 @@ This document provides a similar tutorial, addressing a complete XR Telemetry TC
 I have tested the configuration in this document using the relative recent Vagrant IOS-XRv box version 6.2.1.15I.
 If you are looking for more information on IOS-XRv for Vagrant, you may follow Akshat tutorial [IOS-XRv Vagrant Quick Start](https://xrdocs.github.io/application-hosting/tutorials/iosxr-vagrant-quickstart) for step by step instructions.
 
-{% endcapture %}
-
-<div class="notice--info">
-{{ output | markdownify }}
-</div>
-
 If you are not familiar with IOS-XRv, follow Akshat tutorial [IOS-XRv Vagrant Quick Start](https://xrdocs.github.io/application-hosting/tutorials/iosxr-vagrant-quickstart) for step by step instructions.
 
 ## Tutorial goal
