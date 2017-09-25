@@ -383,7 +383,7 @@ telemetry model-driven
 
 ## Clean
 
-One last commands to delete the configuration:
+One last command to delete the configuration:
 
 ```python
 rpc_service.delete(xr, xr_telemetry.TelemetryModelDriven())
