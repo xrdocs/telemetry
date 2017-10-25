@@ -13,7 +13,7 @@ tags:
   - monitoring
 ---
 
-{% include toc icon="table" title="MDT with gRPC: Transport Tricks" %}
+{% include toc icon="table" title="NCS1002 Telemetry deep dive" %}
 {% include base_path %}
 
 
