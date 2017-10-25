@@ -17,6 +17,8 @@ tags:
 {% include base_path %}
 
 
+## Introduction
+
 This tutorial continues the series of documents about [automation of configuration of Cisco optical products](https://xrdocs.github.io/programmability/tutorials/). The purpose of this document is to give you a lot of details about Telemetry on [NCS1002 (terminal device)](https://www.cisco.com/c/en/us/products/collateral/optical-networking/network-convergence-system-1000-series/datasheet-c78-733699.html). The goal is not only to give you some information about valuable sensor paths for NCS1002, but also to provide all the pieces for you to start exploring Telemetry on NCS1002 right away.
 
 Model-driven Telemetry (MDT) provides a mechanism to stream data from an MDT-capable device to a destination(s). There are several core components of Streaming Telemetry you should know and understand:
