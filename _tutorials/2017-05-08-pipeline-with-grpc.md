@@ -241,8 +241,9 @@ telemetry model-driven
  destination-group DGroup2
   address family ipv4 172.30.8.4 port 57500
    encoding self-describing-gpb
-   protocol grpc 
+   protocol grpc tls-hostname darcy.cisco.example
 ```
+In that last line, the tls-hostname (darcy.cisco.example) must match the Common Name (CN) in Pipeline's certificate.
 
 ### Configuring Pipeline for tls=true
 We can use the ```[gRPCDIalout]``` input stage in the default pipeline.conf.  The only change is the last 4 lines where we enable tls and set the pem, key and servername to the values corresponding to the [Pipeline certificate we generated earlier](#pipelinecert). 
@@ -609,7 +610,7 @@ Subscription:  Sub3
     Encoding:             self-describing-gpb
     Transport:            dialin
     <mark>State:                Active</mark>
-    No TLS
+    TLS :                 True
     Total bytes sent:     11446
     Total packets sent:   8
     Last Sent time:       2017-05-19 16:48:12.1233215666 +0000
