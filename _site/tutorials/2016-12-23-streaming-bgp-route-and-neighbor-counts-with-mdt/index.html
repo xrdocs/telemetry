@@ -1,0 +1,746 @@
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+
+<meta charset="utf-8">
+
+
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>            Streaming BGP Route and Neighbor Counts with MDT      IOS XR Streaming Telemetry @xrdocs      </title>
+
+
+
+
+
+
+
+<meta property="og:locale" content="en-US">
+<meta property="og:site_name" content="IOS XR Streaming Telemetry @xrdocs">
+<meta property="og:title" content="Streaming BGP Route and Neighbor Counts with MDT">
+
+
+  <link rel="canonical" href="https://xrdocs.github.io/telemetry/tutorials/2016-12-23-streaming-bgp-route-and-neighbor-counts-with-mdt/">
+  <meta property="og:url" content="https://xrdocs.github.io/telemetry/tutorials/2016-12-23-streaming-bgp-route-and-neighbor-counts-with-mdt/">
+
+
+
+  <meta property="og:description" content="Describes how to configure sensor-paths to stream BGP route counts and neighbor counts">
+
+
+
+  <meta name="twitter:site" content="@xrdocs">
+  <meta name="twitter:title" content="Streaming BGP Route and Neighbor Counts with MDT">
+  <meta name="twitter:description" content="Describes how to configure sensor-paths to stream BGP route counts and neighbor counts">
+  <meta name="twitter:url" content="https://xrdocs.github.io/tutorials/2016-12-23-streaming-bgp-route-and-neighbor-counts-with-mdt/">
+
+  
+    <meta name="twitter:card" content="summary">
+    
+      <meta name="twitter:image" content="https://xrdocs.github.io/telemetry/images/telemetry-xrdocs.jpg">
+    
+  
+
+  
+    <meta name="twitter:creator" content="@scadora">
+  
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2016-12-23T16:45:00+00:00">
+  
+    <link rel="next" href="https://xrdocs.github.io/telemetry/tutorials/2016-10-03-pipeline-to-text-tutorial/" title="Using Pipeline: TCP to textfile">
+  
+  
+    <link rel="prev" href="https://xrdocs.github.io/telemetry/tutorials/2016-10-24-configuring-model-driven-telemetry-mdt-with-ydk-and-xr-native-yang-model/" title="Configuring Model-Driven Telemetry (MDT) with YDK and XR Native YANG model">
+  
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Organization",
+      "url": "https://xrdocs.github.io/telemetry",
+      "logo": "https://xrdocs.github.io/telemetry/images/telemetry-xrdocs.jpg"
+    }
+  </script>
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "person",
+      "name" : "Cisco Systems Inc",
+      "url" : "https://xrdocs.github.io/telemetry",
+      "sameAs" : ["https://twitter.com/CiscoDevNet"]
+    }
+  </script>
+
+
+
+
+
+
+<!-- end SEO -->
+
+<link href="https://xrdocs.github.io/telemetry/feed.xml" type="application/atom+xml" rel="alternate" title="IOS XR Streaming Telemetry @xrdocs Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="jgRKKm6B9FwJJPXxpmc0-EP3D0Mh8JHXaJqoYIGj1ek" />
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<script>
+if (!(window.location.host.startsWith("127.0.0.1") || window.location.host.startsWith("localhost")) && (window.location.host.substr(-10) == '.github.io') && (window.location.protocol != "https:"))
+    window.location.protocol = "https";
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/telemetry/assets/css/main.css">
+<meta http-equiv="cleartype" content="on">
+<style>
+.underline-on-hover:hover {
+    text-decoration: underline;
+}
+.searchForm{
+      border-radius:5px;
+      -moz-border-radius:5px;
+      -webkit-border-radius:5px;
+      width: 900px;
+   }
+#search_results{
+      display: table; margin:0 auto;
+   }
+</style>
+</style>
+
+    
+
+<!-- start custom head snippets -->
+
+<link href="https://xrdocs.github.io/telemetry/assets/css/lity.min.css" rel="stylesheet">
+<link href="https://xrdocs.github.io/telemetry/assets/css/cisco-sans.min.css" rel="stylesheet">
+<link href="https://xrdocs.github.io/telemetry/assets/css/material-scrolltop.css" rel="stylesheet">
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="https://xrdocs.github.io/telemetry/images/apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://xrdocs.github.io/telemetry/images/apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://xrdocs.github.io/telemetry/images/apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://xrdocs.github.io/telemetry/images/apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="60x60" href="https://xrdocs.github.io/telemetry/images/apple-touch-icon-60x60.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://xrdocs.github.io/telemetry/images/apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="76x76" href="https://xrdocs.github.io/telemetry/images/apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="https://xrdocs.github.io/telemetry/images/apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="https://xrdocs.github.io/telemetry/images/favicon-196x196.png" sizes="196x196" />
+<link rel="icon" type="image/png" href="https://xrdocs.github.io/telemetry/images/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/png" href="https://xrdocs.github.io/telemetry/images/favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="https://xrdocs.github.io/telemetry/images/favicon-16x16.png" sizes="16x16" />
+<link rel="icon" type="image/png" href="https://xrdocs.github.io/telemetry/images/favicon-128.png" sizes="128x128" />
+<link rel="shortcut icon" href="https://xrdocs.github.io/telemetry/images/favicon_cisco.ico" />
+<meta name="application-name" content="&nbsp;"/>
+<meta name="msapplication-TileColor" content="#FFFFFF" />
+<meta name="msapplication-TileImage" content="https://xrdocs.github.io/telemetry/images/mstile-144x144.png" />
+<meta name="msapplication-square70x70logo" content="https://xrdocs.github.io/telemetry/images/mstile-70x70.png" />
+<meta name="msapplication-square150x150logo" content="https://xrdocs.github.io/telemetry/images/mstile-150x150.png" />
+<meta name="msapplication-wide310x150logo" content="https://xrdocs.github.io/telemetry/images/mstile-310x150.png" />
+<meta name="msapplication-square310x310logo" content="https://xrdocs.github.io/telemetry/images/mstile-310x310.png" />
+
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu" style="padding-left:2em;">
+      <nav id="site-nav" class="greedy-nav">
+        <button><div class="navicon"></div></button>
+        <ul class="visible-links">
+          <img src="https://xrdocs.github.io/telemetry/images/xrdocs_logo.png" width="45px" height="45px" alt="xrdocs logo" style="float:left;">
+          <li class="masthead__menu-item masthead__menu-item--lg"><a href="https://xrdocs.github.io">@xrdocs</a></li>
+          <li class="masthead__menu-item"><a href="https://xrdocs.github.io/telemetry/">Telemetry</a></li>
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="https://xrdocs.github.io/telemetry/blogs/">Blogs</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item greedy-nav-active"><a href="https://xrdocs.github.io/telemetry/tutorials/">Tutorials</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="https://xrdocs.github.io/telemetry/search">Search <i class="fa fa-search" aria-hidden="true"></i></a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="https://xrdocs.github.io/telemetry/tags/">Tags</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="https://xrdocs.github.io/telemetry/collection-archive/">Archive</a></li>
+                
+            
+
+
+          
+        </ul>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <div class="sidebar sticky">
+  
+
+
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  <div class="author__avatar">
+    
+    	<img src="https://xrdocs.github.io/telemetry/images/avatars/scadora16.jpeg" class="author__avatar" alt="Shelly Cadora">
+    
+  </div>
+
+  <div class="author__content">
+    <h3 class="author__name">Shelly Cadora</h3>
+    <p class="author__bio">Principal Technical Marketing Engineer, Cisco</p>
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+      
+      
+        <li><a href="mailto:scadora@cisco.com"><i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email</a></li>
+      
+      
+      
+        <li><a href="http://twitter.com/scadora"><i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+        <li><a href="http://github.com/scadora"><i class="fa fa-fw fa-github" aria-hidden="true"></i> Github</a></li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Streaming BGP Route and Neighbor Counts with MDT">
+    <meta itemprop="description" content="Describes how to configure sensor-paths to stream BGP route counts and neighbor counts">
+    <meta itemprop="datePublished" content="December 23, 2016">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Streaming BGP Route and Neighbor Counts with MDT
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  3 minutes read
+</p>
+          
+        </header>
+      
+
+    
+      
+        
+
+
+
+
+
+<div class="breadcrumbs">
+  <ol itemscope itemtype="http://schema.org/BreadcrumbList" style="margin:0;padding:0;">
+    
+    
+    
+      
+        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem" style="margin:0;padding:0;">
+          <a href="https://xrdocs.github.io/telemetry/" itemprop="item"><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <span class="sep">/</span>
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem" style="margin:0;padding:0;">
+          <a href="https://xrdocs.github.io/telemetry/tutorials" itemprop="item"><span itemprop="name">Tutorials</span></a>
+          <meta itemprop="position" content="2" />
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        <li class="current" style="margin:0;padding:0;">Streaming BGP Route and Neighbor Counts with MDT</li>
+      
+    
+  </ol>
+</div>
+
+      
+    
+
+
+      <section class="page__content" itemprop="text">
+
+        <aside class="sidebar__right">
+<nav class="toc">
+    <header><h4 class="nav__title"><i class="fa fa-table"></i> Streaming BGP Stats with MDT</h4></header>
+<ul class="toc__menu" id="markdown-toc">
+  <li><a href="#bgp-performance-indicators" id="markdown-toc-bgp-performance-indicators">BGP Performance Indicators</a>    <ul>
+      <li><a href="#number-of-bgp-routes" id="markdown-toc-number-of-bgp-routes">Number of BGP Routes</a></li>
+      <li><a href="#number-of-bgp-neighbors" id="markdown-toc-number-of-bgp-neighbors">Number of BGP Neighbors</a></li>
+    </ul>
+  </li>
+</ul>
+
+  </nav>
+</aside>
+
+<h2 id="bgp-performance-indicators">BGP Performance Indicators</h2>
+
+<p>The number of BGP routes and neighbor at any given time can be good, high-level indicators of network health.  Being able to stream those numbers periodically is a good use of model-driven telemetry (MDT) but the associated YANG models are large and can be intimidating, so this tutorial shows how to drill down for these specific stats.</p>
+
+<h3 id="number-of-bgp-routes">Number of BGP Routes</h3>
+
+<p>For CLI fans, the information that I was looking for is often found in the output of “show route ipv4 summary”:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RP/0/RP0/CPU0:SunC#show route ipv4 summary
+Fri Dec 23 16:48:59.988 UTC
+Route Source                     Routes     Backup     Deleted     Memory(bytes)
+local                            3          0          0           720
+connected                        2          1          0           720
+static                           1          0          0           240
+dagr                             0          0          0           0
+bgp 1                            5          1          0           1440
+isis 1                           1          1          0           480
+Total                            12         3          0           3600
+
+RP/0/RP0/CPU0:SunC#
+</code></pre></div></div>
+
+<p>This data is included in the IOS XR native YANG model called “Cisco-IOS-XR-ip-rib-ipv4-oper.yang”.  Now, there is a ton of stuff in that YANG model, including all of the prefixes in the RIB.  That’s too much. I just want the summary statistics for BGP routes.  So I needed to filter down to a very specific tree path.  Using <a href="https://github.com/mbj4668/pyang">pyang</a> to present a tree view of the model, here is the desired path:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ pyang -f tree Cisco-IOS-XR-ip-rib-ipv4-oper.yang --tree-path rib/vrfs/vrf/afs/af/safs/saf/ip-rib-route-table-names/ip-rib-route-table-name/protocol/bgp/as/information
+
+module: Cisco-IOS-XR-ip-rib-ipv4-oper
+   +--ro rib
+      +--ro vrfs
+         +--ro vrf* [vrf-name]
+            +--ro afs
+               +--ro af* [af-name]
+                  +--ro safs
+                     +--ro saf* [saf-name]
+                        +--ro ip-rib-route-table-names
+                           +--ro ip-rib-route-table-name* [route-table-name]
+                              +--ro protocol
+                                 +--ro bgp
+                                    +--ro as* [as]
+                                       +--ro information
+                                          +--ro protocol-names?                string
+                                          +--ro instance?                      string
+                                          +--ro version?                       uint32
+                                          +--ro redistribution-client-count?   uint32
+                                          +--ro protocol-clients-count?        uint32
+                                          +--ro routes-counts?                 uint32
+                                          +--ro active-routes-count?           uint32
+                                          +--ro deleted-routes-count?          uint32
+                                          +--ro paths-count?                   uint32
+                                          +--ro protocol-route-memory?         uint32
+$
+</code></pre></div></div>
+
+<p>If you did a NETCONF <get> operation on this subtree, the data would be returned encoded in XML like this:</get></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0"?&gt;</span>
+<span class="nt">&lt;rpc-reply</span> <span class="na">message-id=</span><span class="s">"urn:uuid:7aa4d7d8-4638-40ed-bb87-93b1403e0baa"</span> <span class="na">xmlns:nc=</span><span class="s">"urn:ietf:params:xml:ns:netconf:base:1.0"</span> <span class="na">xmlns=</span><span class="s">"urn:ietf:params:xml:ns:netconf:base:1.0"</span><span class="nt">&gt;</span>
+ <span class="nt">&lt;data&gt;</span>
+  <span class="nt">&lt;rib</span> <span class="na">xmlns=</span><span class="s">"http://cisco.com/ns/yang/Cisco-IOS-XR-ip-rib-ipv4-oper"</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;vrfs&gt;</span>
+    <span class="nt">&lt;vrf&gt;</span>
+     <span class="nt">&lt;vrf-name&gt;</span>default<span class="nt">&lt;/vrf-name&gt;</span>
+     <span class="nt">&lt;afs&gt;</span>
+      <span class="nt">&lt;af&gt;</span>
+       <span class="nt">&lt;af-name&gt;</span>IPv4<span class="nt">&lt;/af-name&gt;</span>
+       <span class="nt">&lt;safs&gt;</span>
+        <span class="nt">&lt;saf&gt;</span>
+         <span class="nt">&lt;saf-name&gt;</span>Unicast<span class="nt">&lt;/saf-name&gt;</span>
+         <span class="nt">&lt;ip-rib-route-table-names&gt;</span>
+          <span class="nt">&lt;ip-rib-route-table-name&gt;</span>
+           <span class="nt">&lt;route-table-name&gt;</span>default<span class="nt">&lt;/route-table-name&gt;</span>
+           <span class="nt">&lt;protocol&gt;</span>
+            <span class="nt">&lt;bgp&gt;</span>
+             <span class="nt">&lt;as&gt;</span>
+              <span class="nt">&lt;as&gt;</span>1<span class="nt">&lt;/as&gt;</span>
+              <span class="nt">&lt;information&gt;</span>
+               <span class="nt">&lt;protocol-names&gt;</span>bgp<span class="nt">&lt;/protocol-names&gt;</span>
+               <span class="nt">&lt;instance&gt;</span>1<span class="nt">&lt;/instance&gt;</span>
+               <span class="nt">&lt;version&gt;</span>0<span class="nt">&lt;/version&gt;</span>
+               <span class="nt">&lt;redistribution-client-count&gt;</span>0<span class="nt">&lt;/redistribution-client-count&gt;</span>
+               <span class="nt">&lt;protocol-clients-count&gt;</span>1<span class="nt">&lt;/protocol-clients-count&gt;</span>
+               <span class="nt">&lt;routes-counts&gt;</span>6<span class="nt">&lt;/routes-counts&gt;</span>
+               <span class="nt">&lt;active-routes-count&gt;</span>5<span class="nt">&lt;/active-routes-count&gt;</span>
+               <span class="nt">&lt;deleted-routes-count&gt;</span>0<span class="nt">&lt;/deleted-routes-count&gt;</span>
+               <span class="nt">&lt;paths-count&gt;</span>6<span class="nt">&lt;/paths-count&gt;</span>
+               <span class="nt">&lt;protocol-route-memory&gt;</span>1440<span class="nt">&lt;/protocol-route-memory&gt;</span>
+               <span class="nt">&lt;backup-routes-count&gt;</span>1<span class="nt">&lt;/backup-routes-count&gt;</span>
+              <span class="nt">&lt;/information&gt;</span>
+             <span class="nt">&lt;/as&gt;</span>
+            <span class="nt">&lt;/bgp&gt;</span>
+           <span class="nt">&lt;/protocol&gt;</span>
+          <span class="nt">&lt;/ip-rib-route-table-name&gt;</span>
+         <span class="nt">&lt;/ip-rib-route-table-names&gt;</span>
+        <span class="nt">&lt;/saf&gt;</span>
+       <span class="nt">&lt;/safs&gt;</span>
+      <span class="nt">&lt;/af&gt;</span>
+     <span class="nt">&lt;/afs&gt;</span>
+    <span class="nt">&lt;/vrf&gt;</span>
+   <span class="nt">&lt;/vrfs&gt;</span>
+  <span class="nt">&lt;/rib&gt;</span>
+ <span class="nt">&lt;/data&gt;</span>
+<span class="nt">&lt;/rpc-reply&gt;</span>
+</code></pre></div></div>
+
+<p>To get this same data encoded in Google Protocol Buffers and streamed using MDT, just configure a sensor-path as follows:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>telemetry model-driven
+  sensor-group SGroup1
+   sensor-path Cisco-IOS-XR-ip-rib-ipv4-oper:rib/vrfs/vrf/afs/af/safs/saf/ip-rib-route-table-names/ip-rib-route-table-name/protocol/bgp/as/information
+</code></pre></div></div>
+
+<p>Notice that the subtree filter (everything after <strong>Cisco-IOS-XR-ip-rib-ipv4-oper:</strong> in the sensor-path) is exactly the same as the argument I passed to the –tree-path filter in pyang.  That’s a handy tip for constructing sensor-paths in general!</p>
+
+<h3 id="number-of-bgp-neighbors">Number of BGP Neighbors</h3>
+
+<p>For BGP neighbor counts, the model you want is Cisco-IOS-XR-ipv4-bgp-oper.yang.  Again, this is a very juicy model, so it’s best to winnow it down to the nearest subtree:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ pyang -f tree Cisco-IOS-XR-ipv4-bgp-oper.yang --tree-path bgp/instances/instance/instance-active/default-vrf/process-info/global
+module: Cisco-IOS-XR-ipv4-bgp-oper
+   +--ro bgp
+      +--ro instances
+         +--ro instance* [instance-name]
+            +--ro instance-active
+               +--ro default-vrf
+                  +--ro process-info
+                     +--ro global
+                        +--ro process-instance-node?                string
+                        +--ro restart-count?                        uint32
+                        +--ro path-attributes-entry-count?          uint32
+                        +--ro path-attribute-memory?                uint32
+                        +--ro as-path-entry-count?                  uint32
+                        +--ro as-path-entries-memory?               uint32
+                        +--ro community-entry-count?                uint32
+                        +--ro community-memory?                     uint32
+                        +--ro extended-community-entry-count?       uint32
+                        +--ro extended-community-memory?            uint32
+                        +--ro pe-distinguisher-label-entry-count?   uint32
+                        +--ro pe-distinguisher-label-memory?        uint32
+                        +--ro pta-entry-count?                      uint32
+                        +--ro pta-memory?                           uint32
+                        +--ro ribrnh-entry-count?                   uint32
+                        +--ro ribrnh-memory?                        uint32
+                        +--ro ppmp-entry-count?                     uint32
+                        +--ro ppmp-memory?                          uint32
+                        +--ro route-reflectors?                     uint32
+                        +--ro route-reflector-memory?               uint32
+                        +--ro nexthop-count?                        uint32
+                        +--ro nexthop-memory?                       uint32
+                        +--ro local-as?                             uint32
+                        +--ro total-vrf-count?                      uint32
+                        +--ro neighbors-count-total?                uint32
+                        +--ro established-neighbors-count-total?    uint32
+                        +--ro sn-num-non-dflt-vrf-nbrs?             uint32
+                        +--ro sn-num-non-dflt-vrf-nbrs-estab?       uint32
+                        +--ro pool-size*                            uint32
+                        +--ro pool-alloc-count*                     uint32
+                        +--ro pool-free-count*                      uint32
+                        +--ro msg-log-pool-size*                    uint32
+                        +--ro msg-log-pool-alloc-count*             uint32
+                        +--ro msg-log-pool-free-count*              uint32
+
+</code></pre></div></div>
+
+<p>Depending on whether you’re interested in all neighbors or just neighbors in the established state, you can grab neighbors-count-total or established-neighbors-count-total from that list.</p>
+
+<p>To get that data via MDT,  configure the sensor path like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>telemetry model-driven
+  sensor-group SGroup1
+   sensor-path Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/default-vrf/process-info
+</code></pre></div></div>
+
+<p>The hardest part of MDT is often just figuring out which YANG model and subtree has the data you need.  Once you’ve got that, the configuration is pretty trivial.  Hopefully these two examples will get you started.</p>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="https://xrdocs.github.io/telemetry/tags/#bgp" class="page__taxonomy-item" rel="tag">bgp</a><span class="sep">, </span>
+    
+      
+      
+      <a href="https://xrdocs.github.io/telemetry/tags/#iosxr" class="page__taxonomy-item" rel="tag">iosxr</a><span class="sep">, </span>
+    
+      
+      
+      <a href="https://xrdocs.github.io/telemetry/tags/#mdt" class="page__taxonomy-item" rel="tag">mdt</a><span class="sep">, </span>
+    
+      
+      
+      <a href="https://xrdocs.github.io/telemetry/tags/#telemetry" class="page__taxonomy-item" rel="tag">telemetry</a><span class="sep">, </span>
+    
+      
+      
+      <a href="https://xrdocs.github.io/telemetry/tags/#yang" class="page__taxonomy-item" rel="tag">yang</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2016-12-23T16:45:00+00:00">December 23, 2016</time></p>
+        
+      </footer>
+
+      
+
+<section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=https://xrdocs.github.io/telemetry/tutorials/2016-12-23-streaming-bgp-route-and-neighbor-counts-with-mdt/" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https://xrdocs.github.io/telemetry/tutorials/2016-12-23-streaming-bgp-route-and-neighbor-counts-with-mdt/" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=https://xrdocs.github.io/telemetry/tutorials/2016-12-23-streaming-bgp-route-and-neighbor-counts-with-mdt/" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://xrdocs.github.io/telemetry/tutorials/2016-12-23-streaming-bgp-route-and-neighbor-counts-with-mdt/" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+
+    <br>
+    <br>
+    <br>
+</section>
+
+
+    </div>
+
+    
+      
+
+<div class="page__comments">
+  <h4 class="page__comments-title">Leave a Comment</h4>
+  
+    <section id="disqus_thread"></section>
+  
+</div>
+    
+  </article>
+
+  
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+      <li><a href="https://twitter.com/xrdocs"><i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+    
+    
+    
+      <li><a href="http://github.com/xrdocs"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    <li><a href="https://xrdocs.github.io/telemetry/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2018 Cisco Systems Inc. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+      </footer>
+    </div>
+
+    <script src="https://xrdocs.github.io/telemetry/assets/js/main.min.js"></script>
+<script src="https://xrdocs.github.io/telemetry/assets/js/scrollmenu.js"></script>
+
+
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-78256516-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+  
+  <script type="text/javascript">
+  	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  	var disqus_shortname = 'xrdocs';
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function() {
+  		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  	})();
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function () {
+  		var s = document.createElement('script'); s.async = true;
+  		s.type = 'text/javascript';
+  		s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  		(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  	}());
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+
+
+<!-- material-scrolltop button -->
+<button class="material-scrolltop" type="button"></button>
+
+<!-- material-scrolltop plugin -->
+<script src="https://xrdocs.github.io/telemetry/assets/js/material-scrolltop.js"></script>
+
+<!-- Initialize material-scrolltop with (minimal) -->
+<script>
+    $('body').materialScrollTop();
+</script>
+
+
+  </body>
+</html>
+

@@ -1,0 +1,1 @@
+Sitemap: https://xrdocs.github.io/telemetry/sitemap.xml

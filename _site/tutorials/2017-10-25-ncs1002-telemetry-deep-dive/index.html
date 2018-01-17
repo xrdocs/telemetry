@@ -1,0 +1,1038 @@
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+
+<meta charset="utf-8">
+
+
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>            NCS1002 Telemetry deep dive      IOS XR Streaming Telemetry @xrdocs      </title>
+
+
+
+
+
+
+
+<meta property="og:locale" content="en-US">
+<meta property="og:site_name" content="IOS XR Streaming Telemetry @xrdocs">
+<meta property="og:title" content="NCS1002 Telemetry deep dive">
+
+
+  <link rel="canonical" href="https://xrdocs.github.io/telemetry/tutorials/2017-10-25-ncs1002-telemetry-deep-dive/">
+  <meta property="og:url" content="https://xrdocs.github.io/telemetry/tutorials/2017-10-25-ncs1002-telemetry-deep-dive/">
+
+
+
+  <meta property="og:description" content="NCS1002 Telemetry deep dive">
+
+
+
+  <meta name="twitter:site" content="@xrdocs">
+  <meta name="twitter:title" content="NCS1002 Telemetry deep dive">
+  <meta name="twitter:description" content="NCS1002 Telemetry deep dive">
+  <meta name="twitter:url" content="https://xrdocs.github.io/tutorials/2017-10-25-ncs1002-telemetry-deep-dive/">
+
+  
+    <meta name="twitter:card" content="summary">
+    
+      <meta name="twitter:image" content="https://xrdocs.github.io/telemetry/images/telemetry-xrdocs.jpg">
+    
+  
+
+  
+    <meta name="twitter:creator" content="@">
+  
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2017-10-25T17:12:00+00:00">
+  
+  
+    <link rel="prev" href="https://xrdocs.github.io/telemetry/tutorials/2017-05-08-pipeline-with-grpc/" title="Pipeline with gRPC">
+  
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Organization",
+      "url": "https://xrdocs.github.io/telemetry",
+      "logo": "https://xrdocs.github.io/telemetry/images/telemetry-xrdocs.jpg"
+    }
+  </script>
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "person",
+      "name" : "Cisco Systems Inc",
+      "url" : "https://xrdocs.github.io/telemetry",
+      "sameAs" : ["https://twitter.com/CiscoDevNet"]
+    }
+  </script>
+
+
+
+
+
+
+<!-- end SEO -->
+
+<link href="https://xrdocs.github.io/telemetry/feed.xml" type="application/atom+xml" rel="alternate" title="IOS XR Streaming Telemetry @xrdocs Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="jgRKKm6B9FwJJPXxpmc0-EP3D0Mh8JHXaJqoYIGj1ek" />
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<script>
+if (!(window.location.host.startsWith("127.0.0.1") || window.location.host.startsWith("localhost")) && (window.location.host.substr(-10) == '.github.io') && (window.location.protocol != "https:"))
+    window.location.protocol = "https";
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/telemetry/assets/css/main.css">
+<meta http-equiv="cleartype" content="on">
+<style>
+.underline-on-hover:hover {
+    text-decoration: underline;
+}
+.searchForm{
+      border-radius:5px;
+      -moz-border-radius:5px;
+      -webkit-border-radius:5px;
+      width: 900px;
+   }
+#search_results{
+      display: table; margin:0 auto;
+   }
+</style>
+</style>
+
+    
+
+<!-- start custom head snippets -->
+
+<link href="https://xrdocs.github.io/telemetry/assets/css/lity.min.css" rel="stylesheet">
+<link href="https://xrdocs.github.io/telemetry/assets/css/cisco-sans.min.css" rel="stylesheet">
+<link href="https://xrdocs.github.io/telemetry/assets/css/material-scrolltop.css" rel="stylesheet">
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="https://xrdocs.github.io/telemetry/images/apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://xrdocs.github.io/telemetry/images/apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://xrdocs.github.io/telemetry/images/apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://xrdocs.github.io/telemetry/images/apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="60x60" href="https://xrdocs.github.io/telemetry/images/apple-touch-icon-60x60.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://xrdocs.github.io/telemetry/images/apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="76x76" href="https://xrdocs.github.io/telemetry/images/apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="https://xrdocs.github.io/telemetry/images/apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="https://xrdocs.github.io/telemetry/images/favicon-196x196.png" sizes="196x196" />
+<link rel="icon" type="image/png" href="https://xrdocs.github.io/telemetry/images/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/png" href="https://xrdocs.github.io/telemetry/images/favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="https://xrdocs.github.io/telemetry/images/favicon-16x16.png" sizes="16x16" />
+<link rel="icon" type="image/png" href="https://xrdocs.github.io/telemetry/images/favicon-128.png" sizes="128x128" />
+<link rel="shortcut icon" href="https://xrdocs.github.io/telemetry/images/favicon_cisco.ico" />
+<meta name="application-name" content="&nbsp;"/>
+<meta name="msapplication-TileColor" content="#FFFFFF" />
+<meta name="msapplication-TileImage" content="https://xrdocs.github.io/telemetry/images/mstile-144x144.png" />
+<meta name="msapplication-square70x70logo" content="https://xrdocs.github.io/telemetry/images/mstile-70x70.png" />
+<meta name="msapplication-square150x150logo" content="https://xrdocs.github.io/telemetry/images/mstile-150x150.png" />
+<meta name="msapplication-wide310x150logo" content="https://xrdocs.github.io/telemetry/images/mstile-310x150.png" />
+<meta name="msapplication-square310x310logo" content="https://xrdocs.github.io/telemetry/images/mstile-310x310.png" />
+
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu" style="padding-left:2em;">
+      <nav id="site-nav" class="greedy-nav">
+        <button><div class="navicon"></div></button>
+        <ul class="visible-links">
+          <img src="https://xrdocs.github.io/telemetry/images/xrdocs_logo.png" width="45px" height="45px" alt="xrdocs logo" style="float:left;">
+          <li class="masthead__menu-item masthead__menu-item--lg"><a href="https://xrdocs.github.io">@xrdocs</a></li>
+          <li class="masthead__menu-item"><a href="https://xrdocs.github.io/telemetry/">Telemetry</a></li>
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="https://xrdocs.github.io/telemetry/blogs/">Blogs</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item greedy-nav-active"><a href="https://xrdocs.github.io/telemetry/tutorials/">Tutorials</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="https://xrdocs.github.io/telemetry/search">Search <i class="fa fa-search" aria-hidden="true"></i></a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="https://xrdocs.github.io/telemetry/tags/">Tags</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="https://xrdocs.github.io/telemetry/collection-archive/">Archive</a></li>
+                
+            
+
+
+          
+        </ul>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <div class="sidebar sticky">
+  
+
+
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  <div class="author__avatar">
+    
+    	<img src="https://xrdocs.github.io/telemetry/images/avatars/vosipchu.jpeg" class="author__avatar" alt="Viktor Osipchuk">
+    
+  </div>
+
+  <div class="author__content">
+    <h3 class="author__name">Viktor Osipchuk</h3>
+    <p class="author__bio">A person who never made a mistake never tried anything new</p>
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+      
+      
+        <li><a href="mailto:vosipchu@cisco.com"><i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email</a></li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+        <li><a href="http://github.com/vosipchu"><i class="fa fa-fw fa-github" aria-hidden="true"></i> Github</a></li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="NCS1002 Telemetry deep dive">
+    <meta itemprop="description" content="NCS1002 Telemetry deep dive">
+    <meta itemprop="datePublished" content="October 25, 2017">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">NCS1002 Telemetry deep dive
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  10 minutes read
+</p>
+          
+        </header>
+      
+
+    
+      
+        
+
+
+
+
+
+<div class="breadcrumbs">
+  <ol itemscope itemtype="http://schema.org/BreadcrumbList" style="margin:0;padding:0;">
+    
+    
+    
+      
+        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem" style="margin:0;padding:0;">
+          <a href="https://xrdocs.github.io/telemetry/" itemprop="item"><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <span class="sep">/</span>
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem" style="margin:0;padding:0;">
+          <a href="https://xrdocs.github.io/telemetry/tutorials" itemprop="item"><span itemprop="name">Tutorials</span></a>
+          <meta itemprop="position" content="2" />
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        <li class="current" style="margin:0;padding:0;">NCS1002 Telemetry deep dive</li>
+      
+    
+  </ol>
+</div>
+
+      
+    
+
+
+      <section class="page__content" itemprop="text">
+
+        <aside class="sidebar__right">
+<nav class="toc">
+    <header><h4 class="nav__title"><i class="fa fa-table"></i> NCS1002 Telemetry deep dive</h4></header>
+<ul class="toc__menu" id="markdown-toc">
+  <li><a href="#introduction" id="markdown-toc-introduction">Introduction</a></li>
+  <li><a href="#sensor-paths-for-ncs1002" id="markdown-toc-sensor-paths-for-ncs1002">Sensor Paths for NCS1002</a></li>
+  <li><a href="#ncs1002-telemetry-configuration" id="markdown-toc-ncs1002-telemetry-configuration">NCS1002 Telemetry configuration</a></li>
+  <li><a href="#ncs1002-telemetry-data-consumption" id="markdown-toc-ncs1002-telemetry-data-consumption">NCS1002 telemetry data consumption</a></li>
+  <li><a href="#conclusion" id="markdown-toc-conclusion">Conclusion</a></li>
+</ul>
+
+  </nav>
+</aside>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>This tutorial continues the series of documents about <a href="https://xrdocs.github.io/programmability/tutorials/">automation of configuration of Cisco optical products</a>. The purpose of this document is to give you a lot of details about Telemetry on <a href="https://www.cisco.com/c/en/us/products/collateral/optical-networking/network-convergence-system-1000-series/datasheet-c78-733699.html">NCS1002 (terminal device)</a>. The goal is not only to give you some information about valuable sensor paths for NCS1002, but also to provide all the pieces for you to start exploring Telemetry on NCS1002 right away.</p>
+
+<p>Model-driven Telemetry (MDT) provides a mechanism to stream data from an MDT-capable device to a destination(s). There are several core components of Streaming Telemetry you should know and understand:</p>
+<ul>
+  <li>“Sensor path”. Describes the data you want your NCS1002 to stream to a collector (for example, OSNR values from your line ports)</li>
+  <li>“Transport protocol”. Describes the protocol you want to use to deliver to your collector/controller the information you selected with sensor-paths (for example, TCP)</li>
+  <li>“Encoder”. Describes the format of the data on the wire (for example, GPB)</li>
+  <li>“Initialization of streaming session”. Describes who initiates the streaming of data from the router towards the collector. Two possible options are: dial-in mode (the collector initiates a session to the router and subscribes to data to be streamed out) or dial-out mode (the router initiates a session to the destinations based on the subscription.)</li>
+  <li>“Subscription”. Binds everything together for the router to start streaming data on the configured intervals.</li>
+</ul>
+
+<p>There is no need to go in details about telemetry, as there are many different technical documents available in <a href="https://xrdocs.github.io/telemetry/">xrdocs-telemetry</a>, and you can also find configuration information on <a href="https://www.cisco.com/c/en/us/td/docs/iosxr/ncs5500/telemetry/b-telemetry-cg-ncs5500-62x/b-telemetry-cg-ncs5500-62x_chapter_010.html">cisco.com</a>.</p>
+
+<h2 id="sensor-paths-for-ncs1002">Sensor Paths for NCS1002</h2>
+
+<p>With this generic understanding of telemetry, let’s now define sensor paths that could be valuable exactly for your optical deployments based on NCS1002. These paths provide valuable information about NCS1002 and that list should be pretty complete for you to start playing around and testing your optical DCI segments. Feel free to add or remove paths from the suggested list as well as optimize sample-interval timers according to your requirements.
+Here is a list of sensor paths for NCS1002 with some basic explanation and print screens from Grafana for better visibility:</p>
+
+<ul>
+  <li><b>Monitoring of CPU utilization:</b> <em>Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.</em></li>
+</ul>
+
+<p><img src="https://xrdocs.github.io/xrdocs-images/assets/tutorial-images/vosipchu/NCS1002_telemetry/CPU_health.png" alt="" /></p>
+
+<p>With this model you’re able to get information about NCS1002 CPU load for 1-, 5- and 15-min intervals.</p>
+
+<ul>
+  <li><b>Monitoring of memory usage:</b> <em>Cisco-IOS-XR-nto-misc-oper:memory-summary/nodes/node/summary</em></li>
+</ul>
+
+<p><img src="https://xrdocs.github.io/xrdocs-images/assets/tutorial-images/vosipchu/NCS1002_telemetry/Memory.png" alt="" /></p>
+
+<p>This model helps you to have information about NCS1002 free memory availability.</p>
+
+<ul>
+  <li><b>Alarms:</b> <em>Cisco-IOS-XR-alarmgr-server-oper:alarms/brief/brief-card/brief-locations/brief-location/active.</em></li>
+</ul>
+
+<p>This path gives you information about currently active alarms in NCS1002.</p>
+
+<p>Here is an example of text-based output for active alarms on an NCS1002 under testing. You can modify your existing tools (or develop new) to collect this information either directly from a <a href="https://en.wikipedia.org/wiki/Time_series_database">TSDB (time-series database)</a> like <a href="https://www.influxdata.com/">InfluxDB</a> or from <a href="https://kafka.apache.org/">Kafka platform</a>, depending on your design.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Summary: GPB(common) Message [172.16.1.1:27939(rosco_1)/Cisco-IOS-XR-alarmgr-server-oper:alarms/brief/brief-card/brief-locations/brief-location/active msg len: 3150]
+{
+    "Source": "172.16.1.1:27939",
+    "Telemetry": {
+        "node_id_str": "rosco_1",
+        "subscription_id_str": "optical",
+        "encoding_path": "Cisco-IOS-XR-alarmgr-server-oper:alarms/brief/brief-card/brief-locations/brief-location/active",
+        "collection_id": 24180,
+        "collection_start_time": 1508635312850,
+        "msg_timestamp": 1508635312850,
+        "collection_end_time": 1508635312858
+    },
+    "Rows": [
+        {
+            "Timestamp": 1508635312856,
+            "Keys": {
+                "node-id": "0/RP0/CPU0"
+            },
+            "Content": {
+                "alarm-info_PIPELINE_EDIT": [
+                    {
+                        "clear-time": "-",
+                        "clear-timestamp": 0,
+                        "description": "Optics0/0/0/1 - Improper Removal",
+                        "group": "controller",
+                        "location": "0/0",
+                        "set-time": "09/12/2017 23:30:07 PDT",
+                        "set-timestamp": 1505284207,
+                        "severity": "critical"
+                    },
+       {
+                        "clear-time": "-",
+                        "clear-timestamp": 0,
+                        "description": "One Or More FPDs Need Upgrade Or Not In Current State",
+                        "group": "fpd-infra",
+                        "location": "0/0",
+                        "set-time": "09/14/2017 01:28:05 PDT",
+                        "set-timestamp": 1505377685,
+                        "severity": "major"
+                    },
+                    {
+                        "clear-time": "-",
+                        "clear-timestamp": 0,
+                        "description": "HundredGigECtrlr0/0/0/0 - Carrier Loss On The LAN",
+                        "group": "ethernet",
+                        "location": "0/0",
+                        "set-time": "09/22/2017 07:46:09 PDT",
+                        "set-timestamp": 1506091569,
+                        "severity": "major"
+                    },
+       {
+                        "clear-time": "-",
+                        "clear-timestamp": 0,
+                        "description": "Optics0/0/0/20 - Optics High Laser Bias",
+                        "group": "controller",
+                        "location": "0/0",
+                        "set-time": "10/19/2017 10:46:23 PDT",
+                        "set-timestamp": 1508435183,
+                        "severity": "minor"
+                    }
+                ]
+            }
+        }
+    ]
+}
+</code></pre></div></div>
+
+<ul>
+  <li><b>Chassis info:</b> <em>Cisco-IOS-XR-plat-chas-invmgr-oper:platform-inventory/racks/rack/attributes/basic-info.</em></li>
+</ul>
+
+<p>This path is useful to get information about the serial number and software version on NCS1002. You don’t need to stream this data very often.</p>
+
+<p>Here is an example output of this path for the NCS1002 under testing:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Summary: GPB(common) Message [172.16.1.1:27939(rosco_1)/Cisco-IOS-XR-plat-chas-invmgr-oper:platform-inventory/racks/rack/attributes/basic-info msg len: 471]
+{
+    "Source": "172.16.1.1:27939",
+    "Telemetry": {
+        "node_id_str": "rosco_1",
+        "subscription_id_str": "optical",
+        "encoding_path": "Cisco-IOS-XR-plat-chas-invmgr-oper:platform-inventory/racks/rack/attributes/basic-info",
+        "collection_id": 24175,
+        "collection_start_time": 1508635312221,
+        "msg_timestamp": 1508635312221,
+        "collection_end_time": 1508635312225
+    },
+    "Rows": [
+        {
+            "Timestamp": 1508635312223,
+            "Keys": {
+                "name": "0"
+            },
+            "Content": {
+                "description": "Network Convergence System 1002 20 QSFP28/QSFP+ slots",
+                "firmware-revision": "",
+                "hardware-revision": "V01",
+                "is-field-replaceable-unit": "true",
+                "model-name": "NCS1002-K9",
+                "name": "Rack 0",
+                "serial-number": "CAT1111A1AA",
+                "software-revision": "6.2.2\n",
+                "vendor-type": "1.3.6.1.4.1.9.12.3.1.3.1786"
+            }
+        }
+    ]
+}
+</code></pre></div></div>
+
+<ul>
+  <li><b>Pluggables info:</b> <em>Cisco-IOS-XR-plat-chas-invmgr-oper:platform-inventory/racks/rack/slots/slot/cards/card/port-slots/port-slot/portses/ports/hw-components/hw-component/attributes/basic-info.</em></li>
+</ul>
+
+<p>This path is useful to get information about the serial number and hardware revision details about pluggables inserted into the platform. You don’t need to stream this data very often, but it might be valuable to collect information about installed pluggables on each platform for inventory.</p>
+
+<p>Here is a partial output of this path for the NCS1002 under testing:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Summary: GPB(common) Message [172.16.1.1:41461(rosco_1)/Cisco-IOS-XR-plat-chas-invmgr-oper:platform-inventory/racks/rack/slots/slot/cards/card/port-slots/port-slot/portses/ports/hw-components/hw-component/attributes/basic-info msg len: 4611]
+{
+    "Source": "172.16.1.1:41461",
+    "Telemetry": {
+        "node_id_str": "rosco_1",
+        "subscription_id_str": "100",
+        "encoding_path": "Cisco-IOS-XR-plat-chas-invmgr-oper:platform-inventory/racks/rack/slots/slot/cards/card/port-slots/port-slot/portses/ports/hw-components/hw-component/attributes/basic-info",
+        "collection_id": 47,
+        "collection_start_time": 1508773513140,
+        "msg_timestamp": 1508773513140,
+        "collection_end_time": 1508773513441
+    },
+    "Rows": [
+        {
+            "Timestamp": 1508773513174,
+            "Keys": {
+                "name_PIPELINE_EDIT": [
+                    "0",
+                    "1",
+                    "0",
+                    "17d0",
+                    "0",
+                    "0"
+                ]
+            },
+            "Content": {
+                "description": "Cisco 100G QSFP28 LR4-S Pluggable Optics Module",
+                "firmware-revision": "",
+                "hardware-revision": "V01 ",
+                "is-field-replaceable-unit": "false",
+                "model-name": "QSFP-100G-LR4-S",
+                "name": "0/0-Optics0/0/0/0-IDPROM",
+                "serial-number": "FNS11111AA1     ",
+                "software-revision": "",
+                "vendor-type": "1.3.6.1.4.1.9.12.3.1.16.1"
+            }
+        },
+        {
+            "Timestamp": 1508773513203,
+            "Keys": {
+                "name_PIPELINE_EDIT": [
+                    "0",
+                    "1",
+                    "0",
+                    "17d5",
+                    "0",
+                    "0"
+                ]
+            },
+            "Content": {
+                "description": "Cisco CFP2 DWDM Pluggable Optics",
+                "firmware-revision": "",
+                "hardware-revision": "V02 ",
+                "is-field-replaceable-unit": "false",
+                "model-name": "ONS-CFP2-WDM",
+                "name": "0/0-Optics0/0/0/5-IDPROM",
+                "serial-number": "OVE1111111A",
+                "software-revision": "",
+                "vendor-type": "1.3.6.1.4.1.9.12.3.1.16.1"
+            }
+        }
+    ]
+}
+</code></pre></div></div>
+
+<ul>
+  <li><b>Client Optics RX and TX power:</b> <em>Cisco-IOS-XR-controller-optics-oper:optics-oper/optics-ports/optics-port/optics-info.</em></li>
+</ul>
+
+<p><img src="https://xrdocs.github.io/xrdocs-images/assets/tutorial-images/vosipchu/NCS1002_telemetry/Client_TX_RX_optics.png" alt="" /></p>
+
+<p>With this model you can get information about TX and RX power levels from each lane on each pluggable on the platform.</p>
+
+<ul>
+  <li><b>Client Optics Laser Bias Current:</b> <em>Cisco-IOS-XR-controller-optics-oper:optics-oper/optics-ports/optics-port/optics-info.</em></li>
+</ul>
+
+<p><img src="https://xrdocs.github.io/xrdocs-images/assets/tutorial-images/vosipchu/NCS1002_telemetry/Laser_bias.png" alt="" /></p>
+
+<p>With this model you can get information about average laser bias current from each lane on each pluggable on the platform.</p>
+
+<ul>
+  <li><b>Client Optics RX utilization:</b> <em>Cisco-IOS-XR-pmengine-oper:performance-management/ethernet/ethernet-ports/ethernet-port/ethernet-current/ethernet-second30/second30-ethers/second30-ether</em></li>
+</ul>
+
+<p><img src="https://xrdocs.github.io/xrdocs-images/assets/tutorial-images/vosipchu/NCS1002_telemetry/RX_util.png" alt="" /></p>
+
+<p>This sensor-path gives you highly granular information about RX load on each client port.</p>
+
+<ul>
+  <li><b>Pre-FEC and Post-FEC information about NCS1002 line ports:</b> <em>Cisco-IOS-XR-pmengine-oper:performance-management/otu/otu-ports/otu-port/otu-current/otu-second30/otu-second30fecs/otu-second30fec</em></li>
+</ul>
+
+<p><img src="https://xrdocs.github.io/xrdocs-images/assets/tutorial-images/vosipchu/NCS1002_telemetry/Pre-FEC_BER_nice.png" alt="" /></p>
+
+<p><img src="https://xrdocs.github.io/xrdocs-images/assets/tutorial-images/vosipchu/NCS1002_telemetry/Post-FEC_BER.png" alt="" /></p>
+
+<p>As it can be seen, you can get almost real time information about Pre-FEC BER on each line port. Data is taken from each 30 seconds interval (the shortest one on NCS1002). Post-FEC BER is expected to be zero on each port (and this can be seen on the graph).</p>
+
+<ul>
+  <li><b>Bit errors corrected and uncorrected words:</b> <em>Cisco-IOS-XR-pmengine-oper:performance-management/otu/otu-ports/otu-port/otu-current/otu-second30/otu-second30fecs/otu-second30fec</em></li>
+</ul>
+
+<p><img src="https://xrdocs.github.io/xrdocs-images/assets/tutorial-images/vosipchu/NCS1002_telemetry/Bit_errors_corrected.png" alt="" /></p>
+
+<p><img src="https://xrdocs.github.io/xrdocs-images/assets/tutorial-images/vosipchu/NCS1002_telemetry/Uncorrected_words.png" alt="" /></p>
+
+<p>You can also look at FEC from error bits corrected value and uncorrected words, to have more granular information on how FEC BER is calculated. As with Post-FEC, expectation is that UC-Words number is equal to zero.</p>
+
+<ul>
+  <li><b>OTN errors on near-end and on far-end:</b> <em>Cisco-IOS-XR-pmengine-oper:performance-management/otu/otu-ports/otu-port/otu-current/otu-second30/otu-second30otns/otu-second30otn</em></li>
+</ul>
+
+<p><img src="https://xrdocs.github.io/xrdocs-images/assets/tutorial-images/vosipchu/NCS1002_telemetry/OTN_NE.png" alt="" /></p>
+
+<p><img src="https://xrdocs.github.io/xrdocs-images/assets/tutorial-images/vosipchu/NCS1002_telemetry/OTN_FE.png" alt="" /></p>
+
+<p>This model gives information about different OTN parameters for each line port:</p>
+<ul>
+  <li>ES-NE/ES-FE (Error Seconds in the near end / far end)</li>
+  <li>ESR-NE/ESR-FE (Error Seconds Ratio on the near end / far end)</li>
+  <li>SES-NE/SES-FE (Severely error seconds in the near end / far end)</li>
+  <li>SESR-NE/SESR-FE (Severely error seconds ratio in the near end / far end)</li>
+  <li>BBE-NE/ BBE-FE (Background block errors in the near end / far end)</li>
+  <li>
+    <p>BBER-NE/ BBER-FE (Background block errors in the near end / far end)
+Other parameters, such as UAS (Unavailable seconds) and FC (Failure counts) can also be found there.</p>
+  </li>
+  <li><b>OPT and OPR for line ports:</b> <em>Cisco-IOS-XR-pmengine-oper:performance-management/optics/optics-ports/optics-port/optics-current/optics-second30/optics-second30-optics/optics-second30-optic</em></li>
+</ul>
+
+<p><img src="https://xrdocs.github.io/xrdocs-images/assets/tutorial-images/vosipchu/NCS1002_telemetry/OPR_OPT.png" alt="" /></p>
+
+<p>You can get almost real time information about OPT/OPR levels for each line port with this model. Information is taken from each 30 seconds interval.</p>
+
+<ul>
+  <li><b>CD / PMD / DGD / OSNR for line ports:</b> <em>Cisco-IOS-XR-pmengine-oper:performance-management/optics/optics-ports/optics-port/optics-current/optics-second30/optics-second30-optics/optics-second30-optic</em></li>
+</ul>
+
+<p><img src="https://xrdocs.github.io/xrdocs-images/assets/tutorial-images/vosipchu/NCS1002_telemetry/CD.png" alt="" /></p>
+
+<p><img src="https://xrdocs.github.io/xrdocs-images/assets/tutorial-images/vosipchu/NCS1002_telemetry/PMD.png" alt="" /></p>
+
+<p><img src="https://xrdocs.github.io/xrdocs-images/assets/tutorial-images/vosipchu/NCS1002_telemetry/DGD.png" alt="" /></p>
+
+<p><img src="https://xrdocs.github.io/xrdocs-images/assets/tutorial-images/vosipchu/NCS1002_telemetry/OSNR.png" alt="" /></p>
+
+<p>You can get information about average (also, minimum and maximum, if you want) values for each 30-seconds interval for:</p>
+<ul>
+  <li>Chromatic Dispersion</li>
+  <li>Polarization Mode Dispersion</li>
+  <li>Differential Group Delay</li>
+  <li>Optical Signal to Noise ratio</li>
+</ul>
+
+<p>Sensor paths listed here can help you with fast monitoring of different important optical parameters as well as platform itself. Let’s have a look how to configure that.</p>
+
+<h2 id="ncs1002-telemetry-configuration">NCS1002 Telemetry configuration</h2>
+
+<p>There are many possible ways to configure a device to stream the data using telemetry. You can find a good explanation how to do it with CLI configuration [here] (https://xrdocs.github.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/) or you can configure Telemetry using <a href="https://developer.cisco.com/site/ydk/">YANG Development Kit (YDK)</a>, like <a href="https://xrdocs.github.io/telemetry/tutorials/2016-08-08-configuring-model-driven-telemetry-with-ydk/">here</a></p>
+
+<p>Let me first show you an example configuration of models above using CLI. Telemetry configuration will be based on gRPC, Self-Describing GPB and Dial-out Mode.</p>
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code> 
+telemetry model-driven
+ destination-group DGROUP1
+  address-family ipv4 1.1.1.1 port 5432
+   encoding self-describing-gpb
+   protocol grpc no-tls
+  !
+  address-family ipv4 10.30.110.38 port 5432
+   encoding self-describing-gpb
+   protocol grpc no-tls
+  !
+ !
+ sensor-group SGROUP1
+  sensor-path Cisco-IOS-XR-plat-chas-invmgr-oper:platform-inventory/racks/rack/attributes/basic-info
+  sensor-path Cisco-IOS-XR-plat-chas-invmgr-oper:platform-inventory/racks/rack/slots/slot/cards/card/port-   slots/port-slot/portses/ports/hw-components/hw-component/attributes/basic-info
+ !
+ sensor-group SGROUP2
+  sensor-path Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization
+  sensor-path Cisco-IOS-XR-nto-misc-oper:memory-summary/nodes/node/summary
+  sensor-path Cisco-IOS-XR-alarmgr-server-oper:alarms/brief/brief-card/brief-locations/brief-location/active
+ !
+ sensor-group SGROUP3
+  sensor-path Cisco-IOS-XR-controller-optics-oper-sub1:optics-oper/optics-ports/optics-port/optics-info
+  sensor-path Cisco-IOS-XR-pmengine-oper:performance-management/otu/otu-ports/otu-port/otu-current/otu-second30/otu-second30fecs/otu-second30fec
+  sensor-path Cisco-IOS-XR-pmengine-oper:performance-management/otu/otu-ports/otu-port/otu-current/otu-second30/otu-second30otns/otu-second30otn
+  sensor-path Cisco-IOS-XR-pmengine-oper:performance-management/ethernet/ethernet-ports/ethernet-port/ethernet-current/ethernet-second30/second30-ethers/second30-ether
+  sensor-path Cisco-IOS-XR-pmengine-oper:performance-management/optics/optics-ports/optics-port/optics-current/optics-second30/optics-second30-optics/optics-second30-optic
+ !
+ subscription Sub1
+  sensor-group-id SGROUP1 sample-interval 1800000
+  destination-id DGROUP1
+ !
+ subscription Sub2
+  sensor-group-id SGROUP2 sample-interval 20000
+  destination-id DGROUP1
+ !
+ subscription Sub3
+  sensor-group-id SGROUP3 sample-interval 10000
+  destination-id DGROUP1
+ !
+</code>
+</pre>
+</div>
+<p>MDT configuration using CLI is very straightforward and simple.</p>
+
+<p>More interesting and powerful way to configure telemetry on NCS1002 is through YDK. If you want to read more about YDK, a lot of details and information can be found <a href="https://communities.cisco.com/community/developer/ydk">here</a> with hundreds of examples <a href="https://github.com/CiscoDevNet/ydk-py-samples">here</a>. 
+Let’s briefly cover major parts of YDK for NCS1002 telemetry configuration for your convenience. For this example I will use native IOS-XR telemetry YANG model. Configuration is based on gRPC Dial-out with self-describing GPB model (the same as it was with CLI).</p>
+
+<p>Let’s start with configuring destination address/port, encoding and transport protocol:</p>
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code> 
+destination_group = telemetry_model_driven.destination_groups.DestinationGroup()
+## the name of this destination group
+destination_group.destination_id = 'DGROUP'
+ipv4_destination = destination_group.ipv4_destinations.Ipv4Destination()
+## address and port of the server configuration
+ipv4_destination.destination_port = 57500
+ipv4_destination.ipv4_address = 10.30.110.38
+## define encoding
+ipv4_destination.encoding = xr_telemetry_model_driven_cfg.EncodeTypeEnum.self_describing_gpb
+protocol = ipv4_destination.Protocol()
+## define the transport protocol
+protocol.protocol = xr_telemetry_model_driven_cfg.ProtoTypeEnum.grpc
+protocol.no_tls = 1
+ipv4_destination.protocol = protocol
+destination_group.ipv4_destinations.ipv4_destination.append(ipv4_destination)
+telemetry_model_driven.destination_groups.destination_group.append(destination_group)
+</code>
+</pre>
+</div>
+<p>After destination, encoding and transport configuration, let’s configure a sensor-group with one sensor path:</p>
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code> 
+sensor_group = telemetry_model_driven.sensor_groups.SensorGroup()
+## the name of this sensor-group
+sensor_group.sensor_group_identifier = 'SGROUP'
+sensor_group.enable = Empty()        
+## define the path you want to be collected
+sensor_path = sensor_group.sensor_paths.SensorPath()
+sensor_path.telemetry_sensor_path = 'Cisco-IOS-XR-nto-misc-oper:memory-summary/nodes/node/summary'
+sensor_group.sensor_paths.sensor_path.append(sensor_path)   
+telemetry_model_driven.sensor_groups.sensor_group.append(sensor_group)
+</code>
+</pre>
+</div>
+<p>The final step is to define subscription and configure all together:</p>
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code> 
+subscription = telemetry_model_driven.subscriptions.Subscription()
+## name of the subscription group
+subscription.subscription_identifier = "Sub1"
+sensor_profile = subscription.sensor_profiles.SensorProfile()
+## attach the sensor-group
+sensor_profile.sensorgroupid = 'SGROUP1'
+## define the interval
+sensor_profile.sample_interval = 20000
+subscription.sensor_profiles.sensor_profile.append(sensor_profile) 
+sensor_profile = subscription.sensor_profiles.SensorProfile()
+## define destination group to be used
+destination_profile = subscription.destination_profiles.DestinationProfile()
+destination_profile.destination_id = 'DGROUP1'
+destination_profile.enable = Empty()
+subscription.destination_profiles.destination_profile.append(destination_profile) 
+telemetry_model_driven.subscriptions.subscription.append(subscription)
+</code>
+</pre>
+</div>
+<p>That’s it! The full version with all sensor paths and two destinations can be found <a href="https://github.com/ios-xr/telemetry-NCS1002/blob/master/YDK-scripts/nc-create-ncs1002-telemetry-native-grpc-out-ydk.py">here</a>. You can also find there YDK configurations for few other modes, including configurations using OpenConfig models (feel free to modify them and use as you need!)</p>
+
+<h2 id="ncs1002-telemetry-data-consumption">NCS1002 telemetry data consumption</h2>
+
+<p>At this step we defined the data we want to stream out of an NCS1002. We configured Model-Driven Telemetry with destination, encoding, transport and sampling details. The final step for our task will be to collect and process this data.
+There are several ways to achieve this and you’re free to use any one that you like. For those of you who have just started looking into telemetry, there are several files at the end to help with faster adoption and testing of things described above.
+Steps you need to do have your collector up and running:</p>
+
+<ol>
+  <li>
+    <p>Clone/download “pipeline” on your server. Pipeline can be found <a href="https://github.com/cisco/bigmuddy-network-telemetry-pipeline">here</a> and the basic overview of pipeline is <a href="http://blogs.cisco.com/sp/introducing-pipeline-a-model-driven-telemetry-collection-service">here</a></p>
+  </li>
+  <li>
+    <p>Download and install “InfluxDB” on your server. The link for download is <a href="https://portal.influxdata.com/downloads">here</a></p>
+  </li>
+  <li>
+    <p>Make sure “pipeline” streams data to “InfluxDB”. How to do this is <a href="https://xrdocs.github.io/telemetry/tutorials/2017-04-10-using-pipeline-integrating-with-influxdb/">here</a>. And make sure you don’t forget to create a <a href="https://github.com/influxdata/influxdb#create-your-first-database">database!</a></p>
+  </li>
+  <li>
+    <p>Install Grafana and add “InfluxDB” database. The link to Grafana is <a href="https://grafana.com/grafana/download">here</a> or go to their <a href="https://github.com/grafana/grafana">github link</a></p>
+  </li>
+</ol>
+
+<p>After these steps are done, you will need to install correct “metrics.json” file that will contain descriptions of models described in this tutorial. For Grafana you will need to have a dashboard configured. As i mentioned above, these files are already prepared for you! You can get “metrics.json” <a href="https://github.com/ios-xr/telemetry-NCS1002/blob/master/metrics/metrics.json">here</a> and the dashboard for NCS1002 for Grafana can be found <a href="https://github.com/ios-xr/telemetry-NCS1002/blob/master/dashboard/NCS1002%20Telemetry.json">here</a>.</p>
+
+<p>NCS1002 with IOS XR 6.2.2, YDK version 0.5.4, Grafana 4.2.0, InfluxDB v1.0.0 and Python 2.7 were used.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Telemetry is the modern way to get almost real-time information from your NCS1002 devices. In this tutorial, we covered valuable sensor paths for NCS1002, how to configure them with CLI and YDK and how to process. Try telemetry on NCS1002 today and stay tuned for our next updates. NCS1001 configuration automation tutorials are coming soon!</p>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="https://xrdocs.github.io/telemetry/tags/#iosxr" class="page__taxonomy-item" rel="tag">iosxr</a><span class="sep">, </span>
+    
+      
+      
+      <a href="https://xrdocs.github.io/telemetry/tags/#monitoring" class="page__taxonomy-item" rel="tag">monitoring</a><span class="sep">, </span>
+    
+      
+      
+      <a href="https://xrdocs.github.io/telemetry/tags/#ncs1002" class="page__taxonomy-item" rel="tag">NCS1002</a><span class="sep">, </span>
+    
+      
+      
+      <a href="https://xrdocs.github.io/telemetry/tags/#rosco" class="page__taxonomy-item" rel="tag">Rosco</a><span class="sep">, </span>
+    
+      
+      
+      <a href="https://xrdocs.github.io/telemetry/tags/#telemetry" class="page__taxonomy-item" rel="tag">Telemetry</a><span class="sep">, </span>
+    
+      
+      
+      <a href="https://xrdocs.github.io/telemetry/tags/#visualization" class="page__taxonomy-item" rel="tag">Visualization</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2017-10-25T17:12:00+00:00">October 25, 2017</time></p>
+        
+      </footer>
+
+      
+
+<section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=https://xrdocs.github.io/telemetry/tutorials/2017-10-25-ncs1002-telemetry-deep-dive/" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https://xrdocs.github.io/telemetry/tutorials/2017-10-25-ncs1002-telemetry-deep-dive/" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=https://xrdocs.github.io/telemetry/tutorials/2017-10-25-ncs1002-telemetry-deep-dive/" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://xrdocs.github.io/telemetry/tutorials/2017-10-25-ncs1002-telemetry-deep-dive/" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+
+    <br>
+    <br>
+    <br>
+</section>
+
+
+    </div>
+
+    
+      
+
+<div class="page__comments">
+  <h4 class="page__comments-title">Leave a Comment</h4>
+  
+    <section id="disqus_thread"></section>
+  
+</div>
+    
+  </article>
+
+  
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+      <li><a href="https://twitter.com/xrdocs"><i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+    
+    
+    
+      <li><a href="http://github.com/xrdocs"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    <li><a href="https://xrdocs.github.io/telemetry/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2018 Cisco Systems Inc. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+      </footer>
+    </div>
+
+    <script src="https://xrdocs.github.io/telemetry/assets/js/main.min.js"></script>
+<script src="https://xrdocs.github.io/telemetry/assets/js/scrollmenu.js"></script>
+
+
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-78256516-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+  
+  <script type="text/javascript">
+  	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  	var disqus_shortname = 'xrdocs';
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function() {
+  		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  	})();
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function () {
+  		var s = document.createElement('script'); s.async = true;
+  		s.type = 'text/javascript';
+  		s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  		(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  	}());
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+
+
+<!-- material-scrolltop button -->
+<button class="material-scrolltop" type="button"></button>
+
+<!-- material-scrolltop plugin -->
+<script src="https://xrdocs.github.io/telemetry/assets/js/material-scrolltop.js"></script>
+
+<!-- Initialize material-scrolltop with (minimal) -->
+<script>
+    $('body').materialScrollTop();
+</script>
+
+
+  </body>
+</html>
+
