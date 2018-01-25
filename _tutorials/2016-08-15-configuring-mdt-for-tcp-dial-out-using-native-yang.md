@@ -518,11 +518,3 @@ xr.close_session()
 
 The IOS XR Native telemetry YANG model exposes the full range of functionality in Model-Driven Telemetry.  The examples in this tutorial should get you started with configuring MDT in a programmatic way.  
 
-
-Prose
-
-    Prose
-    About
-    Developers
-    Language
-    Logout
