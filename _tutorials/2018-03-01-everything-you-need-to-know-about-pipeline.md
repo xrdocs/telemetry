@@ -441,7 +441,7 @@ encoding = gpbkv  			<i>## Key-Value GPB encoding</i>
 encap = gpb				<i>## use “gpb” for both, compact and key-value GPB</i>
 server = [2500::3]:57500   		<i>## IP address and port of the router</i>
 subscriptions = health     		<i>## specify the subscription to be used (it has to be configured)</i>
-tls = false        		<i>## no TLS</i>
+tls = false        		 <i>## no TLS</i>
 
 </code>
 </pre>
