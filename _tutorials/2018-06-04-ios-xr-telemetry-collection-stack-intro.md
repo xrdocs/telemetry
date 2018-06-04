@@ -15,7 +15,7 @@ tags:
   - InfluxDB
   - Kapacitor
   - Grafana
-position: hidden
+position: top
 ---
 {% include toc icon="table" title="IOS XR Telemetry Collection Stack Intro" %}
 {% include base_path %}
@@ -168,7 +168,7 @@ You need to modify words in blue color. Let's go line by line:
 6. If you want to change the default login/password pair for Grafana (to protect from improper access), you can do it in the last two lines of the document with variables.
 
 **That's it! This is all you need to know to have the IOS XT Telemetry Collection Stack up and running!**
-If you're interested in details of the script, jump [here](URL TO THE 2ND POST) after finishing this tutorial!
+If you're interested in details of the script, jump [here](https://xrdocs.github.io/telemetry/tutorials/2018-06-04-telemetry-collection-stack-detailed-overview/) after finishing this tutorial!
 
 ## What You Will Get with the Collection Stack  
 
