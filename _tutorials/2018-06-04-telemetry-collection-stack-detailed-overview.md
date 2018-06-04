@@ -3,7 +3,7 @@ published: true
 date: '2018-06-04 16:13 -0700'
 title: Telemetry Collection Stack Detailed Overview
 author: Viktor Osipchuk
-position: hidden
+position: top
 excerpt: >-
   Detailed explanation of the script that installs and configures the IOS XR
   Model Driven Telemetry Stack
@@ -20,7 +20,7 @@ tags:
 {% include toc icon="table" title="IOS XR Telemetry Collection Stack Detailed Overview" %}
 {% include base_path %}
 
-In our [previous tutorial](URL) we provided a high-level overview of the IOS XR Telemetry Collection Stack. The goal of the stack is to help engineers to quickly start testing telemetry and not to waste time to research on how to integrate an application A with application B and application C.
+In our [previous tutorial](https://xrdocs.github.io/telemetry/tutorials/2018-06-04-ios-xr-telemetry-collection-stack-intro/) we provided a high-level overview of the IOS XR Telemetry Collection Stack. The goal of the stack is to help engineers to quickly start testing telemetry and not to waste time to research on how to integrate an application A with application B and application C.
 
 While working on this script, attention was given to the fact that people with a very different level of Linux/programming knowledge will use that script. That's why description was added for almost every step there. It might seem not very elegant, but I think it is essential for every person to understand how it works and what will run on his/her server. Also, the decision was to use a single language, with no overcomplication, and not to jump between different tools, as this, again, could bring unnecessary confusion for people who want to understand how it works (obviously, this task could be done in many different ways)
 
@@ -627,7 +627,6 @@ The purpose of the code is to modify ["~/.bashrc"](https://www.lifewire.com/bash
 The code itself is pretty compact and refers to the ["wrappers.txt"](https://github.com/vosipchu/XR_TCS/blob/master/wrappers.txt) file.
 
 ```
-#!/bin/bash
 ################################################################################
 #########             Telemetry Collection CLI Aliases                ##########
 ################################################################################
@@ -656,7 +655,7 @@ fi
 </pre>
 </div>
 
-As was described in our [previous post](LINK TO ALIASES), you can start (and stop) running Pipeline in "troubleshooting mode", where all the Telemetry messages are dumped into the "dump.txt" file.
+As was described in our [previous post](https://xrdocs.github.io/telemetry/tutorials/2018-06-04-ios-xr-telemetry-collection-stack-intro/#alias-commands-to-manage-the-collection-stack), you can start (and stop) running Pipeline in "troubleshooting mode", where all the Telemetry messages are dumped into the "dump.txt" file.
 In order to do that, a special function is added into the "~/.bashrc" file.
 When you plan to start using Pipeline in troubleshooting mode, the code will look for an active instance of Pipeline and kill it (together with an active instance of "screen"). Then it will use "SED" to modify the content of the "pipeline.conf" file, by activating dumping to a file. Finally, it starts a Pipeline. It is expected, that you will go and [start checking the "dump.txt" file contents](https://www.howtoforge.com/linux-tail-command/) in real time to see the messages, that's why the code will also remove the previous version of the "dump.txt" file. This way you will see the actual information you're looking for, not the data from previous troubleshooting sessions.
 At some moment you won't need to run this mode anymore, and you will stop it. The code will find the active running instance of Pipeline, kill it, update the configuration of the "pipeline.conf" file back and start a new instance of Pipeline in a screen.
@@ -891,7 +890,6 @@ If you decided to remove your Collection Stack from the server, you might want t
 It will remove all the added lines from ".bashrc" and you will not see anything next time you log in!
 
 ```
-#!/bin/bash
 #######################################################
 ######## This removes aliases from your server  #######
 #######################################################
