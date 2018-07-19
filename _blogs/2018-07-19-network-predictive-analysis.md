@@ -7,10 +7,10 @@ title: >-
 author: Cristina Precup
 position: hidden
 ---
-{% include toc icon="table" title="Network Predictive Analysis: A Journey into Traffic Forecasting with Deep Learning" %}
+{% include toc icon="table" title="Network Predictive Analysis" %}
+
 {% include base_path %}
 
-# Network Predictive Analysis: A Journey into Traffic Forecasting with Deep Learning
 
 ## Context
 This development complements the features of Cisco WAN Automation Engine (WAE). WAE is a software tool that permits definition, maintenance and monitoring of a network. It can gather and use information coming from snapshots of the topology, device configurations and telemetry from an operational network. The approach presented here makes use of SNMP traffic data collected by WAE, to which a model has been fitted. Currently, the model is built based solely on traffic information. However, ideally, the project could mature into one that is suitable for production, where additional telemetry-based features of the network are brought in, e.g., number of paths, link failures. The model can be used as an estimator for *what if*scenarios, predicting a change in the traffic and thus anticipating the need or ability for a network change. A first application could be the provision of future network maintenance windows. Knowing in advance the suitable time and values of the traffic would allow for an optimised maintenance process, opening the window for anticipated network adjustment.
