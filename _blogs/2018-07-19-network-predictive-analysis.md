@@ -70,10 +70,10 @@ The Box Plot (Fig. 3), histogram and density plot (Fig. 4) of the traffic variab
 
 ![image-center]({{ base_path }}/images/network_predictive_analysis/3-month-histogram-orig-traffic.png){: .align-center}
 
-*Fig. 4: Three month dataset - Histogram and distribution plot of original data *
+*Fig. 4: Three month dataset - Histogram and distribution plot of original data*
 {: .text-center}
 
- The 1-day dataset is similarly skewed to the right (Fig. 5, 6), with a single peak, a skewness value of positive 0.855 and a p-value of 0.0059.
+The 1-day dataset is similarly skewed to the right (Fig. 5, 6), with a single peak, a skewness value of positive 0.855 and a p-value of 0.0059.
 
 
 ![image-center]({{ base_path }}/images/network_predictive_analysis/3-month-box-plot-orig-traffic.png){: .align-center}
@@ -354,7 +354,7 @@ K-fold cross-validation with K=10 was used for subsampling the training dataset 
 |--------------------------|--------------------|----------------| 
 | MSE in transformed scale | 0.00135            | 0.07561        |
 | RMSE in transformed scale| 0.03681            | 0.27498        |
-| MSE                      | 6805089.28 Mbps^2  | 1898.08 Mbps^2 |
+| MSE                      | 6805089.28 Mbps<sup>2</sup>| 1898.08 Mbps<sup>2</sup>|
 | **RMSE**                 | **2608.65 Mbps**   | **43.56 Mbps** |
 
 *Table 4: LSTM Test scores*
