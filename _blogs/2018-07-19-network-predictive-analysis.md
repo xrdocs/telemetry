@@ -94,21 +94,21 @@ The 1-day dataset is similarly skewed to the right (Fig. 5, 6), with a single pe
 In the case of the 3-month dataset, the mean of 30699.8 Mbps and median of 29073.57 Mbps confirm the skewness of the data (Fig. 3, Fig. 4). The standard deviation is 14826.39 Mbps and IQR is 25365 Mbps, with Q1: 17696 Mbps and Q3: 43061 Mbps. This means that the majority of the traffic is between 15873.41 and 45526.19 Mbps. An overview of both datasets is given in the Table 1.
 
 
-| Measure                | 3-month dataset       | 1-day dataset   |
-| -----------------------|-----------------------|-----------------| 
-| Count                  | 1268                  | 96              |
-| Mean                   | 30699.80 Mbps         | 52.2900000 Mbps |
-| Median                 | 29073.57 Mbps         | 46.7800000 Mbps |
-| Standard deviation     | 14826.39 Mbps         | 37.51 Mbps      |
-| Minimum                | 7046.44 Mbps          | 0.03 Mbps       |
-| 25%                    | 17696.04 Mbps         | 24.84 Mbps      |
-| 50%                    | 29073.57 Mbps         | 46.78 Mbps      |
-| 75%                    | 43061.07 Mbps         |  79.71 Mbps     |
-| Maximum                | 74321.33 Mbps         | 147.74 Mbps     |
-| Variance               | 219821840.43 Mbps^2   | 1407.00 Mbps^2  |
-| Standard deviation     | 14826.39 Mbps         | 37.51 Mbps      |
-| Range                  | 67274.89 Mbps         | 147.71 Mbps     |
-| IQR                    | 25365.03 Mbps         | 54.87 Mbps      |
+| Measure                | 3-month dataset                  | 1-day dataset            |
+| -----------------------|----------------------------------|--------------------------| 
+| Count                  | 1268                             | 96                       |
+| Mean                   | 30699.80 Mbps                    | 52.2900000 Mbps          |
+| Median                 | 29073.57 Mbps                    | 46.7800000 Mbps          |
+| Standard deviation     | 14826.39 Mbps                    | 37.51 Mbps               |
+| Minimum                | 7046.44 Mbps                     | 0.03 Mbps                |
+| 25%                    | 17696.04 Mbps                    | 24.84 Mbps               |
+| 50%                    | 29073.57 Mbps                    | 46.78 Mbps               |
+| 75%                    | 43061.07 Mbps                    |  79.71 Mbps              |
+| Maximum                | 74321.33 Mbps                    | 147.74 Mbps              |
+| Variance               | 219821840.43 Mbps<sup>2</sup>    | 1407.00 Mbps<sup>2</sup> |
+| Standard deviation     | 14826.39 Mbps                    | 37.51 Mbps               |
+| Range                  | 67274.89 Mbps                    | 147.71 Mbps              |
+| IQR                    | 25365.03 Mbps                    | 54.87 Mbps               |
 
 *Table 1: Measures of centrality and variability*
 
@@ -335,10 +335,10 @@ The data has been segmented in two parts: training and test. The training data r
 K-fold cross-validation with K=10 was used for subsampling the training dataset and computing the fitness measure for the K models. The best model had an MSE error of 0.0016 for the 3-month dataset and an MSE error of 0.0583 for the 1-day dataset. The training scores are shown in original scale in Table 3.
 
 
-| Measure  | 3-month dataset    | 1-day dataset  |
-| -------- | -------------------| -------------  | 
-| MSE      | 7461821.55 Mbps^2  | 1153.38 Mbps^2 |
-| **RMSE** | **2731.63 Mbps**   | **33.96 Mbps** |
+| Measure  | 3-month dataset             | 1-day dataset            |
+| -------- | ----------------------------| -------------------------| 
+| MSE      | 7461821.55 Mbps<sup>2</sup> | 1153.38 Mbps<sup>2</sup> |
+| **RMSE** | **2731.63 Mbps**            | **33.96 Mbps**           |
 
 *Table 3: LSTM Training scores*
 
@@ -350,12 +350,12 @@ K-fold cross-validation with K=10 was used for subsampling the training dataset 
 33% of the data was put aside for testing purposes, i.e., no bias had been introduced by using this data in the training phase. The values have been given as input to the RNN and the resulted forecast was compared to the ground truth. The performance of the model on the test data has been assessed using the loss function mean squared error. The test scores are summarised in transformed and original scale in Table 4.
 
 
-| Measure                  | 3-month dataset    | 1-day dataset  |
-|--------------------------|--------------------|----------------| 
-| MSE in transformed scale | 0.00135            | 0.07561        |
-| RMSE in transformed scale| 0.03681            | 0.27498        |
-| MSE                      | 6805089.28 Mbps<sup>2</sup>| 1898.08 Mbps<sup>2</sup>|
-| **RMSE**                 | **2608.65 Mbps**   | **43.56 Mbps** |
+| Measure                  | 3-month dataset             | 1-day dataset            |
+|--------------------------|-----------------------------|--------------------------| 
+| MSE in transformed scale | 0.00135                     | 0.07561                  |
+| RMSE in transformed scale| 0.03681                     | 0.27498                  |
+| MSE                      | 6805089.28 Mbps<sup>2</sup> | 1898.08 Mbps<sup>2</sup> |
+| **RMSE**                 | **2608.65 Mbps**            | **43.56 Mbps**           |
 
 *Table 4: LSTM Test scores*
 
