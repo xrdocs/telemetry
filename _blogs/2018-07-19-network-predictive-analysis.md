@@ -97,16 +97,15 @@ In the case of the 3-month dataset, the mean of 30699.8 Mbps and median of 29073
 | Measure                | 3-month dataset                  | 1-day dataset            |
 | -----------------------|----------------------------------|--------------------------| 
 | Count                  | 1268                             | 96                       |
-| Mean                   | 30699.80 Mbps                    | 52.2900000 Mbps          |
-| Median                 | 29073.57 Mbps                    | 46.7800000 Mbps          |
+| Mean                   | 30699.80 Mbps                    | 52.29 Mbps               |
+| Median                 | 29073.57 Mbps                    | 46.78 Mbps               |
 | Standard deviation     | 14826.39 Mbps                    | 37.51 Mbps               |
 | Minimum                | 7046.44 Mbps                     | 0.03 Mbps                |
 | 25%                    | 17696.04 Mbps                    | 24.84 Mbps               |
 | 50%                    | 29073.57 Mbps                    | 46.78 Mbps               |
-| 75%                    | 43061.07 Mbps                    |  79.71 Mbps              |
+| 75%                    | 43061.07 Mbps                    | 79.71 Mbps               |
 | Maximum                | 74321.33 Mbps                    | 147.74 Mbps              |
 | Variance               | 219821840.43 Mbps<sup>2</sup>    | 1407.00 Mbps<sup>2</sup> |
-| Standard deviation     | 14826.39 Mbps                    | 37.51 Mbps               |
 | Range                  | 67274.89 Mbps                    | 147.71 Mbps              |
 | IQR                    | 25365.03 Mbps                    | 54.87 Mbps               |
 
@@ -308,18 +307,12 @@ The RMSE for the 3-month dataset was 2608.65 Mbps, a value very low considering 
 
 #### One-day dataset: Demand Traffic
 
-The RMSE was 43.56 Mbps, a value rather high considering that the range of the data is 147.71 Mbps and that the standard deviation is 37.51 Mbps. Nevertheless, as it can be seen in the Figures 17 and 18, the predictions follow the pattern of the ground truth. One could consider improving the model by extending the neural network, bringing in more training data or adjusting the hyper-parameters of the RNN.
+The RMSE was 43.56 Mbps, a value rather high considering that the range of the data is 147.71 Mbps and that the standard deviation is 37.51 Mbps. Nevertheless, as it can be seen in the Figure 17, the predictions follow the pattern of the ground truth. One could consider improving the model by extending the neural network, bringing in more training data or adjusting the hyper-parameters of the RNN.
 
 
 ![image-center]({{ base_path }}/images/network_predictive_analysis/1-day-forecast-test-data-1.png){: .align-center}
 
-*Fig. 17: One day dataset - Forecast on test set (1/2)*
-{: .text-center}
-
-
-![image-center]({{ base_path }}/images/network_predictive_analysis/1-day-forecast-test-data-2.png){: .align-center}
-
-*Fig. 18: One day dataset - Forecast on test set (2/2)*
+*Fig. 17: One day dataset - Forecast on test set*
 {: .text-center}
 
 
