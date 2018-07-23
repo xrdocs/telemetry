@@ -6,6 +6,17 @@ title: >-
   Learning
 author: Cristina Precup
 position: hidden
+excerpt: >-
+  Deep Learning predictive analysis for network operations brings traffic
+  forecasting to the WAN Automation Engine solution. The proposal enables
+  service providers and large enterprises to identify optimal operational
+  windows for the maintenance of links and nodes for software or capacity
+  upgrade.
+tags:
+  - Machine Learning
+  - Deep Learning
+  - WAE
+  - Traffic forecasting
 ---
 {% include toc icon="table" title="Network Predictive Analysis" %}
 
@@ -13,12 +24,14 @@ position: hidden
 
 
 ## Context
-This development complements the features of Cisco WAN Automation Engine (WAE). WAE is a software tool that permits definition, maintenance and monitoring of a network. It can gather and use information coming from snapshots of the topology, device configurations and telemetry from an operational network. The approach presented here makes use of SNMP traffic data collected by WAE, to which a model has been fitted. Currently, the model is built based solely on traffic information. However, ideally, the project could mature into one that is suitable for production, where additional telemetry-based features of the network are brought in, e.g., number of paths, link failures. The model can be used as an estimator for *what if*scenarios, predicting a change in the traffic and thus anticipating the need or ability for a network change. A first application could be the provision of future network maintenance windows. Knowing in advance the suitable time and values of the traffic would allow for an optimised maintenance process, opening the window for anticipated network adjustment.
+This development complements the features of Cisco WAN Automation Engine (WAE). WAE is a software tool that permits definition, maintenance and monitoring of a network. It can gather and use information coming from snapshots of the topology, device configurations and telemetry from an operational network. The approach presented here makes use of SNMP traffic data collected by WAE, to which a model has been fitted. Currently, the model is built based solely on traffic information. However, ideally, the project could mature into one that is suitable for production, where additional telemetry-based features of the network are brought in, e.g., number of paths and link failures. The model can be used as an estimator for *what if* scenarios, predicting a change in the traffic and thus anticipating the need or ability for a network change. A first application could be the provision of future network maintenance windows. Knowing in advance the suitable time and values of the traffic would allow for an optimised maintenance process, opening the window for anticipated network adjustment.
+
 
 ## Introduction
 With the development of programmatic network APIs and model-driven architectures, network operations are more and more automated. Being able to predict network state in the future allows for the orchestration and path computation engines to figure out network issues before they impact operational performance, to estimate best and feasible network or infrastructure maintenance windows, to plan for optimum capacity upgrade or traffic engineering re-optimisation as well as provide resource allocation with guaranteed service level agreement.
-Amongst all the key performance indicators available our project aims to forecast the per-interface traffic utilisation variable to address the specific challenge of finding the best maintenance window. When traffic is predicted on all the network interfaces, Cisco WAE algorithm for demand deduction can be used to build the related predicted demands i.e. forecasted traffic matrix from source to destination. When traffic matrix for demands is available, Cisco WAE impact analysis capability allows to compute “what if” analysis and provide with the state of the network in case of link or node failure. Then, it is possible to get the list of all the feasible maintenance windows not violating any specified maximum link utilisation thresholds and schedule for the less impactful.
+Amongst all the key performance indicators available our project aims to forecast the per-interface traffic utilisation variable to address the specific challenge of finding the best maintenance window. When traffic is predicted on all the network interfaces, Cisco WAE algorithm for demand deduction can be used to build the related predicted demands i.e. forecasted traffic matrix from source to destination. When traffic matrix for demands is available, Cisco WAE impact analysis capability allows to compute *what if* analysis and provide with the state of the network in case of link or node failure. Then, it is possible to get the list of all the feasible maintenance windows not violating any specified maximum link utilisation thresholds and schedule for the less impactful.
 The main hypothesis to our predictive analysis project is that the network traffic utilisation can be collected as a multiple variables time series where each variable represents per-interface traffic utilisation in a specific direction over time. From experience, we can also make the hypothesis that the time series will exhibit seasonality and trend. 
+
 
 ## Data
 The dataset comes as a collection of *plan files*. The collection spreads across 3 months with acquisitions made every 10 minutes. Each plan file represents a snapshot of the network state at a given point in time. Although its content describes various components of the network, this project focuses on the Traffic Measurements of the Interfaces. Additionally, a second dataset is used. It is a 1-day dataset with a 15-minute cadence and information on Demand Traffic. This is used for comparing the performance of the proposed approaches. Finally, the sequence of plan files is interpreted as a time series.
@@ -26,12 +39,16 @@ The dataset comes as a collection of *plan files*. The collection spreads across
 #### Dataset of the Interface Traffic
 
 The training is done on the Traffic Measurement of an interface, with unique keys Node-Interface (Fig.1, Fig. 2). The model definition is based on data for a single interface.
+ 
+![image-center]({{ base_path }}/images/network_predictive_analysis/3-month-orig-traffic.png){: .align-center}
 
 *3-month Dataset - Original Traffic (Fig. 1)*
-![]({{ base_path }}/images/network_predictive_analysis/3-month-orig-traffic.png)
+{: .text-center}
+
+
+![]({{ base_path }}/images/network_predictive_analysis/1-day-orig-demand.png)
 
 *1-day Dataset - Original Traffic (Fig. 2)*
-![]({{ base_path }}/images/network_predictive_analysis/1-day-orig-demand.png)
 
 
 ### Exploratory Data Analysis
@@ -42,21 +59,23 @@ The quantitative data has been explored through graphical and numerical summarie
 
 The Box Plot (Fig. 3), histogram and density plot (Fig. 4) of the traffic variable show that the 3-month data is skewed to the right. A skewness value of 0.288 was found, with the p-value of 3.54e-05. The distribution shows 3 peaks and is thus multimodal: there are low traffic (< 10 Gbps), medium-low traffic (~ 30 Gbps) and medium traffic (~ 50 Gbps).
 
-*3-month Dataset - Box Plot of original data (Fig. 3)*
 ![]({{ base_path }}/images/network_predictive_analysis/3-month-box-plot-orig-traffic.png)
 
+*3-month Dataset - Box Plot of original data (Fig. 3)*
+
+![]({{ base_path }}/images/network_predictive_analysis/3-month-histogram-orig-traffic.png)
 
 *3-month Dataset - Histogram and distribution plot of original data (Fig. 4)*
-![]({{ base_path }}/images/network_predictive_analysis/3-month-histogram-orig-traffic.png)
 
  The 1-day dataset is similarly skewed to the right (Fig. 5, 6), with a single peak, a skewness value of positive 0.855 and a p-value of 0.0059.
 
-*1-day Dataset - Box Plot of original data (Fig. 5)*
 ![]({{ base_path }}/images/network_predictive_analysis/3-month-box-plot-orig-traffic.png)
 
+*1-day Dataset - Box Plot of original data (Fig. 5)*
+
+![]({{ base_path }}/images/network_predictive_analysis/3-month-histogram-orig-traffic.png)
 
 *1-day Dataset - Histogram and distribution plot of original data (Fig. 6)*
-![]({{ base_path }}/images/network_predictive_analysis/3-month-histogram-orig-traffic.png)
 
 
 
@@ -64,7 +83,6 @@ The Box Plot (Fig. 3), histogram and density plot (Fig. 4) of the traffic variab
 
 In the case of the 3-month dataset, the mean of 30699.8 Mbps and median of 29073.57 Mbps confirm the skewness of the data (Fig. 3, Fig. 4). The standard deviation is 14826.39 Mbps and IQR is 25365 Mbps, with Q1: 17696 Mbps and Q3: 43061 Mbps. This means that the majority of the traffic is between 15873.41 and 45526.19 Mbps. An overview of both datasets is given in the Table 1.
 
-*Measures of centrality and variability (Table 1)*
 
 | Measure                | 3-month dataset       | 1-day dataset   |
 | -----------------------|-----------------------|-----------------| 
@@ -82,6 +100,8 @@ In the case of the 3-month dataset, the mean of 30699.8 Mbps and median of 29073
 | Range                  | 67274.89 Mbps         | 147.71 Mbps     |
 | IQR                    | 25365.03 Mbps         | 54.87 Mbps      |
 
+*Measures of centrality and variability (Table 1)*
+
 #### Outliers
 
 There were no outliers in the 3-month data. There were 2 outliers in the 1-day dataset: 142.91, 147.74.
@@ -90,20 +110,23 @@ There were no outliers in the 3-month data. There were 2 outliers in the 1-day d
 
 The dataset has been decomposed in seasonality, trend and cycle and residuals. There was no clear proof of a trend but there was proof of a 24-hour seasonality in the case of the 3-month dataset (Fig. 7, Fig. 8). 
 
-*3-month Dataset - Time series decomposition of seasonally differenced data (Fig. 7)*
 ![]({{ base_path }}/images/network_predictive_analysis/3-month-time-series-decomposition.png)
 
-*3-month Dataset - ACF and PACF plots of seasonally differenced data (Fig. 8)*
+*3-month Dataset - Time series decomposition of seasonally differenced data (Fig. 7)*
+
 ![]({{ base_path }}/images/network_predictive_analysis/3-month-ACF-and-PACF.png)
+
+*3-month Dataset - ACF and PACF plots of seasonally differenced data (Fig. 8)*
 
 The seasonality for the 1-day dataset was half an hour (Fig. 9, Fig. 10).
 
-*1-day Dataset - Time series decomposition of seasonally differenced data (Fig. 9)*
 ![]({{ base_path }}/images/network_predictive_analysis/1-day-time-series-decomposition.png)
 
+*1-day Dataset - Time series decomposition of seasonally differenced data (Fig. 9)*
+
+![]({{ base_path }}/images/network_predictive_analysis/1-day-ACF-and-PACF.png)
 
 *1-day Dataset - ACF and PACF plots of seasonally differenced data (Fig. 10)*
-![]({{ base_path }}/images/network_predictive_analysis/1-day-ACF-and-PACF.png)
 
 
 ### Preprocessing
@@ -122,18 +145,18 @@ Although the measures of central tendency, mean and median are close to one anot
 
 Furthermore, the data is standardised with the Min-Max. Once the transformations have been applied, the skewness is -0.0052 and the p-value is 0.939, meaning that there is a 93% chance that the data follows a Normal distribution (Fig. 11).
 
-*3-month Dataset - Histogram and distribution plot of transformed data (Fig. 11)*
 ![]({{ base_path }}/images/network_predictive_analysis/3-month-histogram-of-trasformed-data-box-cox.png)
 
-*1-day Dataset - Histogram and distribution plot of transformed data (Fig. 12)*
+*3-month Dataset - Histogram and distribution plot of transformed data (Fig. 11)*
+
 ![]({{ base_path }}/images/network_predictive_analysis/1-day-histogram-of-trasformed-data-box-cox.png)
+
+*1-day Dataset - Histogram and distribution plot of transformed data (Fig. 12)*
 
 
 #### Stationarity
 
-The augmented Dickey-Fuller test has been used for assessing the stationarity. The H0 hypothesis:*data is non-stationary*, is confirmed by the Test-statistic being greater than the 1% critical value. Table 2 shows the stationarity values. After separating the seasonality from the data by means of differencing, the p-value stays below 0.05 and the Test-statistic drops lower than the 1% critical value -3.43. Thus, one can reject the null hypothesis and accept the alternative hypothesis that the data is stationary.
-
-*3-month Dataset - Dickey-Fuller Test for stationarity (Table 2)*
+The augmented Dickey-Fuller test has been used for assessing the stationarity. The H0 hypothesis: *data is non-stationary*, is confirmed by the Test-statistic being greater than the 1% critical value. Table 2 shows the stationarity values. After separating the seasonality from the data by means of differencing, the p-value stays below 0.05 and the Test-statistic drops lower than the 1% critical value -3.43. Thus, one can reject the null hypothesis and accept the alternative hypothesis that the data is stationary.
 
 | Measure             | Results of Dickey-Fuller Test: Original dataset | Results of Dickey-Fuller Test: Transformed dataset |
 |---------------------|-------------------------------------------------|----------------------------------------------------| 
@@ -145,6 +168,9 @@ The augmented Dickey-Fuller test has been used for assessing the stationarity. T
 | Critical Value (1%) | -3.435618                                       | -3.435618 |
 | Critical Value (10%)| -2.568008                                       | -2.568008 |
 
+*3-month Dataset - Dickey-Fuller Test for stationarity (Table 2)*
+
+
 ### Postprocessing
 
 The predictions are made on transformed data. A back-transformation of Min-Max standardisation and Box-Cox is applied before giving the final traffic prediction.
@@ -154,8 +180,9 @@ The predictions are made on transformed data. A back-transformation of Min-Max s
 
 The development process is illustrated in Fig. 13.
 
-*Development pipeline  (Fig. 13)*
 ![]({{ base_path }}/images/network_predictive_analysis/development-pipeline.png)
+
+*Development pipeline (Fig. 13)*
 
 
 ### Model
@@ -173,6 +200,7 @@ Currently, the training and predictions are done on a node-interface-level. An e
 The traffic dataset can be considered a time series. A first attempt at estimating the dataset has been performed using simple linear regression. Along the development of this project several other approaches have been evaluated. These methods are autoregressive:
 
 * **ARIMA** (Autoregressive Integrated Moving Average) with parameters (p=5, d=1, q=2)
+
 Non-seasonal ARIMA proved to perform rather poorly. One of the limitations of ARIMA is that it cannot include information about the seasonality component. Furthermore, although one-step out-of-sample forecasting results were close to ground truth, it becomes unreliable when performing multi-step out-of-sample forecasting.
 
 * **seasonal ARIMA** with parameters (p=0, d=0, q=1), (P=1, D=1, Q=1, s=24) for the 3-month dataset and (p=1, d=1, q=2), (P=1, D=1, Q=1, s=2) for the 1-day dataset
@@ -188,6 +216,7 @@ Seasonal ARIMA has the advantage of separating and describing the time series wi
 	* 1-day dataset:
 		* look back: 2
 		* epochs: 100.
+
 
 ### LSTM RNN Motivation
 
@@ -229,28 +258,29 @@ Both datasets had good forecasting, LSTM RNN outperforming traditional and seaso
 
 The RMSE for the 3-month dataset was 2608.65 Mbps, a value very low considering that the range of the data is 67274.89 Mbps and that the standard deviation is 14826.39 Mbps. Figures 14, 15, and 16 show the forecasts.
 
-*3-month Dataset - Forecast on test set (1/3) (Fig. 14)*
 ![]({{ base_path }}/images/network_predictive_analysis/3-month-forecast-test-data-1.png)
 
-*3-month Dataset - Forecast on test set (2/3) (Fig. 15)*
+*3-month Dataset - Forecast on test set (1/3) (Fig. 14)*
+
 ![]({{ base_path }}/images/network_predictive_analysis/3-month-forecast-test-data-2.png)
 
+*3-month Dataset - Forecast on test set (2/3) (Fig. 15)*
 
-*3-month Dataset - Forecast on test set (3/3) (Fig. 16)*
 ![]({{ base_path }}/images/network_predictive_analysis/3-month-forecast-test-data-3.png)
 
+*3-month Dataset - Forecast on test set (3/3) (Fig. 16)*
 
 #### One-day dataset: Demand Traffic
 
 The RMSE was 43.56 Mbps, a value rather high considering that the range of the data is 147.71 Mbps and that the standard deviation is 37.51 Mbps. Nevertheless, as it can be seen in the Figures 17 and 18, the predictions follow the pattern of the ground truth. One could consider improving the model by extending the neural network, bringing in more training data or adjusting the hyper-parameters of the RNN.
 
-*1-Day Dataset - Forecast on test set (1/2) (Fig. 17)*
 ![]({{ base_path }}/images/network_predictive_analysis/1-day-forecast-test-data-1.png)
 
+*1-Day Dataset - Forecast on test set (1/2) (Fig. 17)*
 
-*1-Day Dataset - Forecast on test set (2/2) (Fig. 18)*
 ![]({{ base_path }}/images/network_predictive_analysis/1-day-forecast-test-data-2.png)
 
+*1-Day Dataset - Forecast on test set (2/2) (Fig. 18)*
 
 
 #### Conclusion
@@ -268,12 +298,13 @@ The data has been segmented in two parts: training and test. The training data r
 
 K-fold cross-validation with K=10 was used for subsampling the training dataset and computing the fitness measure for the K models. The best model had an MSE error of 0.0016 for the 3-month dataset and an MSE error of 0.0583 for the 1-day dataset. The training scores are shown in original scale in Table 3.
 
-*LSTM Training scores (Table 3)*
 
 | Measure  | 3-month dataset    | 1-day dataset  |
 | -------- | -------------------| -------------  | 
 | MSE      | 7461821.55  Mbps^2 | 1153.38 Mbps^2 |
 | **RMSE** | **2731.63 Mbps**   | **33.96 Mbps** |
+
+*LSTM Training scores (Table 3)*
 
 
 ### Model Test
@@ -282,7 +313,6 @@ K-fold cross-validation with K=10 was used for subsampling the training dataset 
 
 33% of the data was put aside for testing purposes, i.e., no bias had been introduced by using this data in the training phase. The values have been given as input to the RNN and the resulted forecast was compared to the ground truth. The performance of the model on the test data has been assessed using the loss function mean squared error. The test scores are summarised in transformed and original scale in Table 4.
 
-*LSTM Test scores (Table 4)*
 
 | Measure                  | 3-month dataset    | 1-day dataset  |
 |--------------------------|--------------------|----------------| 
@@ -290,6 +320,8 @@ K-fold cross-validation with K=10 was used for subsampling the training dataset 
 | RMSE in transformed scale| 0.03681            | 0.27498        |
 | MSE                      | 6805089.28  Mbps^2 | 1898.08 Mbps^2 |
 | **RMSE**                 | **2608.65 Mbps**   | **43.56 Mbps** |
+
+*LSTM Test scores (Table 4)*
 
 
 ## The Journey Continues
@@ -301,5 +333,4 @@ The work presented here is a piece of the analytics puzzle. In order to take thi
 * testing
 * recurrent training
 
-The deployment would result in an intelligent platform that can be fed traffic data, learn from it and forecast future time points. The advantage of NNs that learn from new data would, increase the robustness and flexibility of the model to a large variety of data and keep up with the latest traffic patterns.
-#xrdocs
+The deployment would result in an intelligent platform that can be fed traffic data, learn from it and forecast future time points. The advantage of NNs that learn from new data would increase the robustness and flexibility of the model to a large variety of data and keep up with the latest traffic patterns.
