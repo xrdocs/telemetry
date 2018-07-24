@@ -5,7 +5,7 @@ title: >-
   Network Predictive Analysis: A Journey into Traffic Forecasting with Deep
   Learning
 author: Cristina Precup
-position: hidden
+position: top
 excerpt: >-
   Deep Learning predictive analysis for network operations brings traffic
   forecasting to the WAN Automation Engine solution. The proposal enables
@@ -321,7 +321,7 @@ The RMSE was 43.56 Mbps, a value rather high considering that the range of the d
 
 #### Description
 
-The data has been segmented in two parts: training and test. The training data represented 0.67 of the original data. Model performance has been assessed using the loss function mean squared error on all three parts of the dataset: training, validation, and test.
+The data has been segmented in two parts: training and test. The training data represented 67% of the original data. Model performance has been assessed using the loss function mean squared error on all three parts of the dataset: training, validation, and test.
 
 #### Method
 
