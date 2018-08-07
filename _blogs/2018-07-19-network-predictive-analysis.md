@@ -76,13 +76,13 @@ The Box Plot (Fig. 3), histogram and density plot (Fig. 4) of the traffic variab
 The 1-day dataset is similarly skewed to the right (Fig. 5, 6), with a single peak, a skewness value of positive 0.855 and a p-value of 0.0059.
 
 
-![image-center]({{ base_path }}/images/network_predictive_analysis/3-month-box-plot-orig-traffic.png){: .align-center}
+![image-center]({{ base_path }}/images/network_predictive_analysis/1-day-box-plot-orig-traffic.png){: .align-center}
 
 *Fig. 5: One day dataset - Box plot of original data*
 {: .text-center}
 
 
-![image-center]({{ base_path }}/images/network_predictive_analysis/3-month-histogram-orig-traffic.png){: .align-center}
+![image-center]({{ base_path }}/images/network_predictive_analysis/1-day-histogram-orig-traffic.png){: .align-center}
 
 *Fig. 6: One day dataset - Histogram and distribution plot of original data*
 {: .text-center}
