@@ -2,7 +2,7 @@
 ---
 
 <!doctype html>
-<html lang="{{ site.locale | slice: 0,2 | default: "en" }}" class="no-js">
+<html lang="{{ site.locale | slice: 0,2 | default: " en" }}" class="no-js">
 <head>
     {% include head.html %}
     {% include head/custom.html %}
@@ -14,24 +14,228 @@
 {% include masthead.html %}
 
 <div class="page__hero--overlay" style="background-image: url('images/tlmtr_lp/tl_background.jpg');">
-    <div class="wrapper" >
+    <div class="wrapper">
         <h1 style="margin-top: 0; color: #188DB1;">
-            Cisco IOS XR Telemetry
+            Telemetry
         </h1>
 
         <p>
-            <a href="{{ base_url }}tutorials/" class="btn btn--large"><i class='fa fa-step-forward'></i> Get Started!</a>
-            <!--<a href="https://www.youtube.com/watch?v=yiN8fAxlfwg" class="btn btn&#45;&#45;large" data-lity><i class='fa fa-play-circle-o'></i> Watch Video</a>-->
-            <!--<a href="https://github.com/cisco-service-layer" class="btn btn&#45;&#45;large" data-lity><i class='fa fa-github'></i> Github</a>-->
+            <a href="{{ base_url }}tutorials/" class="btn btn--large"><i class='fa fa-step-forward'></i> Get
+                Started!</a>
         </p>
     </div>
 </div>
 
+
 <div id="main" role="main">
     <article class="splash" itemscope itemtype="http://schema.org/CreativeWork">
-        {% if page.title %}<meta itemprop="headline" content="{{ page.title | markdownify | strip_html | strip_newlines | escape_once }}">{% endif %}
-        {% if page.excerpt %}<meta itemprop="description" content="{{ page.excerpt | markdownify | strip_html | strip_newlines | escape_once }}">{% endif %}
+        {% if page.title %}
+        <meta itemprop="headline" content="{{ page.title | markdownify | strip_html | strip_newlines | escape_once }}">
+        {% endif %}
+        {% if page.excerpt %}
+        <meta itemprop="description"
+              content="{{ page.excerpt | markdownify | strip_html | strip_newlines | escape_once }}">
+        {% endif %}
 
+
+        <div class="feature__wrapper">
+            <div class="archive__item-body">
+                <!--<h2 class="archive__item-title">Resources</h2>-->
+                <!--<div class="archive__item-excerpt" style="font-size: 0.65em;">-->
+                <!--<p>Are you thinking about how to start exploring telemetry? You know how to configure Model Driven-->
+                <!--Telemetry on IOS XR routers and your next question is how to consume it? Find some time to go through-->
+                <!--this Pipeline deep dive. You will find all the answers right here!</p>-->
+                <!--</div>-->
+                <!--<p><a href="https://xrdocs.github.io/telemetry/tutorials/2018-03-01-everything-you-need-to-know-about-pipeline/"-->
+                <!--class="btn ">Check out!</a></p>-->
+
+
+                <h3 class="archive__item-title" >Beginner Materials</h3>
+
+
+                <style>
+                    *,
+                    *::before,
+                    *::after {
+                        box-sizing: border-box;
+                    }
+                    /*html {*/
+                        /*background-color: #f0f0f0;*/
+                    /*}*/
+                    /*body {*/
+                        /*color: #999999;*/
+                        /*font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;*/
+                        /*font-style: normal;*/
+                        /*font-weight: 400;*/
+                        /*letter-spacing: 0;*/
+                        /*padding: 1rem;*/
+                        /*text-rendering: optimizeLegibility;*/
+                        /*-webkit-font-smoothing: antialiased;*/
+                        /*-moz-osx-font-smoothing: grayscale;*/
+                        /*-moz-font-feature-settings: "liga" on;*/
+                    /*}*/
+                    img {
+                        height: auto;
+                        max-width: 100%;
+                        vertical-align: middle;
+                    }
+                    /*.btn {*/
+                        /*background-color: white;*/
+                        /*border: 1px solid #cccccc;*/
+                        /*color: blue;*/
+                        /*padding: 0.5rem;*/
+                        /*text-transform: lowercase;*/
+                    /*}*/
+                    .btn--block {
+                        display: compact;
+                        width: 100%;
+                    }
+                    .cardss {
+                        display: flex;
+                        flex-wrap: wrap;
+                        list-style: none;
+                        margin: 0;
+                        padding: 0;
+                    }
+                    .cards__item {
+                        /*display: flex;*/
+                        padding: 1rem;
+                        width: 270px;
+                        height: 370px;
+                    }
+                    @media (min-width: 40rem) {
+                        .cards__item {
+                            width: 50%;
+                        }
+                    }
+                    @media (min-width: 56rem) {
+                        .cards__item {
+                            width: 33.3333%;
+                        }
+                    }
+                    .card {
+                        background-color: white;
+                        border-radius: 0.25rem;
+                        box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25);
+                        display: flex;
+                        flex-direction: column;
+                        overflow: hidden;
+                    }
+                    .card:hover .card__image {
+                        -webkit-filter: contrast(100%);
+                        filter: contrast(100%);
+                    }
+                    .card__content {
+                        display: flex;
+                        flex: 1 1 auto;
+                        flex-direction: column;
+                        padding: 1rem;
+                    }
+                    .card__image {
+                        background-position: center center;
+                        background-repeat: no-repeat;
+                        background-size: cover;
+                        border-top-left-radius: 0.25rem;
+                        border-top-right-radius: 0.25rem;
+                        -webkit-filter: contrast(70%);
+                        filter: contrast(70%);
+                        overflow: hidden;
+                        position: relative;
+                        transition: -webkit-filter 0.5s cubic-bezier(0.43, 0.41, 0.22, 0.91);
+                        transition: filter 0.5s cubic-bezier(0.43, 0.41, 0.22, 0.91);
+                        transition: filter 0.5s cubic-bezier(0.43, 0.41, 0.22, 0.91), -webkit-filter 0.5s cubic-bezier(0.43, 0.41, 0.22, 0.91);
+                    }
+                    .card__image::before {
+                        content: "";
+                        display: block;
+                        padding-top: 56.25%;
+                    }
+                    @media (min-width: 40rem) {
+                        .card__image::before {
+                            padding-top: 66.6%;
+                        }
+                    }
+                    .card__image--flowers {
+                        background-image: url(https://unsplash.it/800/600?image=82);
+                    }
+                    .card__image--river {
+                        background-image: url(https://unsplash.it/800/600?image=11);
+                    }
+                    .card__image--record {
+                        background-image: url(https://unsplash.it/800/600?image=39);
+                    }
+                    .card__image--fence {
+                        background-image: url(https://unsplash.it/800/600?image=59);
+                    }
+                    .card__title {
+                        color: #696969;
+                        font-size: 0.8rem;
+                        font-weight: 300;
+                        letter-spacing: 2px;
+                        text-transform: uppercase;
+                    }
+                    .card__text {
+                        flex: 1 1 auto;
+                        font-size: 0.6rem;
+                        line-height: 1.5;
+                        margin-bottom: 1.25rem;
+                    }
+
+                </style>
+
+
+                <div class="cardss">
+                    <li class="cards__item">
+                        <div class="card" style="width: 250px; height: 430px" >
+                            <div class="card__image card__image--fence"></div>
+                            <div class="card__content">
+                                <div class="card__title">Everything about pipeline</div>
+                                <p class="card__text"> Are you thinking about how to start exploring telemetry?
+                                    You know how to configure Model Driven Telemetry on IOS XR routers? </p>
+                                <button class="btn btn--block" href="https://xrdocs.io/telemetry">Explore</button>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="cards__item">
+                        <div class="card" style="width: 250px; height: 430px">
+                            <div class="card__image card__image--river"></div>
+                            <div class="card__content">
+                                <div class="card__title">NFD#17: Model Driven Telemetry</div>
+                                <p class="card__text">Move on to enhance your deep understanding of Telemetry
+                                    internals with this video</p>
+                                <button class="btn btn--block " href="https://xrdocs.io/telemetry">Explore</button>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="cards__item">
+                        <div class="card" style="width: 250px; height: 430px">
+                            <div class="card__image card__image--record"></div>
+                            <div class="card__content">
+                                <div class="card__title">Telemetry and optics  </div>
+                                <p class="card__text">ST is very helpful to provide you visibility
+                                    about your routers.
+                                    Have a look how you can use ST for the optical devices.</p>
+                                <button class="btn btn--block " href="https://xrdocs.io/telemetry">Explore</button>
+                            </div>
+                        </div>
+                    </li>
+
+                </div>
+                <br>
+                <br>
+                <br>
+                <!--<h3 class="archive__item-title" style="margin-left: 15px">Medium</h3>-->
+                <!--<h3 class="archive__item-title" style="margin-left: 15px">Advanced</h3>-->
+            </div>
+            <!--<div class="feature__item&#45;&#45;right">-->
+                <!--<div class="archive__item">-->
+                    <!--&lt;!&ndash;<div class="archive__item-teaser center" style="max-height: 200px; max-width: 200px;display: block; margin-left: auto; margin-right: auto;">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<a href="{{ base_path }}/apidocs"><img src="{{ base_path }}/images/tlmtr_lp/pipeline.png" alt="" /></a>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+                <!--</div>-->
+            <!--</div>-->
+        </div>
         <section class="page__content" itemprop="text">
             {{ content }}
         </section>
