@@ -99,3 +99,27 @@ Here is the resulting graph when I brought up my 8-node lab topology:
 
 ![SR-TE-Topo-Sum.jpg]({{site.baseurl}}/images/SR-TE-Topo-Sum.jpg)
 
+## SR-TE Policy Traffic
+
+The proof in the SR-TE pudding is whether or not traffic is actually getting forwarded by that policy.  I explored several different YANG models for this, but the best one ended up being one of the most common MDT sensor-paths -- good old [interface statistics](https://xrdocs.io/telemetry/tutorials/2016-10-13-using-model-driven-telemetry-mdt-for-if-mib-data/)!
+
+The sensor-path for interface statistics is as follows:
+```
+sensor-path Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters
+```
+
+No need to modify the metrics.json file for this one: it's included in the default metrics.json file in pipeline.
+
+The "interface" to monitor in this case is actually the name of the SR-TE policy.  The name is a combination of the policy's color and tailend, e.g. "srte_c_10_ep_1.1.1.6" for Color 10, Tail-end 1.1.1.6.
+
+The following graph shows traffic starting to flow through seven SR-TE policies:
+
+![SR-TE-Packets.jpg]({{site.baseurl}}/images/SR-TE-Packets.jpg)
+
+
+## Just the Beginning
+
+These three sensor-paths should get you started with high-level monitoring of SR-TE.  But it's really just the beginning.  Once you start exploring, you'll quickly realize that IOS XR has an astonishing amount of SR-TE data available in YANG models and streamable via MDT.  
+
+
+
