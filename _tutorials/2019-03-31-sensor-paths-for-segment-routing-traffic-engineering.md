@@ -33,7 +33,7 @@ In the output of this command, you can see that all six of the configured polici
 
 (For the complete configuration of MDT, see [Configuring Model-Driven Telemetry](https://xrdocs.io/telemetry/tutorials/2016-07-21-configuring-model-driven-telemetry-mdt/) ).
 
-If you use [pipeline](https://xrdocs.io/telemetry/tutorials/2018-03-01-everything-you-need-to-know-about-pipeline/) to collect that data, you can easily direct the data to InfluxDB and display it with Grafana. Just add this entry to your metrics.conf file in pipeline:
+If you use [pipeline](https://xrdocs.io/telemetry/tutorials/2018-03-01-everything-you-need-to-know-about-pipeline/) to collect that data, you can easily direct the data to InfluxDB and display it with Grafana. Just add this entry to your [metrics.json](https://xrdocs.io/telemetry/tutorials/2018-03-01-everything-you-need-to-know-about-pipeline/#pipeline-metricsjson) file in pipeline:
 
 ```
         {
@@ -50,6 +50,52 @@ If you use [pipeline](https://xrdocs.io/telemetry/tutorials/2018-03-01-everythin
 
 The resulting graph in Grafana might look something like this as you configure and bring up SR-TE policies:
 
-[insert image]
+![SR-TE-Policy-Summary.jpg]({{site.baseurl}}/images/SR-TE-Policy-Summary.jpg)
 
+
+## SR-TE Topology Summary
+
+Another high-level KPI can be found in the SR-TE topology database statistics.  In CLI, a quick way to verify that is with this command:
+
+```
+RP/0/RP0/CPU0:iosxrv-1#show segment-routing traffic-eng ipv4 topology summary
+Sun Mar 31 23:24:38.880 UTC
+
+XTC Agent's topology database summary:
+--------------------------------
+
+Topology nodes:                8
+Prefixes:                      6
+  Prefix SIDs:                11
+Links:                        20
+  Adjacency SIDs:             40
+
+RP/0/RP0/CPU0:iosxrv-1#
+```
+
+This same data can be reported via MDT using this sensor-path:
+```
+sensor-path Cisco-IOS-XR-infra-xtc-agent-oper:xtc/topology-summary
+```
+
+Not surprisinging, the metrics.json entry for this sensor-path looks like this:
+
+```
+{
+                "basepath" : "Cisco-IOS-XR-infra-xtc-agent-oper:xtc/topology-summary",
+                "spec" : {
+                        "fields" : [
+                                {"name" : "links"},
+                                {"name" : "nodes"},
+                                {"name" : "prefix-sids"},
+                                {"name" : "adjacency-sids"},
+                                {"name" : "prefixes"}
+                        ]
+                }
+        }
+```
+
+Here is the resulting graph when I brought up my 8-node lab topology:
+
+![SR-TE-Topo-Sum.jpg]({{site.baseurl}}/images/SR-TE-Topo-Sum.jpg)
 
