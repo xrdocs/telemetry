@@ -1,13 +1,14 @@
 ---
-published: false
+published: true
 date: '2019-03-31 16:39 -0600'
 title: Sensor Paths for Segment Routing Traffic Engineering
 author: Shelly Cadora
 excerpt: Describes sensor-paths for monitoring SR-TE
+position: hidden
 ---
 ## SR-TE, Meet MDT
 
-Recently, when I was building out a proof of concept in my lab for some new Segment Routing Traffic Engineering (SR-TE) use cases, I found myself wanting a quick way to check if all my policies were coming up and routing traffic.  Model-Driven Telemetry (MDT) can get a lot of data off the routers very quickly.  The only tricky part is identifying the YANG model and container that has the best data for a given use case.  So I wanted to share a couple of the ones that were useful for me for SR-TE.
+Recently, when I was building out a proof of concept in my lab for some new Segment Routing Traffic Engineering (SR-TE) use cases, I found myself wanting a quick way to check if all my policies were coming up and routing traffic.  Model-Driven Telemetry (MDT) can get a lot of data off the routers very quickly.  The only tricky part is identifying the YANG model and container that has the best data for a given use case.  So I wanted to share a couple of the models that were useful for me for SR-TE.
 
 ## SR-TE Policy Status
 
