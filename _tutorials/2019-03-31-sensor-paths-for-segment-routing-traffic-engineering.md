@@ -111,7 +111,7 @@ sensor-path Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface
 
 No need to modify the metrics.json file for this one: it's included in the default metrics.json file in pipeline.
 
-The "interface" to monitor in this case is actually the name of the SR-TE policy.  The name is a combination of the policy's color and tailend, e.g. "srte_c_10_ep_1.1.1.6" is the index name for the policy with Color 10, Tail-end 1.1.1.6.
+The "interface" to monitor in this case is actually the name of the SR-TE policy.  The name is a combination of the policy's color and tailend, e.g. "srte_c_10_ep_1.1.1.6" is the index name for the policy with Color 10, Tailend 1.1.1.6.
 
 The following graph shows traffic starting to flow through seven SR-TE policies:
 
