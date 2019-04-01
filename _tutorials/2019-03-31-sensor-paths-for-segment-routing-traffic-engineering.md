@@ -4,7 +4,15 @@ date: '2019-03-31 16:39 -0600'
 title: Sensor Paths for Segment Routing Traffic Engineering
 author: Shelly Cadora
 excerpt: Describes sensor-paths for monitoring SR-TE
-position: hidden
+position: null
+tags:
+  - iosxr
+  - telemetry
+  - segment routing
+  - traffic-engineering
+  - MDT
+  - SR-TE
+postition: null
 ---
 ## SR-TE, Meet MDT
 
@@ -125,7 +133,4 @@ To display only the SR-TE policy interfaces, structure your Query in Grafana lik
 
 ## Just the Beginning
 
-These three sensor-paths should get you started with high-level monitoring of SR-TE.  But it's really just the beginning.  Once you start exploring, you'll quickly realize that IOS XR has an astonishing amount of SR-TE data available in YANG models and streamable via MDT.  
-
-
-
+These three sensor-paths should get you started with high-level monitoring of SR-TE.  But it's really just the beginning.  Once you start exploring, you'll quickly realize that IOS XR has an astonishing amount of SR-TE data available in YANG models and streamable via MDT.
