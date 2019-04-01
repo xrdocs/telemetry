@@ -117,6 +117,11 @@ The following graph shows traffic starting to flow through seven SR-TE policies:
 
 ![SR-TE-Packets.jpg]({{site.baseurl}}/images/SR-TE-Packets.jpg)
 
+To display only the SR-TE policy interfaces, structure your Query in Grafana like this:
+
+```
+"SELECT \"packets-sent\" FROM \"Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters\" WHERE (\"interface-name\" =~ /sr-srte/ ) AND $timeFilter GROUP BY \"interface-name\""
+```
 
 ## Just the Beginning
 
