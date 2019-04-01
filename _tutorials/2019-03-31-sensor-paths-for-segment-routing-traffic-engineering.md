@@ -8,11 +8,11 @@ position: hidden
 ---
 ## SR-TE, Meet MDT
 
-Recently, when I was building out a proof of concept in my lab for some new Segment Routing Traffic Engineering (SR-TE) use cases, I found myself wanting a quick way to check if all my policies were coming up and routing traffic.  Model-Driven Telemetry (MDT) can get a lot of data off the routers very quickly.  The only tricky part is identifying the YANG model and container that has the best data for a given use case.  So I wanted to share a couple of the models that were useful for me for SR-TE.
+Recently, when I was building out a proof of concept in my lab for some new Segment Routing Traffic Engineering (SR-TE) use cases, I found myself wanting a quick way to check if all my policies were coming up and forwarding traffic.  Model-Driven Telemetry (MDT) can get a lot of operational data off the network very quickly.  The only tricky part is identifying the YANG model and container that has the best data for a given use case.  So I wanted to share a couple of the SR-TE models that were useful for me.
 
 ## SR-TE Policy Status
 
-One high-level Key Performance Indicator (KPI) for SR-TE is the operational state of the SR-TE policies on the headend.  In CLI, a quick way to verify that is with this command:
+One high-level performance indicator for SR-TE is the operational state of the SR-TE policies on the headend.  In CLI, a quick way to verify that is with this command:
 
 ```
 RP/0/RP0/CPU0:iosxrv-1#show segment-routing traffic-eng policy summary
@@ -56,7 +56,7 @@ The resulting graph in Grafana might look something like this as you configure a
 
 ## SR-TE Topology Summary
 
-Another high-level KPI can be found in the SR-TE topology database statistics.  In CLI, a quick way to verify that is with this command:
+Another high-level indicator can be found in the SR-TE topology database statistics.  In CLI, a quick way to verify that is with this command:
 
 ```
 RP/0/RP0/CPU0:iosxrv-1#show segment-routing traffic-eng ipv4 topology summary
@@ -111,7 +111,7 @@ sensor-path Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface
 
 No need to modify the metrics.json file for this one: it's included in the default metrics.json file in pipeline.
 
-The "interface" to monitor in this case is actually the name of the SR-TE policy.  The name is a combination of the policy's color and tailend, e.g. "srte_c_10_ep_1.1.1.6" for Color 10, Tail-end 1.1.1.6.
+The "interface" to monitor in this case is actually the name of the SR-TE policy.  The name is a combination of the policy's color and tailend, e.g. "srte_c_10_ep_1.1.1.6" is the index name for the policy with Color 10, Tail-end 1.1.1.6.
 
 The following graph shows traffic starting to flow through seven SR-TE policies:
 
