@@ -1,8 +1,17 @@
 language: ruby
 rvm:
 - 2.3.3
-# branch whitelist, only for GitHub Pages
 branches:
   only:
-  - gh-pages     # test the gh-pages branch
-script: "bundle exec jekyll build --config _config.travis.yml"
+  - gh-pages
+script:
+- bundle exec jekyll build --config _config.travis.yml
+- bundle exec htmlproofer ./_site --external_only --only-4xx --url-ignore \"/#.*/,/getting-started\"
+notifications:
+  slack:
+    rooms:
+      - secure: X+jRq36q7zulvtcoqX5aRcg1xftgz0HDCYdXC+3QbxTKDpXpW+uL7VBj+QAa9uQ4QKjcECychvUZAmnQLoQcoQCXMAcndInRVYbw8XIVIRGueyFCO7m7MPSJ4eghq2WMY2QiuCrgr3BQIC8cv08qNqPyASkH+qlEDc4+J9nHHSG1rB9bb5avH9mk425Eh3NIQQ5QG0zk/q2st+CIoMrWpRkOe80diDtnPg14mQzNTiOJ1OfTHH7FvwVmjtIlRNNMkBXyOncq3GRVY+rNH3YHKrW/yX0wdCI+bO+DXZ6q9v33IhmPyn0wHIhjMjuh3o+OMy63SIGH3rZM5dYfpIql6tXtbfJZhXHn3HhIH8gqZp1PmFr8Lo3/j2YfLibrZ016/0aUVZWovY6fzZ600gju5oLen3Lma3OOT8R3p/Od1kuDuOvjO8c6qg8/2tIOFwATmIBYtGnhZU1IK7Q0HHcI1c+s1nXxN8XcKawdYizoFSoQiBJeAb7toiuMtOK16Vm1a6iEJ0R6sARbZOmiSqrBFx16jxwwpmmrZYybBv1jJVfogKwQdKt4XF4o9LG5R4yOK1OL0CZfrXdMXSOWWnt5ajrAno1riRJ82ZzEz8/VmSOjR2BuPKUW7IE3Ynd9dR8mCIOZwfCjyZRVAeTD9c48KRf5EvqYybXDBxfavOKz66Q=
+    on_success: never
+    on_failure: always
+    template:
+      - "Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) of %{repository_slug}@%{branch} by %{author} %{result}. Click on the build number to see details."
