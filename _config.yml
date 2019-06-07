@@ -63,9 +63,9 @@ google_ad_slot           :
 
 # Site Author
 author:
-  name             : "Cisco Web Team"
+  name             : "Cisco SP Routing Team"
   avatar           : "telemetry-team.png"
-  bio              : "A Team of coders and network engineers determined to build the best network operating system for Web-Scale Service Providers" 
+  bio              : "A Team of coders and network engineers determined to build the best architectures & technology for Service Providers."
   location         : "San jose, California"
   email            : 
   uri              :
