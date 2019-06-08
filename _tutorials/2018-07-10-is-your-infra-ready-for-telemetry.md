@@ -424,7 +424,7 @@ This is the configuration you need to have in "telegraf.conf" (make sure to spec
     interfaces = ["ens160"]
 ```
 
-Telegraf collects counters from "/proc/net/dev", as it seen [here](https://github.com/influxdata/telegraf/blob/master/plugins/inputs/system/NET_README.md). This is similar if you try to see the stats using "ifconfig" (an old way) or "ip -s link" (a new way).
+Telegraf collects counters from "/proc/net/dev", as it seen [here](https://github.com/influxdata/telegraf/blob/master/plugins/inputs/system/README.md). This is similar if you try to see the stats using "ifconfig" (an old way) or "ip -s link" (a new way).
 
 One might argue that this is pretty high in the Linux networking stack and better to use something closer to the NIC, like ["ethtool"](https://en.wikipedia.org/wiki/Ethtool) at least, but there were no filters, qos, etc. configured and relying on "/proc/net/dev" was good enough.
 Also, during this testing, I didn't try to balance flows from different gRPC sessions/routers to different queues and/or different CPUs to work with the processing of those queues and SoftIRQs (plus, I350 is not very flexible in manipulation).
