@@ -344,7 +344,7 @@ gRPC has SSL/TLS integration and promotes the use of SSL/TLS to authenticate the
 In Dial-OUT mode, the router is the “client” and Pipeline is the “server.” Therefore, in the TLS handshake, Pipeline will need to send a certificate to authenticate itself to the router. The router validates Pipeline’s certificate using the public certificate of the Root Certificate Authority (CA) that signed it and then generates session keys to encrypt the session.
 Running in this mode requires you to have certificates and have your infra ready. But if you want just to try this mode on, there are two ways available for you:
 1. Follow the steps from this [tutorial](https://xrdocs.github.io/telemetry/tutorials/2017-05-08-pipeline-with-grpc/#grpc-dialout-with-tls), or
-2. Follow the steps in this document. Start with downloading an archive with three files from [here](https://cisco.box.com/v/grpc-dial-out-tls)
+2. Follow the steps in this document. Start with downloading an archive with three files from here
 
 After you downloaded the archive and extracted files from it, follow these steps:
 
