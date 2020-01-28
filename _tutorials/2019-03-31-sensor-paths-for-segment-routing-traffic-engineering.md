@@ -131,6 +131,46 @@ To display only the SR-TE policy interfaces, structure your Query in Grafana lik
 "SELECT \"packets-sent\" FROM \"Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters\" WHERE (\"interface-name\" =~ /sr-srte/ ) AND $timeFilter GROUP BY \"interface-name\""
 ```
 
+## Traffic Collector and SR Traffic-Matrix (SR-TM) 
+
+Interested in the traffic patterns on your network?  [SR-TM](https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/asr9k-r6-5/segment-routing/configuration/guide/b-segment-routing-cg-asr9000-65x/b-segment-routing-cg-asr9000-65x_chapter_01100.html) tracks the aggregated flows that enter and leave the network. The Traffic Collector process collects and stores histories of packet and bytes statistics for prefixes, tunnel counters and the Traffic-Matrix counters.
+
+The sensor-path for Traffic-Collector is as follows:
+```
+sensor-path Cisco-IOS-XR-infra-tc-oper:traffic-collector/afs/af/counters/tunnels/tunnel
+```
+
+If you're using pipeline, add this to your metrics.json:
+
+```
+{
+  "basepath" : "Cisco-IOS-XR-infra-tc-oper:traffic-collector/afs/af/counters/tunnels/tunnel",
+  "spec" : {
+    "fields" : [
+      {"name":"interface-name", "tag": true},
+      {"name":"is-active"},
+      {"name":"interface-name-xr"},
+      {"name":"base-counter-statistics",
+        "fields" : [
+          {"name":"count-history",
+            "fields" : [
+              {"name":"transmit-number-of-bytes-switched"},
+              {"name":"transmit-number-of-packets-switched"},
+              {"name":"event-end-timestamp"},
+              {"name":"event-start-timestamp"}
+              ]
+          },
+          {"name":"transmit-packets-per-second-switched"},
+          {"name":"transmit-bytes-per-second-switched"}
+        ]
+      }
+    ]
+  }
+}
+```
+
+Thanks to my colleague, @StLitkowski, for working this one out.
+
 ## Just the Beginning
 
 These three sensor-paths should get you started with high-level monitoring of SR-TE.  But it's really just the beginning.  Once you start exploring, you'll quickly realize that IOS XR has an astonishing amount of SR-TE data available in YANG models and streamable via MDT.
