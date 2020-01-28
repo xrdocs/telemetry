@@ -173,4 +173,4 @@ Thanks to my colleague, @StLitkowski, for working this one out.
 
 ## Just the Beginning
 
-These three sensor-paths should get you started with high-level monitoring of SR-TE.  But it's really just the beginning.  Once you start exploring, you'll quickly realize that IOS XR has an astonishing amount of SR-TE data available in YANG models and streamable via MDT.
+These four sensor-paths should get you started with high-level monitoring of SR-TE.  But it's really just the beginning.  Once you start exploring, you'll quickly realize that IOS XR has an astonishing amount of SR-TE data available in YANG models and streamable via MDT.
