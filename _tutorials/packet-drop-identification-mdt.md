@@ -3,8 +3,10 @@ published: true
 date: '2020-09-24 19:00 +0200'
 title: Identify and Root Cause Packet Drop Through Model Driven Telemetry Deployment
 author: Frederic Cuiller
-excerpt: Network Consulting Engineer
 position: hidden
+excerpt: >-
+  How Model Driven Telemetry was used to identify and root cause packet drop in
+  a large service provider production environment.
 ---
 {% include toc icon="table" title="Identify and Root Cause Packet Drop Through Model Driven Telemetry Deployment" %} 
 
