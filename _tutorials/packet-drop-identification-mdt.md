@@ -2,7 +2,7 @@
 published: true
 date: '2020-09-24 19:00 +0200'
 title: Identify and Root Cause Packet Drop Through Model Driven Telemetry Deployment
-author: Fred Cuiller
+author: Frederic Cuiller
 excerpt: Network Consulting Engineer
 position: hidden
 ---
