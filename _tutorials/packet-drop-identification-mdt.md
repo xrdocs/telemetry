@@ -280,6 +280,71 @@ Last, this data-plane phenomenon is a reaction of a control-plane event. ISIS wa
 
 Same pattern repeated over the day. The bigger link utilization was, the bigger was the burst caused by a microloop, the more chances EFD could appear.
 
+## Tracing loop origin
+
+This one was harder as telemetry was little or limited help here. A first thing we did was getting alerted in real-time. For this, Sonia Ben Ayed developed a chat-bot and leveraged Cisco Webex Teams API and Grafana alerting webhook features. Every time a fast-drop was detected, a bot would send a message through a dedicated space.
+
+![chatbot]({{site.baseurl}}/images/chatbot.png){: .align-center}
+
+We could then connect on a router in live and capture show isis spf-log to identify source of convergence:
+
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+RP/0/RSP0/CPU0:ASR9000#sh isis spf-log
+Tue May  5 23:32:48.824 FRANCE
+   IS-IS CORE Level 1 IPv4 Unicast Route Calculation Log
+                    Time Total Trig.
+Timestamp    Type   (ms) Nodes Count First Trigger LSP    Triggers
+------------ ----- ----- ----- ----- -------------------- -----------------------
+--- Tue May  5 2020 ---
+<mark>22:51:15.978  FSPF     1   838     1      R1.00-00 LINKBAD</mark>
+<mark>22:51:18.514  FSPF     1   838     1      R1.00-00 LINKGOOD</mark>
+</code>
+</pre>
+</div>
+
+As those events could happen at any time, we decided to leverage an old Cisco IOS-XR feature called Route Convergence Monitoring and Diagnostics (RCMD). If we take CCO description this looked like a perfect tool for our use case:  
+
+> Route Convergence Monitoring and Diagnostics (RCMD) is a mechanism to monitor OSPF and ISIS convergence events, gather details about the SPF runs and time taken to provision routes and LDP labels across all LCs on the router.
+
+RCMD data export through Model Driven Telemetry was successfully tested in lab but customer did not want to pursue in this direction due to privacy reason. Instead, Sonia Ben Ayed developed a python script to parse, analyze and render RCMD results in a spreadsheet:
+
+![rcmd]({{site.baseurl}}/images/rcmd.png){: .align-center}
+
+We could then focus our troubleshooting on specific nodes and identify source of convergence. Pareto Principle: 80% of convergence were caused by 20% of unstable interfaces.
+
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+RP/0/RSP0/CPU0:2020 Jul 15 21:44:38.080 : isis[1009]: %ROUTING-ISIS-5-ADJCHANGE : Adjacency to R1 (TenGigE100/0/0/29) (L1) Up, Restarted
+RP/0/RSP1/CPU0:2020 Jul 15 21:44:38.085 : isis[1009]: %ROUTING-ISIS-5-ADJCHANGE : Adjacency to R1 (TenGigE100/0/0/29) (L1) Up, Restarted
+RP/0/RSP1/CPU0:2020 Jul 15 21:44:44.752 : isis[1009]: %ROUTING-ISIS-5-ADJCHANGE : Adjacency to R1 (TenGigE100/0/0/29) (L1) Down, Neighbor forgot us
+RP/0/RSP0/CPU0:2020 Jul 15 21:44:44.748 : isis[1009]: %ROUTING-ISIS-5-ADJCHANGE : Adjacency to R1 (TenGigE100/0/0/29) (L1) Down, Neighbor forgot us
+RP/0/RSP1/CPU0:2020 Jul 15 21:45:51.135 : isis[1009]: %ROUTING-ISIS-5-ADJCHANGE : Adjacency to R1 (TenGigE100/0/0/29) (L1) Up, Restarted
+RP/0/RSP0/CPU0:2020 Jul 15 21:45:51.131 : isis[1009]: %ROUTING-ISIS-5-ADJCHANGE : Adjacency to R1 (TenGigE100/0/0/29) (L1) Up, Restarted
+RP/0/RSP1/CPU0:2020 Jul 15 21:45:58.752 : isis[1009]: %ROUTING-ISIS-5-ADJCHANGE : Adjacency to R1 (TenGigE100/0/0/29) (L1) Down, Neighbor forgot us
+RP/0/RSP0/CPU0:2020 Jul 15 21:45:58.747 : isis[1009]: %ROUTING-ISIS-5-ADJCHANGE : Adjacency to R1 (TenGigE100/0/0/29) (L1) Down, Neighbor forgot us
+</code>
+</pre>
+</div>
+
+When checking interface in detail:
+
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+RP/0/RSP0/CPU0:ASR9000#sh int TenGigE100/0/0/29
+Thu Jul 16 15:26:56.683 CEST
+TenGigE100/0/0/29 is up, line protocol is up
+  <mark>Interface state transitions: 427</mark>
+</code>
+</pre>
+</div>
+
+## Lessons learnt, some numbers and next steps
+
+
 
 
 
