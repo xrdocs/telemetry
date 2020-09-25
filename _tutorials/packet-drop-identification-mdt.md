@@ -51,7 +51,7 @@ Source of EFD was unknown and could be caused by several factors. An engineering
 
 ## Leveraging Model Driven Telemetry in production
 
-While a manual and offline analysis through enhanced np_perf SMU was handy to prove bursts presence, this was not enough to identify when exactly they appeared, how big they were and how often they would repeat. Those events were very short and intense and could not be caught with traditional monitoring techniques which often provide 5min resolution. Moreover, we were missing critical information not available through regular SNMP MIB which would help us identify the source of those bursts.
+While a manual and offline analysis through enhanced np_perf SMU was handy to prove bursts presence, this was not enough to identify when exactly they appeared, how big they were and how often they would repeat. Those events were very short and intense and could not be caught with traditional monitoring techniques which often provide 5min resolution. Moreover, we were missing critical information not available through regular SNMP MIB which would help us identify the source of those bursts.  
 For all those reasons and after several weeks without progress, we decided to leverage Model Driven Telemetry.
 
 ## Bringing up a cloud-hosted telemetry stack
@@ -246,6 +246,45 @@ When NP load sensor was supported, we could have a real-time view of all ASR9000
 Last, we leveraged QoS statistics to see if bursts were caused by a particular class of traffic:
 
 ![QoS-stats]({{site.baseurl}}/images/QoS-stats.png){: .align-center}
+
+## Data analysis and correlation
+
+Next phase of the project was to analyze the massive amount of data received. While Machine Learning and Artificial Intelligence are industry hot topics, I must admit all correlation has been done manually as we had to navigate through data and our many hypotheses. I will not spend time on dead end we faced and will go directly to the conclusion of this story. It turned out those bursts were caused by something we early suspected in our troubleshooting: microloops.  
+I will cover one occurrence we analyzed and the repeated pattern we could observe.  
+
+First, we had to catch fast-drops. This one at 12h12 was big and was caused by a 1.6Mpps burst:
+
+![occurence-1]({{site.baseurl}}/images/occurence-1.png){: .align-center}
+
+We can appreciate the peak in this graph:
+
+![occurence-2]({{site.baseurl}}/images/occurence-2.png){: .align-center}
+
+Burst was so big it ultimately triggered congestion on the egress port, causing back pressure at FIA level:
+
+![occurence-3]({{site.baseurl}}/images/occurence-3.png){: .align-center}
+
+![occurence-4]({{site.baseurl}}/images/occurence-4.png){: .align-center}
+
+A first sign of a microloop is simultaneous traffic increase in both directions (ingress, egress) for all packet sizes, on adjacent routers:
+
+![microloop-signature-1]({{site.baseurl}}/images/microloop-signature-1.png){: .align-center}
+
+A second sign of a microloop is after certain amount of time, some packets will have their TTL expired. On ASR 9000, TTL expiration is handled by NP and there is a dedicated counter once it expires. We can also see a coinciding increase on adjacent routers here for IPv4 (same was observed for IPv6 and MPLS):
+
+![microloop-signature-2]({{site.baseurl}}/images/microloop-signature-2.png){: .align-center}
+
+Last, this data-plane phenomenon is a reaction of a control-plane event. ISIS was put under monitoring and we were able to catch SPF calculation at this exact time:
+
+![isis-spf]({{site.baseurl}}/images/isis-spf.png){: .align-center}
+
+Same pattern repeated over the day. The bigger link utilization was, the bigger was the burst caused by a microloop, the more chances EFD could appear.
+
+
+
+
+
+
 
 
 
