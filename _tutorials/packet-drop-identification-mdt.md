@@ -84,6 +84,143 @@ name_suffix = "_tcp"
 - Grafana interface has been secured with Let’s Encrypt certificate.
 - InfluxDB data retention policy has been initially configured to 3 days and later on extended to 5 days. We were not interested in getting full history as routers were monitored in real time and a review was performed on a daily basis. 
 
+## Router configuration
 
+Model Driven Telemetry configuration is done in 3 steps.   
 
+First, we need to declare what we want to export through sensor-group. We were interested in collecting low level router KPI (NP counters, fabric counters), traffic KPI (QoS counters, interface statistics, etc.) and also some control plan statistics (ISIS, OSPF, PIM, RIB). Those counters will be used to make data correlation.
 
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+telemetry model-driven
+sensor-group NP-COUNTERS
+  sensor-path Cisco-IOS-XR-asr9k-np-oper:hardware-module-np/nodes/node/nps/np/fast-drop
+  sensor-path Cisco-IOS-XR-asr9k-np-oper:hardware-module-np/nodes/node/nps/np/load-utilization
+  sensor-path Cisco-IOS-XR-asr9k-np-oper:hardware-module-np/nodes/node/nps/np/counters/np-counter
+ !
+ sensor-group PIM-COUNTERS
+  sensor-path Cisco-IOS-XR-ipv4-pim-oper:pim/active/default-context/traffic-counters
+ !
+ sensor-group QOS-COUNTERS
+  sensor-path Cisco-IOS-XR-qos-ma-oper:qos/interface-table/interface/input/service-policy-names/service-policy-instance/statistics
+  sensor-path Cisco-IOS-XR-qos-ma-oper:qos/interface-table/interface/output/service-policy-names/service-policy-instance/statistics
+ !
+ sensor-group RIB-COUNTERS
+  sensor-path Cisco-IOS-XR-ip-rib-ipv4-oper:rib/rib-stats
+ !
+ sensor-group ISIS-COUNTERS
+  sensor-path Cisco-IOS-XR-clns-isis-oper:isis/instances/instance/statistics-global
+ !
+ sensor-group OSPF-COUNTERS
+  sensor-path Cisco-IOS-XR-ipv4-ospf-oper:ospf/processes/process/default-vrf/process-information/process-areas/process-area
+ !
+ sensor-group FABRIC-COUNTERS
+  sensor-path Cisco-IOS-XR-asr9k-fsi-oper:fabric-stats/nodes/node
+  sensor-path Cisco-IOS-XR-asr9k-xbar-oper:cross-bar-stats/nodes/node/cross-bar-table
+ !
+ sensor-group ETHERNET-COUNTERS
+  sensor-path Cisco-IOS-XR-drivers-media-eth-oper:ethernet-interface/statistics/statistic
+</code>
+</pre>
+</div>
+
+Then we need to define how often counters are collected. As we were troubleshooting traffic bursts, data had to be streamed at very high frequency. We decided to use 10s resolution for control-plan and interface statistics, 30s for NP and fabric counters as number of counters was huge.
+
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+telemetry model-driven
+subscription SUB_MDT
+  sensor-group-id NP-COUNTERS sample-interval 30000
+  sensor-group-id PIM-COUNTERS sample-interval 10000
+  sensor-group-id QOS-COUNTERS sample-interval 30000
+  sensor-group-id RIB-COUNTERS sample-interval 10000
+  sensor-group-id ISIS-COUNTERS sample-interval 10000
+  sensor-group-id OSPF-COUNTERS sample-interval 10000
+  sensor-group-id FABRIC-COUNTERS sample-interval 30000
+  sensor-group-id ETHERNET-COUNTERS sample-interval 10000
+</code>
+</pre>
+</div>
+
+Last, we need to describe how counters are streamed. TCP was used instead of gRPC as monitored device did not support this last one. Encoding is GPB-KV (self-describing-gpb) to accommodate Telegraf Cisco Model-Driven Telemetry (MDT) input plugin.
+
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+telemetry model-driven
+ destination-group CISCO-MDT
+  address-family ipv6 2001:db8::1337 port 57500
+   encoding self-describing-gpb
+   protocol tcp
+subscription SUB_MDT
+  destination-id CISCO-MDT
+  source-interface Loopback6
+</code>
+</pre>
+</div>
+
+Sensors must be in resolved state:
+
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+RP/0/RP0/CPU0:ASR9000#sh telemetry model-driven subscription SUB_MDT
+Mon Sep 21 17:00:22.930 CEST
+Subscription:  SUB_MDT
+-------------
+  State:       ACTIVE
+  Source Interface:       Loopback6(Up 0x60000000)
+  Sensor groups:
+  Id: NP-COUNTERS
+    Sample Interval:      30000 ms
+    Sensor Path:          Cisco-IOS-XR-asr9k-np-oper:hardware-module-np/nodes/node/nps/np/fast-drop
+    <mark>Sensor Path State:    Resolved</mark>
+    Sensor Path:          Cisco-IOS-XR-asr9k-np-oper:hardware-module-np/nodes/node/nps/np/load-utilization
+    Sensor Path State:    Resolved
+    Sensor Path:          Cisco-IOS-XR-asr9k-np-oper:hardware-module-np/nodes/node/nps/np/counters/np-counter
+    Sensor Path State:    Resolved
+...
+</code>
+</pre>
+</div>
+
+Routers will establish TCP session with the collector and start streaming telemetry:
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+RP/0/RP0/CPU0:ASR9000#sh telemetry model-driven destination CISCO-MDT
+Mon Sep 21 17:01:29.610 CEST
+  Destination Group:  CISCO-MDT
+  -----------------
+    Destination IP:       2001:db8::1337
+    Destination Port:     57500
+    Subscription:         SUB_MDT
+    <mark>State:                Active</mark>
+    Encoding:             self-describing-gpb
+    Transport:            tcp
+    No TLS
+    Total bytes sent:     183646872388
+    Total packets sent:   2767164
+    Last Sent time:       2020-09-21 17:01:27.536123923 +0200
+
+    Collection Groups:
+    ------------------
+      Id: 78
+      Sample Interval:      10000 ms
+    Encoding:             self-describing-gpb
+      Num of collection:    285252
+      Collection time:      Min:    70 ms Max:  9046 ms
+      Total time:           Min:  1683 ms Max: 1084745 ms Avg:  2087 ms
+      Total Deferred:       0
+      Total Send Errors:    0
+      Total Send Drops:     0
+      Total Other Errors:   0
+    No data Instances:    0
+      Last Collection Start:2020-09-21 17:01:25.533967923 +0200
+      Last Collection End:  2020-09-21 17:01:27.536164923 +0200
+      Sensor Path:          Cisco-IOS-XR-drivers-media-eth-oper:ethernet-interface/statistics/statistic
+</code>
+</pre>
+</div>
