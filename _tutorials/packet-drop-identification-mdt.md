@@ -224,3 +224,32 @@ Mon Sep 21 17:01:29.610 CEST
 </code>
 </pre>
 </div>
+
+## First results
+
+Model Driven Telemetry rapidly helped us gaining visibility into EFD, especially timestamps and volume:
+
+![first-EFD]({{site.baseurl}}/images/first-EFD.png){: .align-center}
+
+Early in our analysis we were also able to detect strange traffic pattern, like sudden traffic increase in both directions for all packet size:
+
+![packet-size]({{site.baseurl}}/images/packet-size.png){: .align-center}
+
+While NP load model might not be available in older software versions, it was possible to get an idea adding what was transmitted to the 100G wire and what was parsed from the ethernet port through specific NP counters monitoring:
+
+![NP-sum]({{site.baseurl}}/images/NP-sum.png){: .align-center}
+
+When NP load sensor was supported, we could have a real-time view of all ASR9000 NP load present in all linecards belonging to a chassis and see if capacity was exceeded:
+
+![NP-load]({{site.baseurl}}/images/NP-load.png){: .align-center}
+
+Last, we leveraged QoS statistics to see if bursts were caused by a particular class of traffic:
+
+![QoS-stats]({{site.baseurl}}/images/QoS-stats.png){: .align-center}
+
+
+
+
+
+
+
