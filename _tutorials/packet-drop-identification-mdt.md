@@ -344,7 +344,25 @@ TenGigE100/0/0/29 is up, line protocol is up
 
 ## Lessons learnt, some numbers and next steps
 
+Of course, we encountered few problems during this project and I will share them with you.  
 
+The first one was a bug present in IOS-XR 6.2.3 where router was picking the wrong IPv6 source address to initiate the TCP session toward the telemetry collector. As we had strict firewall rules filtering /128 loopbacks, we had to update them to whitelist customer’s infrastructure IPv6 block. Fix is included in IOS-XR 6.3.3 released in 2018.  
+Second challenge we faced was a bug in the Cisco-IOS-XR-qos-ma-oper yang model in 6.2.3. Statistics could not be collected and sensor-group was not resolved. This was corrected in IOS-XR 6.3.2.  
+
+Regarding this specific packet drop and EFD problem, few corrective actions are in progress. It was found ISIS SPF and LSP timers were very aggressive and not aligned on all routers. Unstable interfaces have been isolated and dampening will be deployed to avoid ISIS churn.  
+Another modification was performed on ASR9000 directly. Early Fast Discard classification has been updated on production routers to accommodate customer QoS marking and Cisco IOS-XR code was improved to allow RFD threshold increase on Cisco ASR9000 3rd generation linecards.
+With Segment Routing deployment in this specific network, [Microloop Avoidance](https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/asr9k-r6-5/segment-routing/configuration/guide/b-segment-routing-cg-asr9000-65x/b-segment-routing-cg-asr9000-65x_chapter_01010.pdf) feature is being assessed.  
+
+After 23 weeks this cloud-hosted telemetry stack is still running without any problem. It received 20 Petabytes of counters so far. Few evolutions could be done:
+
+- Use gRPC with TLS encryption instead of TCP. This can be done once routers are upgraded to IOS-XR 64bit
+- Install on-premise telemetry stack. Cloud nature prevented us receiving and processing additional KPI which could have been useful for this troubleshooting (e.g Netflow, BGP BMP)
+
+## Acknowledgement
+
+I would like to recognize Sonia Ben Ayed, Consulting Engineer at Cisco. Sonia made outstanding work over the last six months and helped me setting up this cloud-hosted telemetry stack which delivered strong results. Congratulations to her.  
+I would also like to thank many Cisco employees involved in this escalation: Service Provider Engineering teams CK Chao and Shawn Smith; Escalation team Aleksandar Vidakovic and Xander Thuijs; Customer Experience team JC Rode, Luc De Ghein, Mark Culverhouse, Stefan-Alexandru Manza, Olivier Keiser, Frederic Vanderbecq and many others for their technical support.  
+Last but not least, our customers for their trust.
 
 
 
