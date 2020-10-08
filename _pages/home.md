@@ -59,7 +59,7 @@ author: "Cisco Web Team"
     <div class="feature__item--right">
       <div class="archive__item">
           <div class="archive__item-teaser center" style="max-height: 200px; max-width: 200px;display: block; margin-left: auto; margin-right: auto;">
-            <a href="{{ base_path }}/apidocs"><img src="{{ base_path }}/images/tlmtr_lp/ncs1002.png" alt="" /></a>
+            <a href="{{ base_path }}/"><img src="{{ base_path }}/images/tlmtr_lp/ncs1002.png" alt="" /></a>
           </div>
         <div class="archive__item-body">
             <h2 class="archive__item-title">Telemetry and optical devices</h2>
