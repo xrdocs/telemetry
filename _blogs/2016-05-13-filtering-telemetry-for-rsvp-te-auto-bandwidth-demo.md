@@ -11,7 +11,7 @@ tags:
 ---
 
 
-Telemetry recently took center stage at [SDX Demo Friday](https://www.sdxcentral.com/resources/sdn-demofriday/cisco-ios-xr-signalfx-demo-monitoring-your-modern-network/) with a new demo showcasing the RSVP-TE auto-bandwidth feature.  In the demo, the TE tunnel headend streamed data about the output bytes sent per tunnel and the resulting applied auto-bandwidth.  We streamed the data to SignalFX's cloud monitoring system and were able to show nice visualizations of auto-bandwidth in action as well as some cool alerting capabilities.
+Telemetry recently took center stage at SDX Demo Friday with a new demo showcasing the RSVP-TE auto-bandwidth feature.  In the demo, the TE tunnel headend streamed data about the output bytes sent per tunnel and the resulting applied auto-bandwidth.  We streamed the data to SignalFX's cloud monitoring system and were able to show nice visualizations of auto-bandwidth in action as well as some cool alerting capabilities.
 
 ![AutoBW.jpg]({{site.baseurl}}/images/AutoBW.jpg)
 

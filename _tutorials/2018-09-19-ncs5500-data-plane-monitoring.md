@@ -179,7 +179,7 @@ This is just a small subset of 61 counters available in the dashboard.
 
 A nice way to finish this post is to show a simple use case with the NPU counters discussed.
 The simplest way to get benefits from streamed NPU counters is to send notifications about OOR situations with the routers in your network.
-After getting such a notification (it can be done with [Grafana itself](http://docs.grafana.org/alerting/rules/) or [Kapacitor from InfluxData](https://docs.influxdata.com/kapacitor/v1.5/working/alerts/)) a member of your NOC team can do something (like, drain that router).
+After getting such a notification (it can be done with [Grafana itself](http://docs.grafana.org/) or [Kapacitor from InfluxData](https://docs.influxdata.com/kapacitor/v1.5/working/alerts/)) a member of your NOC team can do something (like, drain that router).
 
 But let's make one more step and try to do a straightforward reaction to move the router under stress away from traffic flow (just as an example of remediation that [many web guys do in their networks](https://www.youtube.com/watch?v=3P3x09ZrT0E))
 
