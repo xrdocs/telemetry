@@ -1,7 +1,7 @@
 ---
 published: false
 date: '2020-12-22 15:15 +0100'
-title: docker-compose-telemetry
+title: 'IOS-XR power consumption monitoring: an ephemeral telemetry stack use case'
 author: fcuiller
 excerpt: >-
   This post will describe how a docker-based ephemeral telemetry stack has been
