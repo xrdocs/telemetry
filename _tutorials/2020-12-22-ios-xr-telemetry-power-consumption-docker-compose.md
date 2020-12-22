@@ -12,7 +12,7 @@ tags:
 ---
 ### Introduction
 
-Power efficiency is a big topic as it can literally help customers save millions. There has been several announcements recently about Cisco’s Silicon One and how it compares to previous generation of chip on this specific point. 
+Power efficiency is a big topic as it can literally help customers save millions. There has been several announcements recently about Cisco’s Silicon One and how it compares to previous generation of chip on this specific point.  
 This post will describe how a docker-based ephemeral telemetry stack has been built to monitor Cisco IOS-XR device power consumption.
 
 ### Context
@@ -28,6 +28,11 @@ Compose is a tool for defining and running multi-container Docker applications. 
 
 There was some work done by Jeff Kehres available on Github. I reused it to add Telegraf and I removed the docker volumes: as this stack is ephemeral, persistent storage is not required. Full code and documentation can be found here. Here is the raw docker-compose.yaml file:
 
+### IOS-XR models
 
+### Router configuration
 
+### I’ve got the power!
 
+### Conclusion
+This was another use case of telemetry, and we could imagine monitoring other KPI with Cisco IOS-XR environmental model like temperature, fan speed or voltages. Docker compose is a very flexible and agile solution when it comes to bring up an application stack. Combining both allows to quickly gain useful information and insights from the infrastructure.
