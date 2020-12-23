@@ -221,11 +221,11 @@ Mon Dec 21 16:00:51.929 CET
   Sensor Group Id:POWER
     Sensor Path:        Cisco-IOS-XR-envmon-oper:power-management
     Sensor Path State:  Resolved
-      Sysdb Path:       /oper/spi/gl/pwrmgmt/rack/<spi_pwrmgmt_oper_Rack_rack>/producers/<spi_pwrmgmt_oper_ProducerNode_nodeid>
+      Sysdb Path:       /oper/spi/gl/pwrmgmt/rack/\<spi_pwrmgmt_oper_Rack_rack\>/producers/\<spi_pwrmgmt_oper_ProducerNode_nodeid\>
        Yang Path:       Cisco-IOS-XR-envmon-oper:power-management/rack/producers/producer-nodes/producer-node
-      Sysdb Path:       /oper/spi/gl/pwrmgmt/rack/<spi_pwrmgmt_oper_Rack_rack>/chassis
+      Sysdb Path:       /oper/spi/gl/pwrmgmt/rack/\<spi_pwrmgmt_oper_Rack_rack>/chassis
        Yang Path:       Cisco-IOS-XR-envmon-oper:power-management/rack/chassis
-      Sysdb Path:       /oper/spi/gl/pwrmgmt/rack/<spi_pwrmgmt_oper_Rack_rack>/consumers/<spi_pwrmgmt_oper_ConsumerNode_nodeid>
+      Sysdb Path:       /oper/spi/gl/pwrmgmt/rack/\<spi_pwrmgmt_oper_Rack_rack>/consumers/<spi_pwrmgmt_oper_ConsumerNode_nodeid\>
        Yang Path:       Cisco-IOS-XR-envmon-oper:power-management/rack/consumers/consumer-nodes/consumer-node 
 </code>
 </pre>
