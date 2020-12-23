@@ -300,5 +300,79 @@ gRPC and TPA have been covered by [Viktor](https://xrdocs.io/telemetry/tutorials
 
 ### I’ve got the power!
 
+Counters are stored in the ‘telemetry’ database. We can check fields directly in influxDB:  
+
+`
+{22/12/20 12:05}fcuillers-MacBook-Pro:~/Dev/telemetry fcuiller% docker exec -it influxdb sh
+# influx
+Connected to http://localhost:8086 version 1.8.3
+InfluxDB shell version: 1.8.3
+> show databases
+name: databases
+name
+----
+telemetry
+_internal
+> use telemetry
+Using database telemetry
+> show field keys
+<snip>
+name: Cisco-IOS-XR-sysadmin-envmon-ui:environment/oper/power/location/pem_attributes_grpc
+fieldKey                           fieldType
+--------                           ---------
+card_type/value                    string
+confgd_power_redundancy_mode/value string
+input_current/value                string
+input_current_to_ps/value          string
+input_power_to_ps                  integer
+input_voltage/value                string
+output_current/value               string
+output_current_from_ps/value       string
+output_footer                      integer
+output_header                      integer
+output_power_from_ps               integer
+output_voltage/value               string
+pem_id/value                       string
+power_allocated                    integer
+power_consumed/value               string
+power_level                        integer
+power_resrv_and_alloc              integer
+power_status/value                 string
+protection_power_capacity          integer
+ps_sum_footer                      integer
+ps_type/value                      string
+shelf_num                          integer
+status/value                       string
+supply_type/value                  string
+system_power_input                 integer
+system_power_used                  integer
+usable_power_capacity              integer
+`
+
+Chassis power consumption is located in system_power_input and system_power_used. 
+For each location, IOS-XR will allocate a power budget stored in power_allocated. Last, current power utilization per location can be found in power_consumed/value.  
+
+Visualization has been tested on device located in Brussels IOS-XR TAC lab. 
+A first simple overall power consumption dashboard has been built for an ASR 9000 and a NCS 5500 routers:
+
+![overall-power]({{site.baseurl}}/images/overall-power.png)
+
+If we focus on one device, it’s interesting to compare the power budget provisioned by the router (worst case scenario) versus the ongoing power consumption. On this NCS 5500, while 7.7kW is provisioned only 2.2kW is drawn from power supplies:
+
+![power-allocated-and-used]({{site.baseurl}}/images/power-allocated-and-used.png)
+
+Last but not least, we can also monitor power consumption per location (i.e. linecard, RP, fabric, FAN, etc.):
+
+![power-consumption-per-location]({{site.baseurl}}/images/power-consumption-per-location.png)
+
+This last metric will help our customer to benchmark linecards and check the impact of different factors such traffic load, packet size, transceivers, etc.  
+
+Here is a configuration extract of this dashboard so you can build your own:
+
+![grafana-query]({{site.baseurl}}/images/grafana-query.png)
+
+I use the location tag as an alias to dynamically display locations in the legend.
+
 ### Conclusion
+
 This was another use case of telemetry, and we could imagine monitoring other KPI with Cisco IOS-XR environmental model like temperature, fan speed or voltages. Docker compose is a very flexible and agile solution when it comes to bring up an application stack. Combining both allows to quickly gain useful information and insights from the infrastructure.
