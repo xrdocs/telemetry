@@ -18,15 +18,15 @@ This post will describe how a docker-based ephemeral telemetry stack has been bu
 ### Context
 
 As part of an upcoming CPOC (Customer Proof Of Concept) engagement, one of our customers wants to benchmark routers power consumption. Most of time, TCO (Total Cost of Ownership) calculations are made based on estimations. Cisco do provide such numbers through [Cisco Power Calculator tool](https://cpc.cloudapps.cisco.com/cpc/). However, they may vary based on several factors like ambient temperature, traffic load and pattern, optics, etc. For a fully loaded ASR 9906 with latest generation of RSP and linecards, there can be a 50% difference between the typical scenario (27C ambient temperature with 50% linerate IMIX traffic) and the worst-case scenario (50/55C)!  
-For this multi-vendor assessment, apples to apples comparison is required. A power meter or a smart PDU could be installed, but they require additional hardware to be purchased and installed on the premises. Instead we decided to use Model Driven Telemetry to monitor in real time Cisco's device power consumption: it’s already available, free and we only need extra configuration. The last missing piece is a collector.
+For this multi-vendor assessment, apples to apples comparison is required. A power meter or a smart PDU could be setup, but they require additional hardware to be purchased and installed on the premises. Instead we decided to use Model Driven Telemetry to monitor in real time Cisco's device power consumption: it’s already available, free and we only need extra configuration. The last missing piece is a collector.
 
 ### Docker-compose telemetry stack
 
-To receive and consume power data from our routers, I decided to build an ephemeral telemetry stack which can be brought on-demand on a server or a laptop. As CPOC will be delivered over a one-week period, there is no need to build a full-blown and permanent solution.  
+To receive and consume power data from our routers, I decided to build an ephemeral telemetry stack which can be brought on-demand on a server or a laptop. As CPOC will be delivered over a one-week period, there is no need to build a full-blown and permanent solution. Purpose here is demonstration only.  
 I reused the same popular components: Telegraf, InfluxDB and Grafana. This time I decided to add Chronograf to quickly see the data stored in InfluxDB. I also leveraged Docker to build this stack and especially Docker Compose. As described in [Docker’s documentation](https://docs.docker.com/compose/):  
 > Compose is a tool for defining and running multi-container Docker applications. With Compose, you use a YAML file to configure your application’s services. Then, with a single command, you create and start all the services from your configuration.
 
-There was some work done by [Jeff Kehres](https://github.com/jkehres) available on Github. I reused it to add Telegraf and I removed the docker volumes: as this stack is ephemeral, persistent storage is not required. Full code and documentation can be found [here](https://github.com/fcuiller/docker-compose-telegraf-influxdb-grafana). Here is the raw docker-compose.yaml file:  
+There was some work done by [Jeff Kehres](https://github.com/jkehres) available on GitHub. I reused it to add Telegraf and I removed the docker volumes: as this stack is ephemeral, persistent storage is not required. Full code and documentation can be found [here](https://github.com/fcuiller/docker-compose-telegraf-influxdb-grafana). Here is the raw docker-compose.yaml file:  
 
 <div class="highlighter-rouge">
 <pre class="highlight">
@@ -98,7 +98,7 @@ To bring up the stack, simply run:
 docker-compose up -d
 `
 
-This will spawn 4 containers to create the ephemeral telemetry stack:
+This will spawn our 4 containers to create the ephemeral telemetry stack:
 
 `
 {21/12/20 11:58}fcuillers-MacBook-Pro:~/Dev/telemetry fcuiller% docker-compose up -d
@@ -118,9 +118,9 @@ With current configuration, following ports are exposed:
 57100, 57500|Telegraf
 127.0.0.1:8888|Chronograf
 
-Port 57100 is used for TCP transport while 57500 is used for gRPC dial-out. telegraf.conf file can be updated to fine tune configuration.   
+Port 57100 is used for TCP transport while 57500 is used for gRPC dial-out. telegraf.conf file can be updated to fit your configuration and environment.   
 
-Once stack is started, following containers should be up:
+Once stack is started, we can check containers are up:
 
 `
 {21/12/20 15:27}fcuillers-MacBook-Pro:~/Dev/telemetry fcuiller% docker ps
@@ -130,6 +130,14 @@ fa0fa0f61c54   grafana/grafana:latest   "/run.sh"                3 seconds ago  
 032555f2ac94   telegraf                 "/entrypoint.sh tele…"   4 seconds ago   Up 3 seconds   8092/udp, 0.0.0.0:57100->57100/tcp, 8125/udp, 8094/tcp, 0.0.0.0:57500->57500/tcp   telegraf
 320d88dbfcf3   influxdb                 "/entrypoint.sh infl…"   4 seconds ago   Up 3 seconds   0.0.0.0:8086->8086/tcp                                                             influxdb
 `
+
+Once your tests are done, you can bring down the stack with the following command:
+
+`
+docker-compose down
+`
+
+All metrics stored in InfluxDB and all dashboards created in Grafana will be lost.
 
 ### IOS-XR models
 
@@ -377,7 +385,7 @@ Chassis power consumption is located in system_power_input and system_power_used
 For each location, IOS-XR will allocate a power budget stored in power_allocated. Last, current power utilization per location can be found in power_consumed/value.  
 
 Visualization has been tested on device located in Brussels IOS-XR TAC lab. 
-A first simple overall power consumption dashboard has been built for an ASR 9000 and a NCS 5500 routers:
+A first simple overall power consumption dashboard has been built for an ASR 9000 and a NCS 5500:
 
 ![overall-power]({{site.baseurl}}/images/overall-power.png)
 
@@ -391,7 +399,7 @@ Last but not least, we can also monitor power consumption per location (i.e. lin
 
 This last metric will help our customer to benchmark linecards and check the impact of different factors such traffic load, packet size, transceivers, etc.  
 
-Here is a configuration extract of this dashboard so you can build your own:
+FInally here is a configuration extract of this dashboard so you can build your own:
 
 ![grafana-query]({{site.baseurl}}/images/grafana-query.png)
 
@@ -399,4 +407,4 @@ I use the location tag as an alias to dynamically display locations in the legen
 
 ### Conclusion
 
-This was another use case of telemetry, and we could imagine monitoring other KPI with Cisco IOS-XR environmental model like temperature, fan speed or voltages. Docker compose is a very flexible and agile solution when it comes to bring up an application stack. Combining both allows to quickly gain useful information and insights from the infrastructure.
+This was another simple and practical use case of telemetry, and we could imagine monitoring other KPI with Cisco IOS-XR environmental model like temperature, fan speed or voltages. Docker compose is a very flexible and agile solution when it comes to bring up an application stack. Combining both allows to quickly gain useful information and insights from the infrastructure.
