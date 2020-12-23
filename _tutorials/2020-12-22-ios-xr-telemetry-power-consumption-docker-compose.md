@@ -127,10 +127,176 @@ fa0fa0f61c54   grafana/grafana:latest   "/run.sh"                3 seconds ago  
 320d88dbfcf3   influxdb                 "/entrypoint.sh infl…"   4 seconds ago   Up 3 seconds   0.0.0.0:8086->8086/tcp                                                             influxdb
 `
 
-
 ### IOS-XR models
 
+Power statistics and counters are exposed through different Yang models.  
+On NCS 5500 and ASR 9000 running IOS-XR 64bit, this is achieved with Cisco-IOS-XR-sysadmin-envmon-ui:environment/oper sensor. This sensor contains information about temperatures, voltages, FAN and also power: all data you can usually find in ‘admin show environment’ command.  
+
+Here is a sample output taken from a NCS 5500 router:
+
+`
+RP/0/RP0/CPU0:NCS-5500#admin sh env power
+Tue Dec 22 12:28:01.758 CET
+================================================================================
+CHASSIS LEVEL POWER INFO: 0
+================================================================================
+   Total output power capacity (Group 0 + Group 1) :    9000W +       0W
+   Total output power required                     :    7748W
+   Total power input                               :    2143W
+   Total power output                              :    2003W
+
+Power Group 0:
+================================================================================
+   Power       Supply     ------Input----   ------Output---      Status
+   Module      Type        Volts     Amps    Volts     Amps
+================================================================================
+   0/PM0       3kW-AC      229.9      3.1     12.0     56.3    OK
+   0/PM1       3kW-AC      231.4      3.3     12.0     58.1    OK
+   0/PM2       3kW-AC      229.9      2.9     12.0     52.5    OK
+
+Total of Power Group 0:       2143W/  9.3A      2003W/166.9A
+
+================================================================================
+   Location     Card Type            Power       Power       Status
+                                     Allocated   Used
+                                     Watts       Watts
+================================================================================
+   0/0          NC55-18H18F            456         273       ON
+   0/1          NC55-24X100G-SE        940         486       ON
+   0/2                 -               902           -       RESERVED
+   0/3                 -                25           -       RESERVED
+   0/4          NC55-36X100G-A-SE     1050         546       ON
+   0/5                 -                25           -       RESERVED
+   0/6                 -                25           -       RESERVED
+   0/7                 -                25           -       RESERVED
+   0/RP0        NC55-RP                 90          33       ON
+   0/RP1               -                90           -       RESERVED
+  0/FC0               -               250           -       RESERVED
+   0/FC1        NC55-5508-FC2          475         191       ON
+   0/FC2               -               250           -       RESERVED
+   0/FC3               -               250           -       RESERVED
+   0/FC4               -               250           -       RESERVED
+   0/FC5               -               250           -       RESERVED
+   0/FT0        NC55-5508-FAN2         775          84       ON
+   0/FT1        NC55-5508-FAN2         775          83       ON
+   0/FT2        NC55-5508-FAN2         775          83       ON
+   0/SC0        NC55-SC                 35          15       ON
+   0/SC1               -                35           -       RESERVED
+RP/0/RP0/CPU0:NCS-5500#
+`
+
+What we are interested in is overall chassis power consumption, especially power input and power output. We would also like to get information on particular locations to monitor specific linecards.  
+
+On Cisco 8000, the sensor is different and power counters can be accessed with Cisco-IOS-XR-envmon-oper:power-management Yang model:
+
+`
+RP/0/RP0/CPU0:Cisco-8000#sh telemetry model-driven sensor-group POWER internal
+Mon Dec 21 16:00:51.929 CET
+  Sensor Group Id:POWER
+    Sensor Path:        Cisco-IOS-XR-envmon-oper:power-management
+    Sensor Path State:  Resolved
+      Sysdb Path:       /oper/spi/gl/pwrmgmt/rack/<spi_pwrmgmt_oper_Rack_rack>/producers/<spi_pwrmgmt_oper_ProducerNode_nodeid>
+       Yang Path:       Cisco-IOS-XR-envmon-oper:power-management/rack/producers/producer-nodes/producer-node
+      Sysdb Path:       /oper/spi/gl/pwrmgmt/rack/<spi_pwrmgmt_oper_Rack_rack>/chassis
+       Yang Path:       Cisco-IOS-XR-envmon-oper:power-management/rack/chassis
+      Sysdb Path:       /oper/spi/gl/pwrmgmt/rack/<spi_pwrmgmt_oper_Rack_rack>/consumers/<spi_pwrmgmt_oper_ConsumerNode_nodeid>
+       Yang Path:       Cisco-IOS-XR-envmon-oper:power-management/rack/consumers/consumer-nodes/consumer-node 
+`
+
 ### Router configuration
+
+On Cisco IOS-XR telemetry is configured in 3 main blocks: sensors, subscription and destination. This time I decided to use gRPC as transport and I will export environment data every 30s from my ASR 9000 and NCS 5500:
+
+`
+telemetry model-driven
+ destination-group DEST-GROUP
+  !
+  address-family ipv4 10.209.198.44 port 57500
+   encoding self-describing-gpb
+   protocol grpc no-tls
+
+sensor-group ENV-COUNTERS
+  sensor-path Cisco-IOS-XR-sysadmin-envmon-ui:environment/oper
+
+subscription SUB
+  sensor-group-id ENV-COUNTERS sample-interval 30000
+  destination-id DEST-GROUP
+`
+
+As I configure gRPC export through the out of band management port, I need additional TPA configuration:
+
+`
+tpa
+ vrf default
+  address-family ipv4
+   default-route mgmt
+   update-source dataports MgmtEth0/RP0/CPU0/0
+`
+
+If TPA routing table is not updated, gRPC session will not come up and following errors in telemetry traces will appear:
+
+`
+RP/0/RP0/CPU0:NCS5500#sh telemetry model-driven trace all | i 10.209.198.44
+Dec 21 15:56:08.925 m2m/mdt/go-info 0/RP0/CPU0 t8076  1122925 [mdt_go_trace_info]: emsMdtConnEstablish:333 Dialer type 1, request of '10.209.198.44:57500'
+Dec 21 15:56:08.925 m2m/mdt/go-info 0/RP0/CPU0 t14463  1122942 [mdt_go_trace_info]: mdtConnEstablish:171 1: Dialing out to 10.209.198.44:57500, req 503
+Dec 21 15:56:08.925 m2m/mdt/go-info 0/RP0/CPU0 t14463  1122944 [mdt_go_trace_info]: mdtConnEstablish:240 dial: target 10.209.198.44:57500
+Dec 21 15:56:08.925 m2m/mdt/go-info 0/RP0/CPU0 t14463  1122945 [mdt_go_trace_info]: mdtDialer:243 1: namespace /var/run/netns/global-vrf, args 10.209.198.44:57500
+Dec 21 15:56:13.925 m2m/mdt/go-info 0/RP0/CPU0 t21431  1129419 [mdt_go_trace_info]: mdtDialer:243 1: namespace /var/run/netns/global-vrf, args 10.209.198.44:57500
+Dec 21 15:56:18.929 m2m/mdt/go-info 0/RP0/CPU0 t21627  1136268 [mdt_go_trace_error]: mdtConnEstablish:267 1: grpc service call failed, ReqId 503, 10.209.198.44:57500, rpc error: code = Unavailable desc = all SubConns are in TransientFailure
+`
+
+As soon as TPA is updated, gRPC session is established to the ephemeral collector:
+
+`
+RP/0/RP0/CPU0:ASR9000#sh telemetry model-driven destination DEST-GROUP
+Tue Dec 22 10:30:03.660 CET
+  Destination Group:  DEST-GROUP
+  -----------------
+    Destination IP:       10.209.198.44
+    Destination Port:     57500
+    Subscription:         SUB
+    State:                Active
+    Encoding:             self-describing-gpb
+    Transport:            grpc
+    No TLS
+    Total bytes sent:     212209
+    Total packets sent:   6
+    Last Sent time:       2020-12-22 10:30:02.941129092 +0100
+
+    Collection Groups:
+    ------------------
+      Id: 2
+      Sample Interval:      30000 ms
+    Encoding:             self-describing-gpb
+      Num of collection:    1553
+      Collection time:      Min:   744 ms Max:  8162 ms
+      Total time:           Min:   651 ms Max:  8205 ms Avg:  3958 ms
+      Total Deferred:       0
+      Total Send Errors:    107
+      Total Send Drops:     0
+      Total Other Errors:   0
+    No data Instances:    8697
+      Last Collection Start:2020-12-22 10:29:59.938084092 +0100
+      Last Collection End:  2020-12-22 10:29:00.879691092 +0100
+      Sensor Path:          Cisco-IOS-XR-sysadmin-envmon-ui:environment/oper
+
+RP/0/RP0/CPU0:ASR9000#
+`
+
+This is also reflected in the telemetry traces:
+
+`
+RP/0/RP0/CPU0:NCS5500#sh telemetry model-driven trace all | i 10.209.198.44
+Dec 21 15:57:08.921 m2m/mdt/go-info 0/RP0/CPU0 t8076  1201871 [mdt_go_trace_info]: emsMdtConnEstablish:333 Dialer type 1, request of '10.209.198.44:57500'
+Dec 21 15:57:08.921 m2m/mdt/go-info 0/RP0/CPU0 t14463  1201888 [mdt_go_trace_info]: mdtConnEstablish:171 1: Dialing out to 10.209.198.44:57500, req 503
+Dec 21 15:57:08.921 m2m/mdt/go-info 0/RP0/CPU0 t14463  1201890 [mdt_go_trace_info]: mdtConnEstablish:240 dial: target 10.209.198.44:57500
+Dec 21 15:57:08.921 m2m/mdt/go-info 0/RP0/CPU0 t14463  1201891 [mdt_go_trace_info]: mdtDialer:243 1: namespace /var/run/netns/global-vrf, args 10.209.198.44:57500
+Dec 21 15:57:09.088 m2m/mdt/go-info 0/RP0/CPU0 t14463  1201949 [mdt_go_trace_info]: mdtConnEstablish:287 1: 10.209.198.44:57500, chanstat buffered num 4000, gHardlimit 13000
+Dec 21 15:57:09.088 m2m/mdt/go-info 0/RP0/CPU0 t14463  1201959 [mdt_go_trace_info]: mdtConnEstablish:299 1: Ready for mdt dialout data, req 503, chan 1, 10.209.198.44:57500
+Dec 21 15:57:09.090 m2m/mdt/subdb 0/RP0/CPU0 t8074  1201964 [mdt_conn_process_establish]: Got resp from ipv4 10.209.198.44, port 57500
+`
+
+gRPC and TPA have been covered by [Viktor](https://xrdocs.io/telemetry/tutorials/2018-03-01-everything-you-need-to-know-about-pipeline/#grpc-things-to-know-about) and [Shelly](https://xrdocs.io/telemetry/tutorials/2017-05-05-mdt-with-grpc-transport-tricks/) in previous articles.
 
 ### I’ve got the power!
 
