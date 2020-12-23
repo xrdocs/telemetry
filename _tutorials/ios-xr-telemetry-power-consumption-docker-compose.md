@@ -9,6 +9,8 @@ excerpt: >-
 position: hidden
 tags:
   - iosxr
+  - telemetry
+  - docker
 ---
 {% include toc icon="table" title="IOS-XR power consumption monitoring: an ephemeral telemetry stack use case" %} 
 
