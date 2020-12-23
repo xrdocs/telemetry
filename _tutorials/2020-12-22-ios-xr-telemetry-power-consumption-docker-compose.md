@@ -28,7 +28,9 @@ I reused the same popular components: Telegraf, InfluxDB and Grafana. This time 
 
 There was some work done by [Jeff Kehres](https://github.com/jkehres) available on Github. I reused it to add Telegraf and I removed the docker volumes: as this stack is ephemeral, persistent storage is not required. Full code and documentation can be found [here](https://github.com/fcuiller/docker-compose-telegraf-influxdb-grafana). Here is the raw docker-compose.yaml file:  
 
-`
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
 version: "2"
 services:
   grafana:
@@ -86,7 +88,9 @@ services:
      - /sys:/rootfs/sys:ro
      - /proc:/rootfs/proc:ro
      - /etc:/rootfs/etc:ro
-`
+</code>
+</pre>
+</div>
 
 To bring up the stack, simply run:
 
@@ -134,7 +138,9 @@ On NCS 5500 and ASR 9000 running IOS-XR 64bit, this is achieved with Cisco-IOS-X
 
 Here is a sample output taken from a NCS 5500 router:
 
-`
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
 RP/0/RP0/CPU0:NCS-5500#admin sh env power
 Tue Dec 22 12:28:01.758 CET
 ================================================================================
@@ -142,8 +148,8 @@ CHASSIS LEVEL POWER INFO: 0
 ================================================================================
    Total output power capacity (Group 0 + Group 1) :    9000W +       0W
    Total output power required                     :    7748W
-   Total power input                               :    2143W
-   Total power output                              :    2003W
+<mark>   Total power input                               :    2143W</mark>
+<mark>   Total power output                              :    2003W</mark>
 
 Power Group 0:
 ================================================================================
@@ -165,7 +171,7 @@ Total of Power Group 0:       2143W/  9.3A      2003W/166.9A
    0/1          NC55-24X100G-SE        940         486       ON
    0/2                 -               902           -       RESERVED
    0/3                 -                25           -       RESERVED
-   0/4          NC55-36X100G-A-SE     1050         546       ON
+<mark>   0/4          NC55-36X100G-A-SE     1050         546       ON</mark>
    0/5                 -                25           -       RESERVED
    0/6                 -                25           -       RESERVED
    0/7                 -                25           -       RESERVED
@@ -183,7 +189,9 @@ Total of Power Group 0:       2143W/  9.3A      2003W/166.9A
    0/SC0        NC55-SC                 35          15       ON
    0/SC1               -                35           -       RESERVED
 RP/0/RP0/CPU0:NCS-5500#
-`
+</code>
+</pre>
+</div>
 
 What we are interested in is overall chassis power consumption, especially power input and power output. We would also like to get information on particular locations to monitor specific linecards.  
 
@@ -235,19 +243,25 @@ tpa
 
 If TPA routing table is not updated, gRPC session will not come up and following errors in telemetry traces will appear:
 
-`
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
 RP/0/RP0/CPU0:NCS5500#sh telemetry model-driven trace all | i 10.209.198.44
 Dec 21 15:56:08.925 m2m/mdt/go-info 0/RP0/CPU0 t8076  1122925 [mdt_go_trace_info]: emsMdtConnEstablish:333 Dialer type 1, request of '10.209.198.44:57500'
 Dec 21 15:56:08.925 m2m/mdt/go-info 0/RP0/CPU0 t14463  1122942 [mdt_go_trace_info]: mdtConnEstablish:171 1: Dialing out to 10.209.198.44:57500, req 503
 Dec 21 15:56:08.925 m2m/mdt/go-info 0/RP0/CPU0 t14463  1122944 [mdt_go_trace_info]: mdtConnEstablish:240 dial: target 10.209.198.44:57500
 Dec 21 15:56:08.925 m2m/mdt/go-info 0/RP0/CPU0 t14463  1122945 [mdt_go_trace_info]: mdtDialer:243 1: namespace /var/run/netns/global-vrf, args 10.209.198.44:57500
 Dec 21 15:56:13.925 m2m/mdt/go-info 0/RP0/CPU0 t21431  1129419 [mdt_go_trace_info]: mdtDialer:243 1: namespace /var/run/netns/global-vrf, args 10.209.198.44:57500
-Dec 21 15:56:18.929 m2m/mdt/go-info 0/RP0/CPU0 t21627  1136268 [mdt_go_trace_error]: mdtConnEstablish:267 1: grpc service call failed, ReqId 503, 10.209.198.44:57500, rpc error: code = Unavailable desc = all SubConns are in TransientFailure
-`
+<mark>Dec 21 15:56:18.929 m2m/mdt/go-info 0/RP0/CPU0 t21627  1136268 [mdt_go_trace_error]: mdtConnEstablish:267 1: grpc service call failed, ReqId 503, 10.209.198.44:57500, rpc error: code = Unavailable desc = all SubConns are in TransientFailure</mark>
+</code>
+</pre>
+</div>
 
 As soon as TPA is updated, gRPC session is established to the ephemeral collector:
 
-`
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
 RP/0/RP0/CPU0:ASR9000#sh telemetry model-driven destination DEST-GROUP
 Tue Dec 22 10:30:03.660 CET
   Destination Group:  DEST-GROUP
@@ -255,9 +269,9 @@ Tue Dec 22 10:30:03.660 CET
     Destination IP:       10.209.198.44
     Destination Port:     57500
     Subscription:         SUB
-    State:                Active
+<mark>    State:                Active</mark>
     Encoding:             self-describing-gpb
-    Transport:            grpc
+<mark>    Transport:            grpc</mark>
     No TLS
     Total bytes sent:     212209
     Total packets sent:   6
@@ -281,11 +295,15 @@ Tue Dec 22 10:30:03.660 CET
       Sensor Path:          Cisco-IOS-XR-sysadmin-envmon-ui:environment/oper
 
 RP/0/RP0/CPU0:ASR9000#
-`
+</code>
+</pre>
+</div>
 
 This is also reflected in the telemetry traces:
 
-`
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
 RP/0/RP0/CPU0:NCS5500#sh telemetry model-driven trace all | i 10.209.198.44
 Dec 21 15:57:08.921 m2m/mdt/go-info 0/RP0/CPU0 t8076  1201871 [mdt_go_trace_info]: emsMdtConnEstablish:333 Dialer type 1, request of '10.209.198.44:57500'
 Dec 21 15:57:08.921 m2m/mdt/go-info 0/RP0/CPU0 t14463  1201888 [mdt_go_trace_info]: mdtConnEstablish:171 1: Dialing out to 10.209.198.44:57500, req 503
@@ -293,8 +311,10 @@ Dec 21 15:57:08.921 m2m/mdt/go-info 0/RP0/CPU0 t14463  1201890 [mdt_go_trace_inf
 Dec 21 15:57:08.921 m2m/mdt/go-info 0/RP0/CPU0 t14463  1201891 [mdt_go_trace_info]: mdtDialer:243 1: namespace /var/run/netns/global-vrf, args 10.209.198.44:57500
 Dec 21 15:57:09.088 m2m/mdt/go-info 0/RP0/CPU0 t14463  1201949 [mdt_go_trace_info]: mdtConnEstablish:287 1: 10.209.198.44:57500, chanstat buffered num 4000, gHardlimit 13000
 Dec 21 15:57:09.088 m2m/mdt/go-info 0/RP0/CPU0 t14463  1201959 [mdt_go_trace_info]: mdtConnEstablish:299 1: Ready for mdt dialout data, req 503, chan 1, 10.209.198.44:57500
-Dec 21 15:57:09.090 m2m/mdt/subdb 0/RP0/CPU0 t8074  1201964 [mdt_conn_process_establish]: Got resp from ipv4 10.209.198.44, port 57500
-`
+<mark>Dec 21 15:57:09.090 m2m/mdt/subdb 0/RP0/CPU0 t8074  1201964 [mdt_conn_process_establish]: Got resp from ipv4 10.209.198.44, port 57500</mark>
+</code>
+</pre>
+</div>
 
 gRPC and TPA have been covered by [Viktor](https://xrdocs.io/telemetry/tutorials/2018-03-01-everything-you-need-to-know-about-pipeline/#grpc-things-to-know-about) and [Shelly](https://xrdocs.io/telemetry/tutorials/2017-05-05-mdt-with-grpc-transport-tricks/) in previous articles.
 
@@ -302,7 +322,9 @@ gRPC and TPA have been covered by [Viktor](https://xrdocs.io/telemetry/tutorials
 
 Counters are stored in the ‘telemetry’ database. We can check fields directly in influxDB:  
 
-`
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
 {22/12/20 12:05}fcuillers-MacBook-Pro:~/Dev/telemetry fcuiller% docker exec -it influxdb sh
 # influx
 Connected to http://localhost:8086 version 1.8.3
@@ -313,7 +335,7 @@ name
 ----
 telemetry
 _internal
-> use telemetry
+<mark>> use telemetry</mark>
 Using database telemetry
 > show field keys
 <snip>
@@ -347,7 +369,9 @@ supply_type/value                  string
 system_power_input                 integer
 system_power_used                  integer
 usable_power_capacity              integer
-`
+</code>
+</pre>
+</div>
 
 Chassis power consumption is located in system_power_input and system_power_used. 
 For each location, IOS-XR will allocate a power budget stored in power_allocated. Last, current power utilization per location can be found in power_consumed/value.  
