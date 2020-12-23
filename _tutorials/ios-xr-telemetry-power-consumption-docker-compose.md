@@ -213,23 +213,19 @@ What we are interested in is overall chassis power consumption, especially power
 
 On Cisco 8000, the sensor is different and power counters can be accessed with Cisco-IOS-XR-envmon-oper:power-management Yang model:
 
-<div class="highlighter-rouge">
-<pre class="highlight">
-<code>
+'
 RP/0/RP0/CPU0:Cisco-8000#sh telemetry model-driven sensor-group POWER internal
 Mon Dec 21 16:00:51.929 CET
   Sensor Group Id:POWER
     Sensor Path:        Cisco-IOS-XR-envmon-oper:power-management
     Sensor Path State:  Resolved
-      Sysdb Path:       /oper/spi/gl/pwrmgmt/rack/\<spi_pwrmgmt_oper_Rack_rack\>/producers/\<spi_pwrmgmt_oper_ProducerNode_nodeid\>
+      Sysdb Path:       /oper/spi/gl/pwrmgmt/rack/\<spi_pwrmgmt_oper_Rack_rack>/producers<spi_pwrmgmt_oper_ProducerNode_nodeid\>
        Yang Path:       Cisco-IOS-XR-envmon-oper:power-management/rack/producers/producer-nodes/producer-node
-      Sysdb Path:       /oper/spi/gl/pwrmgmt/rack/\<spi_pwrmgmt_oper_Rack_rack>/chassis
+      Sysdb Path:       /oper/spi/gl/pwrmgmt/rack/\<spi_pwrmgmt_oper_Rack_rack>chassis
        Yang Path:       Cisco-IOS-XR-envmon-oper:power-management/rack/chassis
-      Sysdb Path:       /oper/spi/gl/pwrmgmt/rack/\<spi_pwrmgmt_oper_Rack_rack>/consumers/<spi_pwrmgmt_oper_ConsumerNode_nodeid\>
+      Sysdb Path:       /oper/spi/gl/pwrmgmt/rack/\<spi_pwrmgmt_oper_Rack_rack>/consumers<spi_pwrmgmt_oper_ConsumerNode_nodeid>
        Yang Path:       Cisco-IOS-XR-envmon-oper:power-management/rack/consumers/consumer-nodes/consumer-node 
-</code>
-</pre>
-</div>
+'
 
 ### Router configuration
 
