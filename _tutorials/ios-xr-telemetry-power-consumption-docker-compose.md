@@ -100,14 +100,18 @@ docker-compose up -d
 
 This will spawn our 4 containers to create the ephemeral telemetry stack:
 
-`
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
 {21/12/20 11:58}fcuillers-MacBook-Pro:~/Dev/telemetry fcuiller% docker-compose up -d
 Creating network "telemetry_default" with the default driver
 Creating telegraf   ... done
 Creating influxdb ... done
 Creating chronograf ... done
 Creating grafana    ... done
-`
+</code>
+</pre>
+</div>
 
 With current configuration, following ports are exposed:
 
@@ -122,16 +126,20 @@ Port 57100 is used for TCP transport while 57500 is used for gRPC dial-out. tele
 
 Once stack is started, we can check containers are up:
 
-`
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
 {21/12/20 15:27}fcuillers-MacBook-Pro:~/Dev/telemetry fcuiller% docker ps
 CONTAINER ID   IMAGE                    COMMAND                  CREATED         STATUS         PORTS                                                                              NAMES
 fa0fa0f61c54   grafana/grafana:latest   "/run.sh"                3 seconds ago   Up 2 seconds   0.0.0.0:3000->3000/tcp                                                             grafana
 88f308900623   chronograf:latest        "/entrypoint.sh chro…"   3 seconds ago   Up 2 seconds   0.0.0.0:8888->8888/tcp                                                             chronograf
 032555f2ac94   telegraf                 "/entrypoint.sh tele…"   4 seconds ago   Up 3 seconds   8092/udp, 0.0.0.0:57100->57100/tcp, 8125/udp, 8094/tcp, 0.0.0.0:57500->57500/tcp   telegraf
 320d88dbfcf3   influxdb                 "/entrypoint.sh infl…"   4 seconds ago   Up 3 seconds   0.0.0.0:8086->8086/tcp                                                             influxdb
-`
+</code>
+</pre>
+</div>
 
-Once your tests are done, you can bring down the stack with the following command:
+When tests are done, you can bring down the stack with the following command:
 
 `
 docker-compose down
@@ -205,7 +213,9 @@ What we are interested in is overall chassis power consumption, especially power
 
 On Cisco 8000, the sensor is different and power counters can be accessed with Cisco-IOS-XR-envmon-oper:power-management Yang model:
 
-`
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
 RP/0/RP0/CPU0:Cisco-8000#sh telemetry model-driven sensor-group POWER internal
 Mon Dec 21 16:00:51.929 CET
   Sensor Group Id:POWER
@@ -217,13 +227,17 @@ Mon Dec 21 16:00:51.929 CET
        Yang Path:       Cisco-IOS-XR-envmon-oper:power-management/rack/chassis
       Sysdb Path:       /oper/spi/gl/pwrmgmt/rack/<spi_pwrmgmt_oper_Rack_rack>/consumers/<spi_pwrmgmt_oper_ConsumerNode_nodeid>
        Yang Path:       Cisco-IOS-XR-envmon-oper:power-management/rack/consumers/consumer-nodes/consumer-node 
-`
+</code>
+</pre>
+</div>
 
 ### Router configuration
 
 On Cisco IOS-XR telemetry is configured in 3 main blocks: sensors, subscription and destination. This time I decided to use gRPC as transport and I will export environment data every 30s from my ASR 9000 and NCS 5500:
 
-`
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
 telemetry model-driven
  destination-group DEST-GROUP
   !
@@ -237,17 +251,23 @@ sensor-group ENV-COUNTERS
 subscription SUB
   sensor-group-id ENV-COUNTERS sample-interval 30000
   destination-id DEST-GROUP
-`
+</code>
+</pre>
+</div>
 
 As I configure gRPC export through the out of band management port, I need additional TPA configuration:
 
-`
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
 tpa
  vrf default
   address-family ipv4
    default-route mgmt
    update-source dataports MgmtEth0/RP0/CPU0/0
-`
+</code>
+</pre>
+</div>
 
 If TPA routing table is not updated, gRPC session will not come up and following errors in telemetry traces will appear:
 
@@ -346,7 +366,7 @@ _internal
 <mark>> use telemetry</mark>
 Using database telemetry
 > show field keys
-<snip>
+-- snip --
 name: Cisco-IOS-XR-sysadmin-envmon-ui:environment/oper/power/location/pem_attributes_grpc
 fieldKey                           fieldType
 --------                           ---------
