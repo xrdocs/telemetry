@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 date: '2020-12-22 15:23 +0100'
 title: 'IOS-XR power consumption monitoring: an ephemeral telemetry stack use case'
 author: fcuiller
