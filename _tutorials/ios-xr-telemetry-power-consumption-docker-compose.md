@@ -10,6 +10,8 @@ position: hidden
 tags:
   - iosxr
 ---
+{% include toc icon="table" title="IOS-XR power consumption monitoring: an ephemeral telemetry stack use case" %} 
+
 ### Introduction
 
 Power efficiency is a big topic as it can literally [help customers save millions](https://blogs.cisco.com/sp/how-cisco-silicon-one-can-help-you-save-millions). Recently there has been several announcements about Cisco’s Silicon One and [how it compares to a previous generation of chip](https://blogs.cisco.com/sp/making-an-eco-friendly-network-with-cisco-silicon-one) on this specific point.  
