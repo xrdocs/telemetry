@@ -107,11 +107,25 @@ Creating grafana    ... done
 
 With current configuration, following ports are exposed:
 
-Host Port	Service
-3000	Grafana
-8086	InfluxDB
-57100, 57500	Telegraf
-127.0.0.1:8888	Chronograf
+**Host Port**|**Service**
+:-----:|:-----:
+3000|Grafana
+8086|InfluxDB
+57100, 57500|Telegraf
+127.0.0.1:8888|Chronograf
+
+Port 57100 is used for TCP transport while 57500 is used for gRPC dial-out. telegraf.conf file can be updated to fine tune configuration.   
+
+Once stack is started, following containers should be up:
+
+`
+{21/12/20 15:27}fcuillers-MacBook-Pro:~/Dev/telemetry fcuiller% docker ps
+CONTAINER ID   IMAGE                    COMMAND                  CREATED         STATUS         PORTS                                                                              NAMES
+fa0fa0f61c54   grafana/grafana:latest   "/run.sh"                3 seconds ago   Up 2 seconds   0.0.0.0:3000->3000/tcp                                                             grafana
+88f308900623   chronograf:latest        "/entrypoint.sh chro…"   3 seconds ago   Up 2 seconds   0.0.0.0:8888->8888/tcp                                                             chronograf
+032555f2ac94   telegraf                 "/entrypoint.sh tele…"   4 seconds ago   Up 3 seconds   8092/udp, 0.0.0.0:57100->57100/tcp, 8125/udp, 8094/tcp, 0.0.0.0:57500->57500/tcp   telegraf
+320d88dbfcf3   influxdb                 "/entrypoint.sh infl…"   4 seconds ago   Up 3 seconds   0.0.0.0:8086->8086/tcp                                                             influxdb
+`
 
 
 ### IOS-XR models
