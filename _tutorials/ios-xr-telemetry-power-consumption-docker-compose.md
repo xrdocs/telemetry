@@ -6,7 +6,7 @@ author: Frederic Cuiller
 excerpt: >-
   This post will describe how a docker-based ephemeral telemetry stack has been
   built to monitor Cisco IOS-XR device power consumption.
-position: hidden
+position: top
 tags:
   - iosxr
   - telemetry
