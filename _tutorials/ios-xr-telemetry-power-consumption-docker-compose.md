@@ -51,7 +51,7 @@ services:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
   influxdb:
-    image: influxdb
+    image: influxdb:1.8
     container_name: influxdb
     restart: always
     ports:
