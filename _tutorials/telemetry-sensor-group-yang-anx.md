@@ -186,7 +186,7 @@ ANX requires a connection to a device. If you don’t have hardware accessible, 
 
 ![xrv9k-cco]({{site.baseurl}}/images/xrv9k-cco.png)
 
-* Use DevNet always-on sandbox. Current version is IOS-XRv 9000 6.5.3
+* Use [DevNet always-on sandbox](devnetsandbox.cisco.com/RM/Topology). Current version is IOS-XRv 9000 6.5.3
 
 ![devnet]({{site.baseurl}}/images/devnet.png)
 
