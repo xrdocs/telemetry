@@ -156,7 +156,7 @@ Wed Mar 17 16:24:59.651 CET
 </pre>
 </div>
 
-Router will start streaming counters after destination-group and subscription-group are configured like described in a [previous post](https://xrdocs.io/telemetry/tutorials/packet-drop-identification-mdt/https:/xrdocs.io/telemetry/tutorials/packet-drop-identification-mdt/). Last, data can be explored and visualized with Grafana:  
+Router will start streaming counters after destination-group and subscription-group are configured like described in a [previous post](https:/xrdocs.io/telemetry/tutorials/packet-drop-identification-mdt/). Last, data can be explored and visualized with Grafana:  
 
 _Et voilà_.
 
