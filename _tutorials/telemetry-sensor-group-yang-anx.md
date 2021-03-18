@@ -23,10 +23,10 @@ The first thing we do is to check the router CLI and find this information:
 <div class="highlighter-rouge">
 <pre class="highlight">
 <code>
-RP/0/RSP0/CPU0:ASR9906_R1#sh l2vpn  bridge-domain bd-name bd1 detail
+RP/0/RSP0/CPU0:ASR9906_R1#<mark>sh l2vpn  bridge-domain bd-name bd1 detail</mark>
 Wed Mar 17 15:09:11.595 CET
 Legend: pp = Partially Programmed.
-Bridge group: bg1, bridge-domain: bd1, id: 8, state: up, ShgId: 0, MSTi: 0
+<mark>Bridge group: bg1, bridge-domain: bd1</mark>, id: 8, state: up, ShgId: 0, MSTi: 0
   Coupled state: disabled
   VINE state: Default
   MAC learning: enabled
@@ -60,7 +60,7 @@ Bridge group: bg1, bridge-domain: bd1, id: 8, state: up, ShgId: 0, MSTi: 0
   No status change since creation
   ACs: 1 (1 up), VFIs: 1, PWs: 2 (2 up), PBBs: 0 (0 up), VNIs: 0 (0 up)
   List of ACs:
-    AC: HundredGigE0/2/0/4.20, state is up
+    <mark>AC: HundredGigE0/2/0/4.20</mark>, state is up
       Type VLAN; Num Ranges: 1
       Rewrite Tags: []
       VLAN ranges: [20, 20]
@@ -86,7 +86,7 @@ Bridge group: bg1, bridge-domain: bd1, id: 8, state: up, ShgId: 0, MSTi: 0
       Storm Control: bridge-domain policer
       Static MAC addresses:
       Statistics:
-        packets: received 80853079 (multicast 0, broadcast 0, unknown unicast 56120, unicast 80850611), sent 80795886
+        packets: received 80853079 (multicast 0, broadcast 0, <mark>unknown unicast 56120</mark>, unicast 80850611), sent 80795886
         bytes: received 44145773679 (multicast 0, broadcast 0, unknown unicast 30445304, unicast 44144620123), sent 44114523280
         MAC move: 0
       Storm control drop counters:
