@@ -6,7 +6,7 @@ excerpt: >-
   This post will describe how to retrieve the YANG path for a given command and
   configure the corresponding sensor-group on an IOS-XR router.
 author: Frederic Cuiller
-position: hidden
+position: top
 tags:
   - iosxr
   - telemetry
