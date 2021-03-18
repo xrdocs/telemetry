@@ -102,15 +102,13 @@ We can assume information is possibly present in some L2VPN YANG models. Let’s
 
 ### ANX to the rescue
 
-Of course you could download YANG models and manually perform some 'grep' commands randomly.
-
-Advanced NETCONF Explorer (ANX) is a tool written by Steven Barth at Cisco which has been open-sourced. ANX is great companion when it comes to explore telemetry and is very handy for this job.
+[Advanced NETCONF Explorer (ANX)](https://github.com/cisco-ie/anx) is a tool written by Steven Barth at Cisco which has been open-sourced. ANX is great companion when it comes to explore telemetry and is very handy for this job.
 
 After installing ANX and configuring netconf on your IOS-XR device, you can point ANX to the router:   
 
 ANX will retrieve and parse available YANG models:  
 
-Number of available YANG models grows release after release. This can be verified on the GitHub repository. Make sure you use a recent IOS-XR version to benefit the latest ones and make the most of telemetry.  
+Number of available YANG models grows release after release. This can be verified on the [GitHub repository](https://github.com/YangModels/yang/tree/master/vendor/cisco/xr). Make sure you use a recent IOS-XR version to benefit the latest ones and make the most of telemetry.  
 
 Once ANX has collected the models, they can be explored. If we take our L2VPN example, our instinct tells us to search into some L2PVN operational models, but there are a lot available:  
 
@@ -136,7 +134,7 @@ Wed Mar 17 16:24:59.651 CET
     Sensor Path:        Cisco-IOS-XR-l2vpn-oper:l2vpnv2/active/bridge-domains/bridge-domain/bridge-acs/bridge-ac/attachment-circuit/statistics/impostion-stats/unknown-unicast/packet-counts
     Sensor Path State:  Resolved
 
-Router will start streaming counters after destination-group and subscription-group are configured like described in a previous post. Last, data can be explored and visualized with Grafana:  
+Router will start streaming counters after destination-group and subscription-group are configured like described in a [previous post](https://xrdocs.io/telemetry/tutorials/packet-drop-identification-mdt/https:/xrdocs.io/telemetry/tutorials/packet-drop-identification-mdt/). Last, data can be explored and visualized with Grafana:  
 
 _Et voilà_.
 
