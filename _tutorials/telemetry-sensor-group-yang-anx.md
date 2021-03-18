@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 date: '2021-03-18 08:28 +0100'
 title: How to find IOS-XR telemetry sensor-group from a CLI?
 excerpt: >-
@@ -7,6 +7,10 @@ excerpt: >-
   configure the corresponding sensor-group on an IOS-XR router.
 author: Frederic Cuiller
 position: hidden
+tags:
+  - iosxr
+  - telemetry
+  - yang
 ---
 ### Introduction
 
