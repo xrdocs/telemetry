@@ -12,6 +12,8 @@ tags:
   - telemetry
   - yang
 ---
+{% include toc icon="table" title="How to find IOS-XR sensor-group from a CLI?" %}
+
 ### Introduction
 
 I’ve been recently working on a Customer Proof of Concept where we demonstrated telemetry capabilities on ASR 9000, NCS 5500 and Cisco 8000 platforms. When going through the demo customer raised a good point: how do you find the telemetry sensor-group to configure? Is it intuition, a sixth sense?
