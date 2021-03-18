@@ -170,7 +170,7 @@ Wed Mar 17 16:24:59.651 CET
 </pre>
 </div>
 
-Router will start streaming counters after destination-group and subscription-group are configured like described in a [previous post](https:/xrdocs.io/telemetry/tutorials/packet-drop-identification-mdt/). Last, data can be explored and visualized with Grafana:  
+Router will start streaming counters after destination-group and subscription-group are configured like described in a [previous post](/telemetry/tutorials/packet-drop-identification-mdt/). Last, data can be explored and visualized with Grafana:  
 
 ![grafana-explore]({{site.baseurl}}/images/grafana-explore.png)
 
@@ -184,7 +184,7 @@ ANX requires a connection to a device. If you don’t have hardware accessible, 
 
 ![xrv9k-cco]({{site.baseurl}}/images/xrv9k-cco.png)
 
-2.	Use DevNet always-on sandbox. Current version is IOS-XRv 9000 6.5.3
+2. Use DevNet always-on sandbox. Current version is IOS-XRv 9000 6.5.3
 
 ![devnet]({{site.baseurl}}/images/devnet.png)
 
