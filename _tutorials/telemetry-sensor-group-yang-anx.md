@@ -20,6 +20,9 @@ Let’s start with an actual example. We are interested in collecting informatio
 
 The first thing we do is to check the router CLI and find this information:  
 
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
 RP/0/RSP0/CPU0:ASR9906_R1#sh l2vpn  bridge-domain bd-name bd1 detail
 Wed Mar 17 15:09:11.595 CET
 Legend: pp = Partially Programmed.
@@ -97,6 +100,9 @@ Bridge group: bg1, bridge-domain: bd1, id: 8, state: up, ShgId: 0, MSTi: 0
   List of VFIs:
     VFI v1 (up)
 --snip--
+</code>
+</pre>
+</div>
 
 We can assume information is possibly present in some L2VPN YANG models. Let’s confirm it.
 
@@ -122,17 +128,29 @@ When clicking on the counter name, ANX displays the Sensor Path on the left:
 
 This is what needs to be configured on the router:  
 
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
 telemetry model-driven
  sensor-group L2VPN-AC-COUNTERS
   sensor-path Cisco-IOS-XR-l2vpn-oper:l2vpnv2/active/bridge-domains/bridge-domain/bridge-acs/bridge-ac/attachment-circuit/statistics/impostion-stats/unknown-unicast/packet-counts
+</code>
+</pre>
+</div>
 
 Once sensor-group is configured, double check path is correctly resolved:  
 
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
 RP/0/RSP0/CPU0:ASR9906_R1#sh telemetry model-driven sensor-group L2VPN-AC-COUNTERS
 Wed Mar 17 16:24:59.651 CET
   Sensor Group Id:L2VPN-AC-COUNTERS
     Sensor Path:        Cisco-IOS-XR-l2vpn-oper:l2vpnv2/active/bridge-domains/bridge-domain/bridge-acs/bridge-ac/attachment-circuit/statistics/impostion-stats/unknown-unicast/packet-counts
-    Sensor Path State:  Resolved
+<mark>    Sensor Path State:  Resolved</mark>
+</code>
+</pre>
+</div>
 
 Router will start streaming counters after destination-group and subscription-group are configured like described in a [previous post](https://xrdocs.io/telemetry/tutorials/packet-drop-identification-mdt/https:/xrdocs.io/telemetry/tutorials/packet-drop-identification-mdt/). Last, data can be explored and visualized with Grafana:  
 
@@ -150,5 +168,3 @@ Pay attention to Platform Dependent (PD) features and models: virtual routers mi
 ### Conclusion
 
 This post covered how to retrieve and configure IOS-XR telemetry sensor-group using ANX. This simple example, starting with a show command, can be replicated for other counters you’d like to stream.
-
-
