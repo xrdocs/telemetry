@@ -1,7 +1,7 @@
 ---
 published: false
 date: '2021-03-18 08:28 +0100'
-title: How to find telemetry sensor-group?
+title: How to find IOS-XR telemetry sensor-group from a CLI?
 excerpt: >-
   This post will describe how to retrieve the YANG path for a given command and
   configure the corresponding sensor-group on an IOS-XR router.
