@@ -182,11 +182,11 @@ _Et voilà_.
 
 ANX requires a connection to a device. If you don’t have hardware accessible, there are a couple of options available:  
 
-1. Download and spin-up an IOS-XRv 9000 virtual machine on your infrastructure, pickup any version you want
+* Download and spin-up an IOS-XRv 9000 virtual machine on your infrastructure, pickup any version you want
 
 ![xrv9k-cco]({{site.baseurl}}/images/xrv9k-cco.png)
 
-2. Use DevNet always-on sandbox. Current version is IOS-XRv 9000 6.5.3
+* Use DevNet always-on sandbox. Current version is IOS-XRv 9000 6.5.3
 
 ![devnet]({{site.baseurl}}/images/devnet.png)
 
