@@ -114,21 +114,35 @@ We can assume information is possibly present in some L2VPN YANG models. Let’s
 
 [Advanced NETCONF Explorer (ANX)](https://github.com/cisco-ie/anx) is a tool written by Steven Barth at Cisco which has been open-sourced. ANX is great companion when it comes to explore telemetry and is very handy for this job.
 
-After installing ANX and configuring netconf on your IOS-XR device, you can point ANX to the router:   
+After installing ANX and configuring netconf on your IOS-XR device, you can point ANX to the router:  
+
+![anx-login]({{site.baseurl}}/images/anx-login.png)
 
 ANX will retrieve and parse available YANG models:  
 
+![anx-models]({{site.baseurl}}/images/anx-models.png)
+
 Number of available YANG models grows release after release. This can be verified on the [GitHub repository](https://github.com/YangModels/yang/tree/master/vendor/cisco/xr). Make sure you use a recent IOS-XR version to benefit the latest ones and make the most of telemetry.  
 
-Once ANX has collected the models, they can be explored. If we take our L2VPN example, our instinct tells us to search into some L2PVN operational models, but there are a lot available:  
+Once ANX has collected the models, they can be explored. If we take our L2VPN example, our instinct tells us to search into some L2PVN operational models, but there are a lot available: 
 
-Search feature can be leveraged to perform additional filtering, but still too much information:  
+![anx-explore]({{site.baseurl}}/images/anx-explore.png)
 
-Good news is heavy lifting work can be offloaded to ANX with CLI to YANG feature. Enter a command, ANX will connect to the router and will try to discover the YANG schema:  
+Search feature can be leveraged to perform additional filtering, but still too much information: 
 
-Finally, we find what we are looking for:  
+![anx-search]({{site.baseurl}}/images/anx-search.png)
 
-When clicking on the counter name, ANX displays the Sensor Path on the left:  
+Good news is heavy lifting work can be offloaded to ANX with _CLI to YANG_ feature. Enter a command, ANX will connect to the router and will try to discover the YANG schema:  
+
+![anx-cli]({{site.baseurl}}/images/anx-cli.png)
+
+Finally, we find what we are looking for: 
+
+![anx-cli-yang]({{site.baseurl}}/images/anx-cli-yang.png)
+
+When clicking on the counter name, ANX displays the Sensor Path on the left: 
+
+![anx-sensor]({{site.baseurl}}/images/anx-sensor.png)
 
 This is what needs to be configured on the router:  
 
@@ -158,14 +172,21 @@ Wed Mar 17 16:24:59.651 CET
 
 Router will start streaming counters after destination-group and subscription-group are configured like described in a [previous post](https:/xrdocs.io/telemetry/tutorials/packet-drop-identification-mdt/). Last, data can be explored and visualized with Grafana:  
 
+![grafana-explore]({{site.baseurl}}/images/grafana-explore.png)
+
 _Et voilà_.
 
 ### What if I don’t have a router available?
+
 ANX requires a connection to a device. If you don’t have hardware accessible, there are a couple of options available:  
 
 1. Download and spin-up an IOS-XRv 9000 virtual machine on your infrastructure, pickup any version you want
 
+![xrv9k-cco]({{site.baseurl}}/images/xrv9k-cco.png)
+
 2.	Use DevNet always-on sandbox. Current version is IOS-XRv 9000 6.5.3
+
+![devnet]({{site.baseurl}}/images/devnet.png)
 
 Pay attention to Platform Dependent (PD) features and models: virtual routers might not have everything available (e.g low level NPU counters for a linecard, optics level).
 
