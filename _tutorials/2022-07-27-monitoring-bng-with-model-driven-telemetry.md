@@ -15,7 +15,6 @@ Broadband Network Gateway (BNG) is a well-established technology for establishin
 ## Active Sessions
 
 When monitoring a BNG device, one of simplest but most important KPIs is the number of activated sessions. In IOS XR, you can use this CLI to get that information:
-
 <div class="highlighter-rouge">
 <pre class="highlight">
 <code>
