@@ -161,6 +161,11 @@ For information on IPv4 DHCP such as you'd see with the CLI command **show dhcp 
 sensor-path Cisco-IOS-XR-ipv4-dhcpd-oper:ipv4-dhcpd/nodes/node/server/binding/summary
 ```
 
+If you'd like to see the data equivalent to **show dhcp ipv4 server statistics detail**, use this one instead:
+```
+sensor-path Cisco-IOS-XR-ipv4-dhcpd-oper:ipv4-dhcpd/nodes/node/server/stats
+```
+
 ### DHCPv6
 For DHCPv6 Solicits, Advertises, Requests and Replies use this sensor path:
 ```
