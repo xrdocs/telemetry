@@ -115,7 +115,7 @@ module: Cisco-IOS-XR-iedge4710-oper
                        +--ro lac-sessions?            uint32
 ```
                       
-If you squint at thi for a while you'll see that this particular YANG model follows the CLI pretty closely, grouping the session counters by state and address-family and then dividing them out by subscriber type.
+If you squint at this for a while, you'll see that this particular YANG model follows the CLI pretty closely, grouping the session counters by state and address-family and then dividing them out by subscriber type.
 
 ### The Config for Subscriber Summary Data
 
@@ -141,16 +141,20 @@ telemetry model-driven
 
 What you do with the data when you get it will depend on your collection infrastructure.  In my lab, I'm using a simple, open-source collection stack of Telegraf, InfluxDB and Grafana.  Just as an example, here is the Flux query I configured in Grafana to retrieve just the activated IPv4 DHCP sessions from InfluxDB:
 
-```
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
 from(bucket: "mybucket")
   |> range(start: v.timeRangeStart, stop:v.timeRangeStop)
   |> filter(fn: (r) =>
     r._measurement == "Cisco-IOS-XR-iedge4710-oper:subscriber/session/nodes/node/summary" and
     r._field == "address_family_xr/ip_subscriber_dhcp/ipv4_only_sessions"
   )
-```
+</code>
+</pre>
+</div>
  
- And that is enough to get me my first BNG monitoring panel:
+And that is enough to get me my first BNG monitoring panel:
  ![Grafana panel showing IPv4 DHCP activated sessions]({{site.baseurl}}/images/GrafanaBNGActivatedSessions.jpg)
 
 ## DHCP KPIs
