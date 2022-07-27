@@ -119,6 +119,8 @@ If you squint at thi for a while you'll see that this particular YANG model foll
 
 ### The Config for Subscriber Summary Data
 
+Here is an example of an IOS XR configuration to stream the subscriber session summary at 10 second intervals:
+
 ```
 telemetry model-driven
  destination-group TELEGRAF
@@ -139,13 +141,14 @@ telemetry model-driven
 
 What you do with the data when you get it will depend on your collection infrastructure.  In my lab, I'm using a simple, open-source collection stack of Telegraf, InfluxDB and Grafana.  Just as an example, here is the Flux query I configured in Grafana to retrieve just the activated IPv4 DHCP sessions from InfluxDB:
 
-```from(bucket: "mybucket")
+```
+from(bucket: "mybucket")
   |> range(start: v.timeRangeStart, stop:v.timeRangeStop)
   |> filter(fn: (r) =>
     r._measurement == "Cisco-IOS-XR-iedge4710-oper:subscriber/session/nodes/node/summary" and
     r._field == "address_family_xr/ip_subscriber_dhcp/ipv4_only_sessions"
   )
- ```
+```
  
  And that is enough to get me my first BNG monitoring panel:
  ![Grafana panel showing IPv4 DHCP activated sessions]({{site.baseurl}}/images/GrafanaBNGActivatedSessions.jpg)
