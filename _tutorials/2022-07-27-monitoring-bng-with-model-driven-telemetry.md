@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 date: '2022-07-27 11:21 -0600'
 title: Monitoring BNG with Model-Driven Telemetry
 author: Shelly Cadora
@@ -16,7 +16,9 @@ Broadband Network Gateway (BNG) is a well-established technology for establishin
 
 When monitoring a BNG device, one of simplest but most important KPIs is the number of activated sessions. In IOS XR, you can use this CLI to get that information:
 
-'''
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
 RP/0/RSP0/CPU0:R1#show subscriber session all summary
 Wed Jul 27 19:19:09.440 UTC
 
@@ -46,7 +48,9 @@ Session Counts by Address-Family/LAC:
                  lac            0               0               0
               Total:            0               121             0
 RP/0/RSP0/CPU0:R1#
-'''
+</code>
+</pre>
+</div>
 
 The CLI returns the number of session counts organized by state or address-family, then by subscriber type (PPPoE, DHCP or IP packet).  As you can see from this output, the device current has 121 Activated IPv4 DHCP sessions.
 
@@ -134,7 +138,7 @@ telemetry model-driven
 
 ### Displaying Subscriber Summary Data
 
-What you do with the data when you get it will depend on your collection infrastructure.  In my lab, I'm using a simple, open-source collection stack of Telegraf, InfluxDB and Grafana.  Just as an example, here is the Flux query I configured in Grafana to retrieve the IPv4 DHCP sessions from InfluxDB:
+What you do with the data when you get it will depend on your collection infrastructure.  In my lab, I'm using a simple, open-source collection stack of Telegraf, InfluxDB and Grafana.  Just as an example, here is the Flux query I configured in Grafana to retrieve just the IPv4 DHCP sessions from InfluxDB:
 
 ```from(bucket: "mybucket")
   |> range(start: v.timeRangeStart, stop:v.timeRangeStop)
@@ -146,3 +150,21 @@ What you do with the data when you get it will depend on your collection infrast
  
  And that is enough to get me my first BNG monitoring panel:
  ![Grafana panel showing IPv4 DHCP activated sessions]({{site.baseurl}}/images/GrafanaBNGActivatedSessions.jpg)
+
+## DHCP KPIs
+
+You may also be interested in keeping track of DHCP statistics.  That data is reported in different models for IPv4 and IPv6.
+
+### DHCPv4
+
+For information on IPv4 DHCP Discovers, Offers, Requests, ACKS, NAKS and Release, use this sensor-path:
+```Cisco-IOS-XR-ipv4-dhcpd-oper:ipv4-dhcpd/nodes/node/proxy/vrfs/vrf/statistics```
+
+### DHCPv6
+for DHCPv6 Solicits, Advertises, Requests and Replies use this sensor path:
+```Cisco-IOS-XR-ipv6-new-dhcpv6d-oper:dhcpv6/nodes/node/proxy/vrfs/vrf/statistics```
+
+### DHCP Proxy
+For details on DHCP Proxy Binding, use this sensor path:
+```Cisco-IOS-XR-ipv4-dhcpd-oper:ipv4-dhcpd/nodes/node/proxy/binding/summary```
+
