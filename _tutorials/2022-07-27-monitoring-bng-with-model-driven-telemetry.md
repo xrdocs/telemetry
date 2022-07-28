@@ -205,5 +205,16 @@ For NASRAQ data, use:
 Cisco-IOS-XR-aaa-diameter-oper:aaa:diameter/nas-summary
 ```
 
+## Process Health
+Another common monitoring task involves tracking the health of BNG-related processes.  The list relevant processes includes:
+-iedged (?)
+-radiusd
+-dhcpd
 
+### Process Memory
+TBD: openconfig and/or Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization
+Native model doesn't appear to have an index??  not sure how to filter for BNG related processes
 
+### Process Memory
+TBD: openconfig and/or Cisco-IOS-XR-procmem-oper:processes-memory/nodes/node/process-ids/process-id
+The native model is indexed by PID which will require a two step process (lookup PID by name, then use PID in this model or in InfluxDB query filter)
