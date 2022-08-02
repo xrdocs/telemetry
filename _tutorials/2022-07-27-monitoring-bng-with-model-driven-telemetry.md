@@ -175,7 +175,7 @@ sensor-path Cisco-IOS-XR-ipv4-dhcpd-oper:ipv4-dhcpd/nodes/node/server/stats
 ### DHCPv6
 For DHCPv6 Solicits, Advertises, Requests and Replies use this sensor path:
 ```
-Cisco-IOS-XR-ipv6-new-dhcpv6d-oper:dhcpv6/nodes/node/proxy/vrfs/vrf/statistics
+Cisco-IOS-XR-ipv6-new-dhcpv6d-oper.yang:dhcpv6/nodes/node/server/stats
 ```
 
 ### DHCP Proxy
@@ -190,7 +190,7 @@ For RADIUS authentication data similar to what you'd see in **show radius authen
 Cisco-IOS-XR-aaa-protocol-radius-oper:radius/nodes/node/authentication
 ```
 
-For COA-specific data, try:
+For COA-specific data, use:
 ```
 Cisco-IOS-XR-aaa-protocol-radius-oper:radius/nodes/node/dynamic-authorization
 ```
@@ -206,7 +206,7 @@ Cisco-IOS-XR-aaa-diameter-oper:aaa:diameter/nas-summary
 ```
 
 ## Process Health
-Another common monitoring task involves tracking the health of BNG-related processes.  The list relevant processes includes iedged and radiusd
+Another common monitoring task involves tracking the health of BNG-related processes.  The list of relevant processes includes iedged and radiusd
 
 ### Process CPU
 Per-process CPU data can be found in the Cisco-IOS-XR-wdsysmon-fd-proc-oper.yang model. Specify the node name and the process-name in the sensor-path as follows:
@@ -215,7 +215,7 @@ Cisco-IOS-XR-wdsysmon-fd-proc-oper:process-monitoring/nodes/node[node-name=0/0/C
 ```
 
 ### Process Memory
-Per-process memory data can be found in the Cisco-IOS-XR-procmem-oper.yang model.  Since this model is indexed by process id (not process name), you'll first have to identify the process id (PID) of the process you want to monitor.  So, for example, to find the PID of the radius process, I could use this CLI:
+Per-process memory data can be found in the [Cisco-IOS-XR-procmem-oper.yang model](https://github.com/YangModels/yang/blob/main/vendor/cisco/xr/752/Cisco-IOS-XR-procmem-oper.yang).  Since this model is indexed by process id (not process name), you'll first have to identify the process id (PID) of the process you want to monitor.  So, for example, to find the PID of the radiusd process, I could use this CLI:
 ```
 RP/0/RSP0/CPU0:R1#show processes radiusd | include PID
                      PID: 14904
