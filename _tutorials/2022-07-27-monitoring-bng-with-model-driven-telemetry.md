@@ -206,15 +206,23 @@ Cisco-IOS-XR-aaa-diameter-oper:aaa:diameter/nas-summary
 ```
 
 ## Process Health
-Another common monitoring task involves tracking the health of BNG-related processes.  The list relevant processes includes:
--iedged (?)
--radiusd
--dhcpd
+Another common monitoring task involves tracking the health of BNG-related processes.  The list relevant processes includes iedged and radiusd
+
+### Process CPU
+Per-process CPU data can be found in the Cisco-IOS-XR-wdsysmon-fd-proc-oper.yang model. Specify the node name and the process-name in the sensor-path as follows:
+```
+Cisco-IOS-XR-wdsysmon-fd-proc-oper:process-monitoring/nodes/node[node-name=0/0/CPU0]/process-name/proc-cpu-utilizations/proc-cpu-utilization[process-name=iedged]
+```
 
 ### Process Memory
-TBD: openconfig and/or Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization
-Native model doesn't appear to have an index??  not sure how to filter for BNG related processes
+Per-process memory data can be found in the Cisco-IOS-XR-procmem-oper.yang model.  Since this model is indexed by process id (not process name), you'll first have to identify the process id (PID) of the process you want to monitor.  So, for example, to find the PID of the radius process, I could use this CLI:
+```
+RP/0/RSP0/CPU0:R1#show processes radiusd | include PID
+                     PID: 14904
+```
 
-### Process Memory
-TBD: openconfig and/or Cisco-IOS-XR-procmem-oper:processes-memory/nodes/node/process-ids/process-id
-The native model is indexed by PID which will require a two step process (lookup PID by name, then use PID in this model or in InfluxDB query filter)
+Once I know that radiusd has PID 14904, I can use that to stream specific memory data for the radiusd process with:
+```
+ sensor-path Cisco-IOS-XR-procmem-oper:processes-memory/nodes/node/process-ids/process-id[process-id=14904]
+ ```
+ 
