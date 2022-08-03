@@ -8,6 +8,9 @@ tags:
   - iosxr
 position: hidden
 ---
+{% include toc icon="table" title="Monitoring BNG with MDT" %}
+{% include base_path %}
+
 ## A Modern Way To Monitor A Venerable Technology
 
 Broadband Network Gateway (BNG) is a well-established technology for establishing and managing subscriber sessions, thus enabling service providers to offer differentiated services for their customers.  But even mature technologies can learn new tricks!  In this blog, I will describe the sensor-paths that allow you to monitor BNG with model-driven telemetry
