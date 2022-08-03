@@ -167,7 +167,7 @@ For information on IPv4 DHCP such as you'd see with the CLI command **show dhcp 
 sensor-path Cisco-IOS-XR-ipv4-dhcpd-oper:ipv4-dhcpd/nodes/node/server/binding/summary
 ```
 
-If you'd like to see the data equivalent to **show dhcp ipv4 server statistics detail**, use this one instead:
+If you'd like to stream the data equivalent to **show dhcp ipv4 server statistics detail**, use this one instead:
 ```
 sensor-path Cisco-IOS-XR-ipv4-dhcpd-oper:ipv4-dhcpd/nodes/node/server/stats
 ```
@@ -209,9 +209,9 @@ Cisco-IOS-XR-aaa-diameter-oper:aaa:diameter/nas-summary
 Another common monitoring task involves tracking the health of BNG-related processes.  The list of relevant processes includes iedged and radiusd
 
 ### Process CPU
-Per-process CPU data can be found in the Cisco-IOS-XR-wdsysmon-fd-proc-oper.yang model. Specify the node name and the process-name in the sensor-path as follows:
+Per-process CPU data can be found in the Cisco-IOS-XR-wdsysmon-fd-proc-oper.yang model. You will need to specify the node name and the process-name in the sensor-path. Here is an example of how to measure the CPU utilization of the iedge process on the RSP:
 ```
-Cisco-IOS-XR-wdsysmon-fd-proc-oper:process-monitoring/nodes/node[node-name=0/0/CPU0]/process-name/proc-cpu-utilizations/proc-cpu-utilization[process-name=iedged]
+Cisco-IOS-XR-wdsysmon-fd-proc-oper:process-monitoring/nodes/node[node-name=0/RSP0/CPU0]/process-name/proc-cpu-utilizations/proc-cpu-utilization[process-name=iedged]
 ```
 
 ### Process Memory
@@ -226,3 +226,18 @@ Once I know that radiusd has PID 14904, I can use that to stream specific memory
  sensor-path Cisco-IOS-XR-procmem-oper:processes-memory/nodes/node/process-ids/process-id[process-id=14904]
  ```
  
+## Interface Statistics
+There's nothing special or unique to BNG when it comes to interface statistics.  So if you're wanting to stream basic interface statistics from access and/or core-facing interfaces, use the sensor paths described in [this tutorial](https://xrdocs.io/telemetry/tutorials/2016-10-13-using-model-driven-telemetry-mdt-for-if-mib-data/). 
+
+## Monitoring QoS
+Just like interface statistics, QoS statistics are not unique to BNG.  If you want to stream up-to-date information about the QoS policies applied to your BNG interfaces, look no further than the usual QoS sensor-paths:
+```
+Cisco-IOS-XR-qos-ma-oper:qos/interface-table/interface/input/service-policy-names/service-policy-instance/statistics
+Cisco-IOS-XR-qos-ma-oper:qos/interface-table/interface/output/service-policy-names/service-policy-instance/statistics
+```
+
+## Final Thoughts
+If you're already monitoring BNG with CLI, then the shift to a model-based approach is relatively straight-forward since most of the relevant models follow the CLI output in a straight-forward way.  By streaming your BNG KPIs with model-based telemetry, you'll get all the benefits of highly efficient, structured data delivered right to your collection stack.
+ 
+#### Acknowledgements
+Many thanks to Gurpreet S for contributing his BNG subject matter expertise to this tutorial.  Check out more of the BNG team's great content at [https://xrdocs.io/cnbng/](https://xrdocs.io/cnbng/).
