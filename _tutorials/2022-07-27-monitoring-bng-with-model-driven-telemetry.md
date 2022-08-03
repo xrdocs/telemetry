@@ -6,6 +6,8 @@ author: Shelly Cadora
 excerpt: This tutorial describes sensor-paths for basic BNG monitoring
 tags:
   - iosxr
+  - BNG
+  - Telemetry
 position: hidden
 ---
 {% include toc icon="table" title="Monitoring BNG with MDT" %}
