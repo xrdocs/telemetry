@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 date: '2022-07-27 11:21 -0600'
 title: Monitoring BNG with Model-Driven Telemetry
 author: Shelly Cadora
