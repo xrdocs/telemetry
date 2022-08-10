@@ -220,7 +220,7 @@ Cisco-IOS-XR-wdsysmon-fd-proc-oper:process-monitoring/nodes/node[node-name=0/RSP
 ```
 
 ### Process Memory
-Per-process memory data can be found in the [Cisco-IOS-XR-procmem-oper.yang model](https://github.com/YangModels/yang/blob/main/vendor/cisco/xr/752/Cisco-IOS-XR-procmem-oper.yang).  Since this model is indexed by process id (not process name), you'll first have to identify the process id (PID) of the process you want to monitor.  So, for example, to find the PID of the radiusd process, I could use this CLI:
+Per-process memory data can be found in the [Cisco-IOS-XR-procmem-oper.yang model](https://github.com/YangModels/yang/blob/main/vendor/cisco/xr/752/Cisco-IOS-XR-procmem-oper.yang).  Since this model is indexed by process-id (not process name), you'll first have to identify the process-id (PID) of the process you want to monitor.  So, for example, to find the PID of the radiusd process, I could use this CLI:
 ```
 RP/0/RSP0/CPU0:R1#show processes radiusd | include PID
                      PID: 14904
@@ -231,6 +231,98 @@ Once I know that radiusd has PID 14904, I can use that to stream specific memory
  sensor-path Cisco-IOS-XR-procmem-oper:processes-memory/nodes/node/process-ids/process-id[process-id=14904]
  ```
  
+#### Telegraf Bonus: Process Memory by Process Name
+There are a couple reasons that I don't love the fact that Cisco-IOS-XR-procmem-oper.yang model forces you to use a PID to select a process for streaming memory statistics.  First, you have to perform an out-of-band process to determine the PID for the process of interest (e.g. the CLI command I showed above).  Second, PIDs can change on reload, so you might find yourself having to repeat the process after an outage or upgrade.  Fortunately, Telegraf users can use processors to make this data easier to use.
+
+As a refresher, here's the relevant part of the data model:
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+> pyang -f tree Cisco-IOS-XR-procmem-oper.yang --tree-path processes-memory/nodes/node/process-ids/process-id
+module: Cisco-IOS-XR-procmem-oper
+  +--ro processes-memory
+     +--ro nodes
+        +--ro node* [node-name]
+           +--ro process-ids
+              +--ro process-id* [process-id]
+                 +--ro process-id        Proc-mem-pid-range
+                 +--ro <mark>name?</mark>             string
+                 +--ro jid?              uint32
+                 +--ro pid?              uint32
+                 +--ro text-seg-size?    uint32
+                 +--ro data-seg-size?    uint32
+                 +--ro stack-seg-size?   uint32
+                 +--ro malloc-size?      uint32
+                 +--ro dyn-limit?        uint32
+                 +--ro shared-mem?       uint32
+                 +--ro physical-mem?     uint32
+</code>
+</pre>
+</div>
+
+As you can see the process name ("name") is in the data model, it's just not the key to the list. This is where the Telegraf converter processor comes in handy.  By adding the following to your telegraf.conf file, you can get Telegraf to convert "name" from a field to a tag:
+
+```
+[[processors.converter]]
+    [processors.converter.fields]
+        tag = [ "name" ]
+```
+
+When Telegraf adds this tag, InfluxDB can filter the memory stats based on process name.
+
+It's a good idea to refine this a little further since Telegraf may be inputting data from many models and sources and we may not always want a "name" field converted to a tag, so we can add a "namepass" statement to the config to restrict this conversion to just the procmem model:
+
+```
+[[processors.converter]]
+    namepass = [ "Cisco-IOS-XR-procmem-oper:processes-memory/nodes/node*" ]
+    [processors.converter.fields]
+        tag = [ "name" ]
+```
+
+To make this even better, I can use the rename processor to rename "name" to "process_name" so that it matches the key name for per-process CPU from Cisco-IOS-XR-wdsysmon-fd-proc-oper.yang.  If I do that, I also need to specify an order for the processors so I convert "name" to a tag first, then rename the "name" tag to "process_name."  So the final processor config in telegraf.conf would look like this:
+
+```
+[[processors.converter]]
+    order = 1
+    namepass = [ "Cisco-IOS-XR-procmem-oper:processes-memory/nodes/node*" ]
+    [processors.converter.fields]
+        tag = [ "name" ]
+
+[[processors.rename]]
+    order = 2
+    namepass = [ "Cisco-IOS-XR-procmem-oper:processes-memory/nodes/node*" ]
+    [[processors.rename.replace]]
+        tag = "name"
+        dest = "process_name"
+```
+
+If you go this route, make sure you modify the sensor path config so the router sends the data for all the processes (not just the one PID):
+
+```
+ sensor-path Cisco-IOS-XR-procmem-oper:processes-memory/nodes/node/process-ids
+ ```
+
+##### Super-Geek Starlark Bonus
+
+Just for fun, I experimented with doing the same thing (tagging and renaming) using the [starlark](https://www.influxdata.com/blog/how-use-starlark-telegraf/) processor instead of converter and rename.  Starlark is probably overkill for this application but just for your reference, here's a working example:
+
+```
+[[processors.starlark]]
+ source = '''
+renames = {
+   'name': 'process_name',
+}
+def apply(metric):
+ # k stands for key, v for value
+   if metric.name == "Cisco-IOS-XR-procmem-oper:processes-memory/nodes/node/process-ids/process-id":
+      for k, v in metric.fields.items():
+         if k in renames:
+            metric.tags[renames[k]] = v
+            metric.fields.pop(k)
+   return metric
+'''
+```
+
 ## Interface Statistics
 There's nothing special or unique to BNG when it comes to interface statistics.  So if you're wanting to stream basic interface statistics from access and/or core-facing interfaces, use the sensor paths described in [this tutorial](https://xrdocs.io/telemetry/tutorials/2016-10-13-using-model-driven-telemetry-mdt-for-if-mib-data/). 
 
