@@ -36,7 +36,7 @@ Session Counts by State:
         initializing            0               0               0
           connecting            0               0               0
            connected            0               0               0
-           <b>activated            0               121             0</b>
+           <mark>activated            0               121             0</mark>
                 idle            0               0               0
        disconnecting            0               0               0
                  end            0               0               0
@@ -45,7 +45,7 @@ Session Counts by State:
 
 Session Counts by Address-Family/LAC:
          in progress            0               0               0
-           <b>ipv4-only            0               121             0</b>
+           <mark>ipv4-only            0               121             0</mark>
            ipv6-only            0               0               0
      dual-partial-up            0               0               0
              dual-up            0               0               0
@@ -260,7 +260,7 @@ module: Cisco-IOS-XR-procmem-oper
 </pre>
 </div>
 
-As you can see the process name ("name") is in the data model, it's just not the key to the list. This is where the Telegraf converter processor comes in handy.  By adding the following to your telegraf.conf file, you can get Telegraf to convert "name" from a field to a tag:
+As you can see the process name ("name") is in the data model, it's just not the key to the list. This is where the Telegraf [converter](https://github.com/influxdata/telegraf/blob/release-1.8/plugins/processors/converter/README.md) processor comes in handy.  By adding the following to your telegraf.conf file, you can get Telegraf to convert "name" from a field to a tag:
 
 ```
 [[processors.converter]]
@@ -279,7 +279,7 @@ It's a good idea to refine this a little further since Telegraf may be inputting
         tag = [ "name" ]
 ```
 
-To make this even better, I can use the rename processor to rename "name" to "process_name" so that it matches the key name for per-process CPU from Cisco-IOS-XR-wdsysmon-fd-proc-oper.yang.  If I do that, I also need to specify an order for the processors so I convert "name" to a tag first, then rename the "name" tag to "process_name."  So the final processor config in telegraf.conf would look like this:
+To make this even better, I can use the [rename](https://github.com/influxdata/telegraf/blob/release-1.8/plugins/processors/rename/README.md) processor to rename "name" to "process_name" so that it matches the key name for per-process CPU from Cisco-IOS-XR-wdsysmon-fd-proc-oper.yang.  If I do that, I also need to specify an order for the processors so I convert "name" to a tag first, then rename the "name" tag to "process_name."  So the final processor config in telegraf.conf would look like this:
 
 ```
 [[processors.converter]]
@@ -296,7 +296,7 @@ To make this even better, I can use the rename processor to rename "name" to "pr
         dest = "process_name"
 ```
 
-If you go this route, make sure you modify the sensor path config so the router sends the data for all the processes (not just the one PID):
+If you go this route, make sure you modify the sensor-path config so the router sends the data for all the processes (not just the one PID):
 
 ```
  sensor-path Cisco-IOS-XR-procmem-oper:processes-memory/nodes/node/process-ids
@@ -304,7 +304,7 @@ If you go this route, make sure you modify the sensor path config so the router 
 
 ##### Super-Geek Starlark Bonus
 
-Just for fun, I experimented with doing the same thing (tagging and renaming) using the [starlark](https://www.influxdata.com/blog/how-use-starlark-telegraf/) processor instead of converter and rename.  Starlark is probably overkill for this application but just for your reference, here's a working example:
+Just for fun, I experimented with doing the same thing (tag conversion and renaming) using the [starlark](https://www.influxdata.com/blog/how-use-starlark-telegraf/) processor instead of **converter** and **rename**.  Starlark is probably overkill for this application but just for your reference, here's a working example:
 
 ```
 [[processors.starlark]]
