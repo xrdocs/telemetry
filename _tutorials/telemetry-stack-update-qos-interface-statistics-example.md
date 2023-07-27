@@ -15,9 +15,9 @@ position: hidden
 {% include toc icon="table" title="Table of Contents" %}
 
 # Introduction 
-While telemetry has gain more popularity in the last few years, we still see a lof of customer that are hesitant to start using it. Telemetry is still seen for many as a black box.
+While telemetry has gain more popularity in the last few years, we still see a lof of customers that are hesitant to start using it. Telemetry is still seen for many as a black box.
 
-There are already many great articles that cover the concepts and basics of telemetry. It gives great examples of what can be done and why telemetry should be used and I suggest that you have a look at them. However, many times people struggle when they start building their telemetry stack and it is not as easy as we may think. 
+There are already many great articles that cover the concepts and basics of telemetry. It gives great examples of what can be done and why telemetry should be used and I suggest that you have a [look at them](https://xrdocs.io/telemetry/). However, many times people struggle when they start building their telemetry stack and it is not as easy as we may think. 
 
 This article is intended to share an up to date telemetry stack that can easily be spinned up using Docker, provide configuration example for both dial-in and dial-out streaming methods and share a few tips and tricks to work with telemetry models and collectors.
 
@@ -44,7 +44,7 @@ A simple telemetry stack is composed of three main elements:
  - **Database:** It stores data. The most suitable database are Time Series DataBase (TSDB). Indeed, they are specificaly built for handling metrics that are time-stamped.
  - **Visualization tool:** It queries the database to display data. It allows to create graphs and others charts for data visualization. Those charts can be gathered in dashboards.
 
-<img src="{{site.baseurl}}/images/telemetry_stack.png"  height="300">
+<img src="{{site.baseurl}}/images/telemetry_stack.png" style="max-height: 300px;">
 
 An alert manager is often added in the stack to trigger alerts on specific thresholds. Many time, this alert manager is part of the vizualization tool. 
 
@@ -164,6 +164,10 @@ docker compose up -d|Create and launch the containers in detached mode. The comm
 docker compose ps|Show the running container
 docker compose down|Stop and delete the containersdocker compose logs <container_name>|show the logs for a specific container
 
+
+**Host Port**|**Service**
+:-----:|:-----:
+3000|Grafana
 
 # Telemetry configuration
  
