@@ -160,8 +160,8 @@ Below table is a quick reminder of useful docker compose commands:
 :-----:|:-----:
 docker compose pull|Pull the images present in the file. Will update to the latest image version if available.
 docker compose up|Create and launch the containers. The command does not return and logs are sent to the terminal output
-docker compose up -d|Create and launch the containers in detached mode. The command returns after the container creation
-docker compose ps|Show the running container
+docker compose up -d|Create and launch the containers in detached mode. The command returns after the containers creation
+docker compose ps|Show the running containers
 docker compose down|Stop and delete the containers
 docker compose logs &lt;container_name&gt;|show the logs for a specific container
 
@@ -172,7 +172,7 @@ For more information, have a look at the [documentation](https://docs.docker.com
  
 ## Dial-out method
 
-When using the dial-out method, most of the configuration is done on the routers. The telegraf config is simpler, although some processor plugins are used to transform and standardize the data.
+When using the dial-out method, most of the configuration is done on the routers. The telegraf configuration is simpler, although some processor plugins are used to transform and standardize the data.
 
 ### XR configuration
 
