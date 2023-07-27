@@ -19,18 +19,18 @@ While telemetry has gain more popularity in the last few years, we still see a l
 
 There are already many great articles that cover the concepts and basics of telemetry. It gives great examples of what can be done and why telemetry should be used and I suggest that you have a [look at them](https://xrdocs.io/telemetry/). However, many times people struggle when they start building their telemetry stack and it is not as easy as we may think. 
 
-This article is intended to share an up to date telemetry stack that can easily be spinned up using Docker, provide configuration example for both dial-in and dial-out streaming methods and share a few tips and tricks to work with telemetry models and collectors.
+This article is intended to share an up to date telemetry stack that can easily be spinned up using Docker, it provides configuration example for both dial-in and dial-out streaming methods and shares a few tips and tricks to work with telemetry models and collectors.
 
 # Context
 ## QOS Interface Statistics
 Collecting QOS interface statistics has been a recurring demand for our customers. Knowing the bandwith utilization of an interface is often not enough and having the distribution of traffic among QOS classes gives a better view of the traffic profile. 
 
 ## Yang Models
-Yang models used for telemetry are not always perfect or they do not exactly fit our needs. There is so much data with many differents models, for example it may happen that a particular model has a wrong data type. In the `Cisco-IOS-XR-qos-ma-oper:qos/interface-table` Yang model, which is used to retrieve QOS interface statistics, the `class-name` leaf inside a service-policy is not seen as a key. We are in the situation on an unkeyed list and it often causes issues with collectors.
+Yang models used for telemetry are not always perfect, sometimes they do not exactly fit our needs. There is so much data with many differents models, it may happen that a particular model has a wrong data type. In the **Cisco-IOS-XR-qos-ma-oper:qos/interface-table** Yang model, which is used to retrieve QOS interface statistics, the **class-name** leaf inside a service-policy is not seen as a key. We are in the situation of an unkeyed list and it often causes issues with collectors.
 
 ![qos_ma_oper_yang_model.png]({{site.baseurl}}/images/qos_ma_oper_yang_model.png)
 
-Many times, the model can be updated, but it means installing a SMU (Software Maintenance Upgrade) or a new software version. It is much simpler to work with the current model available and do some work in the telemetry collector to adapt it to specific needs. 
+Many times, the model can be updated, but it means installing a SMU (Software Maintenance Upgrade) or a new software version. It is often much simpler to work with the current model available and do some work in the telemetry collector to adapt it to specific needs. 
 
 This articles aims to show examples on how to work around Yang models and telemetry collector limitations. It shows an example on how to provides a complete dashboard for monitoring QOS interface statistics.
 
@@ -41,8 +41,8 @@ This articles aims to show examples on how to work around Yang models and teleme
 
 A simple telemetry stack is composed of three main elements:
  - **Collector:** It receives, processes and exports telemetry data from various sources
- - **Database:** It stores data. The most suitable database are Time Series DataBase (TSDB). Indeed, they are specificaly built for handling metrics that are time-stamped.
- - **Visualization tool:** It queries the database to display data. It allows to create graphs and others charts for data visualization. Those charts can be gathered in dashboards.
+ - **Database:** It stores data. The most suitable databases are Time Series DataBase (TSDB). Indeed, they are specificaly built for handling metrics that are time-stamped.
+ - **Visualization tool:** It queries the database to display data. It allows to create graphs and others charts for data visualization. Those charts can often be gathered in dashboards.
 
 <img src="{{site.baseurl}}/images/telemetry_stack.png" style="max-height: 300px;">
 
@@ -58,36 +58,35 @@ The previously known TICK stack (Telegraf - InfluxDB - Chronograf - Kapacitor) i
 {: .notice--info}
 
 ## TIG Stack
-The TIG (Telegraf - InfluxDB - Grafana) is a popular opensource telemetry stack that can be used to gather telemetry data from several network platforms including Cisco devices like IOS XR routers. All example will be based on this stack with Influx DB in version 2. 
+The TIG stack (Telegraf - InfluxDB - Grafana) is a popular opensource telemetry stack that can be used to gather telemetry data from several network platforms including Cisco devices like IOS XR routers. All example will be based on this stack with Influx DB in version 2. 
 
-While InfluxDB offer its own web application for data visualization, Grafana is still used. Indeed, it offers many more options for building dashboard and alerts and can work with other data sources than InfluxDB. Using InfluxDB interface is still very valuable to explore the database and build flux queries.
+While InfluxDB offers its own web application for data visualization, Grafana is still used. Indeed, it offers many more options for building dashboards and alerts and can work with other data sources than InfluxDB. Using InfluxDB interface is still very valuable to explore the database and build flux queries.
 
 ## Collection methods
-There are two collections methods for telemetry. Dial-in and dial-out, it refers to which element initiates the telemetry session: the collector or the data source device. For more information, there is this great article on XRdocs: [Model-Driven Telemetry: Dial-In or Dial-Out ?](https://xrdocs.io/telemetry/blogs/2017-01-20-model-driven-telemetry-dial-in-or-dial-out/)
+There are two collection methods for telemetry. Dial-in and dial-out, it refers to which element initiates the telemetry session: the collector or the data source device. For more information on what you could choose, there is this great article from Shelly on XRdocs: [Model-Driven Telemetry: Dial-In or Dial-Out ?](https://xrdocs.io/telemetry/blogs/2017-01-20-model-driven-telemetry-dial-in-or-dial-out/)
 
-As both methods may be used depending on your production environment, both approach will be described and used as examples. While gRPC dial-out is often easier to work with, we will show that the same result can be achieved with both.
+As both methods may be used depending on your environment, both approach will be described and used as examples. While gRPC dial-out is often easier to work with, we will show that the same result can be achieved with both.
 
 ## Telegraf collector
-Telegraf is composed of multiple plugins that can be categorized in four differents types:
- - **Input plugin:** Collect the raw metrics from the datasources
- - **Processor plugin:** Transform, decorate and filter metrics
- - **Aggregator plugin:** create aggregate metric as average mean, min, max, etc. 
- - **Output plugin:** write the metric to datastore.
+Telegraf is composed of multiple plugins that can be categorized in four different types:
+ - **Input plugin:** collect raw metrics from the datasources
+ - **Processor plugin:** transform, decorate and filter metrics
+ - **Aggregator plugin:** create aggregate metrics such as average mean, min, max, etc. 
+ - **Output plugin:** write metrics to datastore.
 
-For IOS XR routers the plugin `inputs.gnmi` is used for dial-in and the plugin `inputs.cisco_telemetry_mdt` is used for dial-out.
+For IOS XR routers, the plugin `inputs.cisco_telemetry_mdt` is used for dial-out and the plugin `inputs.gnmi` is used for dial-in.
 
-In the example used, multiples processor plugins will be used to sanitize the data received and ensure that the format is the same for both the dial-in and dial-out methods
+Multiples processor plugins will be used in the following examples to sanitize the data received and ensure that the output format is the same for both the dial-in and dial-out methods
 
 ## Telemetry metric format
-Most telemetry data based on timeseries follow a commun format. It is important to know this format to better understand how data is handled between the differents component of the stack.
+Most telemetry data based on timeseries follow a commun format. It is important to know this format to better understand how data is handled between the different components of the stack.
 
 A time serie data point requires the following metadata: 
  - **Timestamp:** the time at which the metric was collected
  - **Metric name:** such as sys.cpu.user , env.probe.temp
- - **Value:** the value of the metric at the given timestamp. This can be of many types such as integer, float, string, boolean, etc.
- - **Tags:** key/value pairs that uniquely identify the metric. For example, there could be multiple cpu cores and many cpu on a system. There can be one or multiples tag
+ - **Value:** the value of the metric at the given timestamp. This can be of many types such as integer, float, string, boolean, etc. There can be one or multiples tag. For example, there could be multiple cpu cores and many cpu on a system. 
 
- Below is an example of metrics collected for a server with two cpus of two cores
+Below is an example of metrics collected for a server with two cpus of two cores
 
 ```
 <timestamp> sys.cpu.user: host=server1,cpu=0,core=0 11
@@ -97,7 +96,9 @@ A time serie data point requires the following metadata:
 ```
 
 # Docker compose
-Building a telemetry stack with docker containers is a great way to quickly start testing telemetry. Below is the docker compose used to launch a TIG stack.
+Building a telemetry stack with docker containers is a great way to quickly start testing telemetry. It could also be used for a production environ, though it would need to be hardened.
+
+Below is the docker compose used to launch a TIG stack.
 
 ```
 version: "2"
@@ -144,7 +145,7 @@ services:
      - ./embedded_tag.star:/etc/telegraf/embedded_tag.star:ro
 ```
 
-Default tcp ports are used for Grafana (3000) and InfluxDB (8086). The port 57500 is exposed for telegraf, it is only used in case of dial-out methods as there is a inbound connection to the collector. 
+Default tcp ports are used for Grafana (3000) and InfluxDB (8086). The port 57500 is exposed for Telegraf, it is only used in case of dial-out methods as there is a inbound connection to the collector. 
 Some environment variables are used to define admin user and password as well as an API token for InfluxDB. If those variables are changes, Telegraf configuration files needs to be updated accordingly.
 
 The InfluxDB data is persistent accross restart of the stack but stored in /tmp.
