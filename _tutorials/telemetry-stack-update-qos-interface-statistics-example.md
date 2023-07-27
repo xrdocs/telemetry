@@ -377,7 +377,7 @@ The full script can be found on the github repository.
 ## Grafana
 
 
-As InfluxDB v2 is used, all queries are done using the Flux language. More information about Flux queries can be found in the [documentation] (https://docs.influxdata.com/influxdb/cloud/query-data/get-started/query-influxdb/). Edit the panels to see how they have been built and which queries are used.
+As InfluxDB v2 is used, all queries are done using the Flux language. More information about Flux queries can be found in the [documentation](https://docs.influxdata.com/influxdb/cloud/query-data/get-started/query-influxdb/). Edit the panels to see how they have been built and which queries are used.
 
 ![panel_edit.png]({{site.baseurl}}/images/panel_edit.png)
 
