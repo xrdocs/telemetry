@@ -163,7 +163,7 @@ docker compose up|Create and launch the containers. The command does not return 
 docker compose up -d|Create and launch the containers in detached mode. The command returns after the container creation
 docker compose ps|Show the running container
 docker compose down|Stop and delete the containers
-docker compose logs <container_name>|show the logs for a specific container
+docker compose logs &lt;container_name&gt;|show the logs for a specific container
 
 For more information, have a look at the [documentation](https://docs.docker.com/compose/reference/)
  
