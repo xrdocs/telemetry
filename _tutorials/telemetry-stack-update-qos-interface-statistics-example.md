@@ -168,6 +168,7 @@ The file `embedded_tag.star` is a small script used to format data when the dial
 
 Below table is a quick reminder of useful docker compose command:
 
+
 **Command**|**Description**
 :-----:|:-----:
 docker compose pull|Pull the images present in the file. Will update to the latest image version if available.
@@ -176,6 +177,7 @@ docker compose up -d|Create and launch the containers in detached mode. The comm
 docker compose ps|Show the running container
 docker compose down|Stop and delete the containers
 docker compose logs <container_name>|show the logs for a specific container
+
 
 # Telemetry configuration
  
