@@ -30,7 +30,7 @@ Collecting QOS interface statistics has been a recurring demand for our customer
 
 ## Yang Models
 
-Yang models used for telemetry are not always perfect or they do not exactly fit our needs. There is so much data with many differents models, it may happen that a particular model has a wrong data type for example. In the `Cisco-IOS-XR-qos-ma-oper:qos/interface-table` Yang model which is used to retrieve QOS interface statistics, the `class-name` leaf inside a service-policy is not seen as a key. We are in the situation on an unkeyed list and it often causes issues with collectors.
+Yang models used for telemetry are not always perfect or they do not exactly fit our needs. There is so much data with many differents models, it may happen that a particular model has a wrong data type for example. In the `Cisco-IOS-XR-qos-ma-oper:qos/interface-table` Yang model, which is used to retrieve QOS interface statistics, the `class-name` leaf inside a service-policy is not seen as a key. We are in the situation on an unkeyed list and it often causes issues with collectors.
 
 ![qos_ma_oper_yang_model.png]({{site.baseurl}}/images/qos_ma_oper_yang_model.png)
 
@@ -45,10 +45,12 @@ This articles aims to show examples on how to work around Yang models and teleme
 ## Components
 
 A simple telemetry stack is composed of three main elements:
- - A collector: It receives, processes and exports telemetry data from various sources
- - A database: It stores data. The most suitable database are Time Series DataBase (TSDB). Indeed, they are specificaly built for handling metrics that are time-stamped.
- - A visualization tool: It queries the database to display data. It allows to create graphs and others charts for data visualization. Those charts can be gathered in dashboards.
+ - **Collector:** It receives, processes and exports telemetry data from various sources
+ - **Database:** It stores data. The most suitable database are Time Series DataBase (TSDB). Indeed, they are specificaly built for handling metrics that are time-stamped.
+ - **Visualization tool:** It queries the database to display data. It allows to create graphs and others charts for data visualization. Those charts can be gathered in dashboards.
 
+<img src="{{site.baseurl}}/images/telemetry_stack.png"  height="300">
+![telemetry_stack.png]()
 
 An alert manager is often added in the stack to trigger alerts on specific thresholds. Many time, this alert manager is part of the vizualization tool. 
 
@@ -57,7 +59,7 @@ There are multiple options for those elements, proprietary and opensource. Below
  - Database: InfluxDB, Prometheus, Elasticsearch
  - Visualization: InfluxDB, Grafana, Kibana
 
-![telemetry_stack.png]({{site.baseurl}}/images/telemetry_stack.png)
+
 
 
 The previously known TICK stack (Telegraf - InfluxDB - Chronograf - Kapacitor) is now integrated into InfluxDB. Since version 2.x, Chronograf (visualization) and Kapacitor (alerts) are integrated into InfluxDB, only Telegraf remains a separate component. Therefore, with only Telegraf and InfluxDB you can have a working telemetry stack.{: .notice--info}
@@ -393,4 +395,3 @@ The dashboard can be displayed for one specific device and one or more interface
 
 
 The variables are then used in the queries to filter the result. For example this is how to filter for a specific device. `|> filter(fn: (r) => r["source"] == "${device}")`
-
