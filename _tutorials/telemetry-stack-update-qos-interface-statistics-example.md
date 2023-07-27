@@ -93,10 +93,10 @@ In the example used, multiples processor plugins will be used to sanitize the da
 Most telemetry data based on timeseries follow a commun format. It is important to know this format to better understand how data is handled between the differents component of the stack.
 
 A time serie data point requires the following metadata: 
- - Timestamp: the time at which the metric was collected
- - Metric name: such as sys.cpu.user , env.probe.temp
- - Value: the value of the metric at the given timestamp. This can be of many types such as integer, float, string, boolean, etc.
- - Tags: key/value pairs that uniquely identify the metric. For example, there could be multiple cpu cores and many cpu on a system. There can be one or multiples tag
+ - **Timestamp:** the time at which the metric was collected
+ - **Metric name:** such as sys.cpu.user , env.probe.temp
+ - **Value:** the value of the metric at the given timestamp. This can be of many types such as integer, float, string, boolean, etc.
+ - **Tags:** key/value pairs that uniquely identify the metric. For example, there could be multiple cpu cores and many cpu on a system. There can be one or multiples tag
 
  Below is an example of metrics collected for a server with two cpus of two cores
 
@@ -110,7 +110,7 @@ A time serie data point requires the following metadata:
 
 # Docker compose
 
-Building a telemetry stack with docker containers is a great way to quickly start testing telemetry. Below is the docker compose used to lauch a TIG stack.
+Building a telemetry stack with docker containers is a great way to quickly start testing telemetry. Below is the docker compose used to launch a TIG stack.
 
 ```
 version: "2"
@@ -158,7 +158,7 @@ services:
 ```
 
 Default tcp ports are used for Grafana (3000) and InfluxDB (8086). The port 57500 is exposed for telegraf, it is only used in case of dial-out methods as there is a inbound connection to the collector. 
-Some environment variables are used to define admin user and password as well as an API token for InfluxDB. If those variables are changes, Telegraf configuration files needs to be changed accordingly.
+Some environment variables are used to define admin user and password as well as an API token for InfluxDB. If those variables are changes, Telegraf configuration files needs to be updated accordingly.
 
 The InfluxDB data is persistent accross restart of the stack but stored in /tmp.
 
