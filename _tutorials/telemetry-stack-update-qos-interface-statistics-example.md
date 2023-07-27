@@ -50,7 +50,6 @@ A simple telemetry stack is composed of three main elements:
  - **Visualization tool:** It queries the database to display data. It allows to create graphs and others charts for data visualization. Those charts can be gathered in dashboards.
 
 <img src="{{site.baseurl}}/images/telemetry_stack.png"  height="300">
-![telemetry_stack.png]()
 
 An alert manager is often added in the stack to trigger alerts on specific thresholds. Many time, this alert manager is part of the vizualization tool. 
 
