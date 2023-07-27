@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 date: '2023-07-27 16:18 +0200'
 title: 'Telemetry Stack Update: QOS interface statistics example'
 author: Romain Cyrille
@@ -10,5 +10,6 @@ excerpt: >-
 tags:
   - iosxr
   - Telemetry
+position: hidden
 ---
 {% include toc icon="table" title="Table of Contents" %}
