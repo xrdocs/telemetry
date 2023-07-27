@@ -73,15 +73,15 @@ While InfluxDB offer its own web application for data visualization, Grafana is 
 
 There are two collections methods for telemetry. Dial-in and dial-out, it refers to which element initiates the telemetry session: the collector or the data source device. For more information, there is this great article on XRdocs: [Model-Driven Telemetry: Dial-In or Dial-Out ?](https://xrdocs.io/telemetry/blogs/2017-01-20-model-driven-telemetry-dial-in-or-dial-out/)
 
-As both methods may be used depending on your production environment, both approach will be described and used as example. While gRPC dial-out is often easier to work with, we will show that the same result can be achieved with both.
+As both methods may be used depending on your production environment, both approach will be described and used as examples. While gRPC dial-out is often easier to work with, we will show that the same result can be achieved with both.
 
 ## Telegraf collector
 
-Telegraf is composed of multiples plugin that can be categorized in four differents types:
- - Input plugin: Collect the raw metrics from the datasources
- - Processor plugin: Transform, decorate and filter metrics
- - Aggregator plugin: create aggregate metric as average mean, min, max, etc. 
- - Output plugin: write the metric to datastore.
+Telegraf is composed of multiple plugins that can be categorized in four differents types:
+ - **Input plugin:** Collect the raw metrics from the datasources
+ - **Processor plugin:** Transform, decorate and filter metrics
+ - **Aggregator plugin:** create aggregate metric as average mean, min, max, etc. 
+ - **Output plugin:** write the metric to datastore.
 
 For IOS XR routers the plugin `inputs.gnmi` is used for dial-in and the plugin `inputs.cisco_telemetry_mdt` is used for dial-out.
 
