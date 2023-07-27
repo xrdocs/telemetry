@@ -154,7 +154,7 @@ The folder `grafana-provisioning` contains files for creating of the InfluxDB da
 
 The file `embedded_tag.star` is a small script used to format data when the dial-in method is used. More details are provided in the following sections.
 
-Below table is a quick reminder of useful docker compose command:
+Below table is a quick reminder of useful docker compose commands:
 
 **Command**|**Description**
 :-----:|:-----:
@@ -165,7 +165,7 @@ docker compose ps|Show the running container
 docker compose down|Stop and delete the containers
 docker compose logs <container_name>|show the logs for a specific container
 
- 
+For more information, have a look at the [documentation](https://docs.docker.com/compose/reference/)
  
 
 # Telemetry configuration
