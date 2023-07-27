@@ -54,11 +54,9 @@ A simple telemetry stack is composed of three main elements:
 An alert manager is often added in the stack to trigger alerts on specific thresholds. Many time, this alert manager is part of the vizualization tool. 
 
 There are multiple options for those elements, proprietary and opensource. Below are popular opensource tools that can be used to build a telemetry stack:
- - Collectors: Telegraf, gnmic, Fluentd, Logstash
- - Database: InfluxDB, Prometheus, Elasticsearch
- - Visualization: InfluxDB, Grafana, Kibana
-
-
+ - **Collectors:** Telegraf, gnmic, Fluentd, Logstash
+ - **Database:** InfluxDB, Prometheus, Elasticsearch
+ - **Visualization:** InfluxDB, Grafana, Kibana
 
 
 The previously known TICK stack (Telegraf - InfluxDB - Chronograf - Kapacitor) is now integrated into InfluxDB. Since version 2.x, Chronograf (visualization) and Kapacitor (alerts) are integrated into InfluxDB, only Telegraf remains a separate component. Therefore, with only Telegraf and InfluxDB you can have a working telemetry stack.{: .notice--info}
