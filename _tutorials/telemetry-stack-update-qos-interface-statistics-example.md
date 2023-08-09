@@ -15,24 +15,24 @@ position: hidden
 {% include toc icon="table" title="Table of Contents" %}
 
 # Introduction 
-While telemetry has gain more popularity in the last few years, we still see a lof of customers that are hesitant to start using it. Telemetry is still seen for many as a black box.
+While telemetry has gained more popularity in the last few years, we still see a lot of customers that are hesitant to start using it. Telemetry is still seen for many as a black box.
 
-There are already many great articles that cover the concepts and basics of telemetry. It gives great examples of what can be done and why telemetry should be used and I suggest that you have a [look at them](https://xrdocs.io/telemetry/tutorials/). However, many times people struggle when they start building their telemetry stack and it is not as easy as we may think. 
+There are already many great articles that cover the concepts and basics of telemetry. It gives great examples of what can be done and why telemetry should be used; I suggest that you have a [look at them](https://xrdocs.io/telemetry/tutorials/). However, many times people struggle when they start building their telemetry stack and it is not as easy as we may think. 
 
-This article is intended to share an up to date telemetry stack that can easily be spinned up using Docker, it provides configuration example for both dial-in and dial-out streaming methods and shares a few tips and tricks to work with telemetry models and collectors.
+This article is intended to share an up-to-date telemetry stack that can easily be spined up using Docker, it provides configuration example for both dial-in and dial-out streaming methods and shares a few tips and tricks to work with telemetry models and collectors.
 
 # Context
 ## QOS Interface Statistics
-Collecting QOS interface statistics is a recurring demand of our customers. Knowing the bandwith utilization of an interface is often not enough and having the distribution of traffic among QOS classes gives a better view of the traffic profile. 
+Collecting QOS interface statistics is a recurring demand of our customers. Knowing the bandwidth utilization of an interface is often not enough and having the distribution of traffic among QOS classes gives a better view of the traffic profile. 
 
 ## Yang Models
-Yang models used for telemetry are not always perfect, sometimes they do not exactly fit our needs. There is so much data with many differents models, it may happen that a particular model has a wrong data type. In the **Cisco-IOS-XR-qos-ma-oper:qos/interface-table** Yang model, which is used to retrieve QOS interface statistics, the **class-name** leaf inside a service-policy is not seen as a key. We are in the situation of an unkeyed list and it often causes issues with collectors.
+Yang models used for telemetry are not always perfect, sometimes they do not exactly fit our needs. There is so much data with many different models, it may happen that a particular model has a wrong data type. In the **Cisco-IOS-XR-qos-ma-oper:qos/interface-table** Yang model, which is used to retrieve QOS interface statistics, the **class-name** leaf inside a service-policy is not seen as a key. We are in the situation of an unkeyed list and it often causes issues with collectors.
 
 ![qos_ma_oper_yang_model.png]({{site.baseurl}}/images/qos_ma_oper_yang_model.png)
 
 Many times, the model can be updated, but it means installing a SMU (Software Maintenance Upgrade) or a new software version. It is often much simpler to work with the current model available and do some work in the telemetry collector to adapt it to specific needs. 
 
-This articles aims to show examples on how to work around Yang models and telemetry collector limitations. It shows an example on how to provides a complete dashboard for monitoring QOS interface statistics.
+This article aims to show examples on how to work around Yang models and telemetry collector limitations. It shows an example on how to provides a complete dashboard for monitoring QOS interface statistics.
 
 ![dashboard_main_view.png]({{site.baseurl}}/images/dashboard_main_view.png)
 
@@ -41,12 +41,12 @@ This articles aims to show examples on how to work around Yang models and teleme
 
 A simple telemetry stack is composed of three main elements:
  - **Collector:** It receives, processes and exports telemetry data from various sources
- - **Database:** It stores data. The most suitable databases are Time Series DataBase (TSDB). Indeed, they are specificaly built for handling metrics that are time-stamped.
+ - **Database:** It stores data. The most suitable databases are Time Series DataBase (TSDB). Indeed, they are specifically built for handling metrics that are time-stamped.
  - **Visualization tool:** It queries the database to display data. It allows to create graphs and others charts for data visualization. Those charts can often be gathered in dashboards.
 <p style="text-align: center;">
 <img src="{{site.baseurl}}/images/telemetry_stack.png" style="max-height: 300px;">
 </p>
-An alert manager is often added in the stack to trigger alerts on specific thresholds. Many time, this alert manager is part of the vizualization tool. 
+An alert manager is often added in the stack to trigger alerts on specific thresholds. Many time, this alert manager is part of the visualization tool. 
 
 There are multiple options for those elements, proprietary and opensource. Below are popular opensource tools that can be used to build a telemetry stack:
  - **Collectors:** Telegraf, gnmic, Fluentd, Logstash
@@ -58,28 +58,28 @@ The previously known TICK stack (Telegraf - InfluxDB - Chronograf - Kapacitor) i
 {: .notice--info}
 
 ## TIG Stack
-The TIG stack (Telegraf - InfluxDB - Grafana) is a popular opensource telemetry stack that can be used to gather telemetry data from several network platforms including Cisco devices like IOS XR routers. All example will be based on this stack with Influx DB in version 2. 
+The TIG stack (Telegraf - InfluxDB - Grafana) is a popular opensource telemetry stack that can be used to gather telemetry data from several network platforms including Cisco devices like IOS XR routers. All example will be based on this stack with InfluxDB (version 2.x). 
 
 While InfluxDB offers its own web application for data visualization, Grafana is still used. Indeed, it offers many more options for building dashboards and alerts and can work with other data sources than InfluxDB. Using InfluxDB interface is still very valuable to explore the database and build flux queries.
 
 ## Collection methods
 There are two collection methods for telemetry. Dial-in and dial-out, it refers to which element initiates the telemetry session: the collector or the data source device. For more information on what you could choose, there is this great article from Shelly on XRdocs: [Model-Driven Telemetry: Dial-In or Dial-Out ?](https://xrdocs.io/telemetry/blogs/2017-01-20-model-driven-telemetry-dial-in-or-dial-out/)
 
-As both methods may be used depending on your environment, both approach will be described and used as examples. While gRPC dial-out is often easier to work with, we will show that the same result can be achieved with both.
+As both methods may be used depending on your environment, both approaches will be described and used as examples. While gRPC dial-out is often easier to work with, we will show that the same result can be achieved with both.
 
 ## Telegraf collector
 Telegraf is composed of multiple plugins that can be categorized in four different types:
- - **Input plugin:** collect raw metrics from the datasources
+ - **Input plugin:** collect raw metrics from the data sources
  - **Processor plugin:** transform, decorate and filter metrics
  - **Aggregator plugin:** create aggregate metrics such as average mean, min, max, etc. 
  - **Output plugin:** write metrics to datastore.
 
 For IOS XR routers, the plugin `inputs.cisco_telemetry_mdt` is used for dial-out and the plugin `inputs.gnmi` is used for dial-in.
 
-Multiples processor plugins will be used in the following examples to sanitize the data received and ensure that the output format is the same for both the dial-in and dial-out methods
+Multiples processor plugins will be used in the following examples to sanitize the data received and ensure that the output format is the same for both the dial-in and dial-out methods.
 
 ## Telemetry metric format
-Most telemetry data based on timeseries follow a commun format. It is important to know this format to better understand how data is handled between the different components of the stack.
+Most telemetry data based on timeseries follow a common format. It is important to know this format to better understand how data is handled between the different components of the stack.
 
 A time serie data point requires the following metadata: 
  - **Timestamp:** the time at which the metric was collected
@@ -148,7 +148,7 @@ services:
 Default tcp ports are used for Grafana (3000) and InfluxDB (8086). The port 57500 is exposed for Telegraf, it is only used in case of dial-out methods as there is a inbound connection to the collector. 
 Some environment variables are used to define admin user and password as well as an API token for InfluxDB. If those variables are changes, Telegraf configuration files needs to be updated accordingly.
 
-The InfluxDB data is persistent accross restart of the stack but stored in /tmp.
+The InfluxDB data is persistent across restart of the stack but stored in /tmp.
 
 The folder `grafana-provisioning` contains files for creating of the InfluxDB datasource as well as the dashboard.
 
@@ -172,13 +172,13 @@ For more information, have a look at the [documentation](https://docs.docker.com
  
 ## Dial-out method
 
-When using the dial-out method, most of the configuration is done on the routers. The telegraf configuration is simpler, although some processor plugins are used to transform and standardize the data.
+When using the dial-out method, most of the configuration is done on the routers. The Telegraf configuration is simpler, although some processor plugins are used to transform and standardize the data.
 
 ### XR configuration
 
-The configuration on the router must define the address and port of the collector as well as the transport and encoding use. Here for simplicity the grpc no-tls is used, therefore no certificate are required. For production network, it is recommended to use TLS for data encryption.
+The configuration on the router must define the address and port of the collector as well as the transport and encoding use. Here for simplicity the grpc no-tls is used, therefore no certificate is required. For production network, it is recommended to use TLS for data encryption.
 
-Two sensor-path are defined for both input and output QOS interface statistics. Finaly the sensor group is associated to the destination, telemetry data will be sent every 10 seconds.
+Two sensor-path are defined for both input and output QOS interface statistics. Finally the sensor group is associated to the destination, telemetry data will be sent every 10 seconds.
 
 ```
 telemetry model-driven
@@ -217,7 +217,7 @@ The transport used is grpc, simple tcp could also be used. The address and port 
 
 The `embedded_tag` attribute is quite important in our case as this helper has been designed specifically to cover the cases of unkeyed list. It will create a new tag from the leaf class-name. Having the class-name as a tag will allow to uniquely identify the metric collected.
 
-Aliases are defined to reduce the name of the metric once stored in the database. Note that this functionnality is offered natively by the input plugin but it could have been done with a processor.
+Aliases are defined to reduce the name of the metric once stored in the database. Note that this functionality is offered natively by the input plugin but it could have been done with a processor.
 
 ```
 [[inputs.cisco_telemetry_mdt]]
@@ -235,7 +235,7 @@ Aliases are defined to reduce the name of the metric once stored in the database
 
 Two processors are used. The first is to rename the tag `class_stats/class_name` to `class_name`. This tag was created by the output plugin using the embedded_tags attribute. The second is to reduce the metric name by removing the prefix path. For example the field `class_stats/general_stats/total_transmit_rate` becomes `total_transmit_rate` 
 
-Namepass is a telegraf selector. It filters the metrics that are processed by a plugin. In this example, it is to ensure that only the targetted metric are going through the processors. The names used are the aliases given by the input plugin.
+Namepass is a Telegraf selector. It filters the metrics that are processed by a plugin. In this example, it is to ensure that only the targeted metric are going through the processors. The names used are the aliases given by the input plugin.
 
 ```
 [[processors.rename]]
@@ -254,11 +254,11 @@ Namepass is a telegraf selector. It filters the metrics that are processed by a 
 
 ## Dial-in method
 
-When using the dial-in method, there are barely any configuration on the routers and most of it is done on the collector. The list of routers to target, as well as which sensor-paths to collect are defined in the telegraf configuration. It is much more similar to what we could have done with SNMP. Some processor plugins are also used to transform and standardize the data.
+When using the dial-in method, there are barely any configuration on the routers and most of it is done on the collector. The list of routers to target, as well as which sensor-paths to collect are defined in the Telegraf configuration. It is much more similar to what we could have done with SNMP. Some processor plugins are also used to transform and standardize the data.
 
 ### XR configuration
 
-The configuration on the router must define the port of the grpc server. Here for simplicity the grpc no-tls is used, therefore no certificate are required. For production network, it is recommended to use TLS for data encryption.
+The configuration on the router must define the port of the grpc server. Here for simplicity the grpc no-tls is used, therefore no certificate is required. For production network, it is recommended to use TLS for data encryption.
 
 ```
 grpc
@@ -276,7 +276,7 @@ The same output plugin `outputs.influxdb_v2` is used as for the dial-out method.
 
 The input plugin `inputs.gnmi` is used to establish a telemetry session over GNMI (gRPC Network Management Interface). All routers on which telemetry needs to be collected must be specified in the addresses list, the port of the gRPC server on the router must be included. The username and password to connect to the routers must be defined.
 
-Several subscription can be described, each correspond to a sensor-path to collect. 
+Several subscriptions can be described, each correspond to a sensor-path to collect. 
 
 
 ```
@@ -306,9 +306,9 @@ Several subscription can be described, each correspond to a sensor-path to colle
 
 Several processors are used to ensure that the data collected with the gnmi plugin is sent to the database with exact same format as with the Cisco mdt plugin. The order attribute is used to ensure that the processors are executed in the correct order. Namepass are also used.
 
-The first processor is to defined the new class-name tag as this is an unkeyed list. It serves the same purpose as the `embedded_tag` attribute. This is done by a custom starlark script. The processor `processors.starlark` allow you to programatically transform the data. It is very flexible and allows to perform operations that are not natively offered by the plugins. The detail of the starlark script is presented on the next section.
+The first processor is to define the new class-name tag as this is an unkeyed list. It serves the same purpose as the `embedded_tag` attribute. This is done by a custom Starlark script. The processor `processors.starlark` allow you to programatically transform the data. It is very flexible and allows to perform operations that are not natively offered by the plugins. The detail of the Starlark script is presented on the next section.
 
-The others processors used are to standardize the data. It reduce the prefix path name, convert some data returned as string to unsigned integer and ensure that underscores `_` are used in tags and field instead of dashes `-`.
+The other processors used are to standardize the data. They reduce the prefix path name, convert some data returned as string to unsigned integer and ensure that underscores `_` are used in tags and field instead of dashes `-`.
 
 ```
 [[processors.starlark]]
@@ -356,14 +356,14 @@ The others processors used are to standardize the data. It reduce the prefix pat
 
 As the `inputs.gnmi` plugin does not offer options like `embedded_tag`, a starlark script is used. Starlark is a programming language which can be described as a dialect of python. It is very similar to python but with only a few basic functions. It is very small and simple. 
 
-When using the starlark processor, every metric object is send to a function `apply(metric)` that must be defined. The function will be called with each metric, and can return None, a single metric, or a list of metrics.
+When using the Starlark processor, every metric object is sent to a function `apply(metric)` that must be defined. The function will be called with each metric, and can return None, a single metric, or a list of metrics.
 
 When the data is received the metric path will look like this `service_policy_names/service_policy_instance/statistics_class-stats_0_class-name`.
 Because there are multiples metric with the same tags, the path will contains an index to differentiate the metrics. For example `_0_class-name`.
 
 This index is used in the script to build new metrics with the `class-name` as a tag.
 
-The full script can be found on the github repository.
+The full script can be found on the Github repository.
 
 ## Grafana
 
