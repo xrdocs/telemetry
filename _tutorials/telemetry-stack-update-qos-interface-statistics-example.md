@@ -83,18 +83,24 @@ Most telemetry data based on timeseries follows a common format. It is important
 
 A time serie data point requires the following metadata: 
  - **Timestamp:** the time at which the metric was collected
- - **Metric name:** such as sys.cpu.user, env.probe.temp
+ - **Metric name:** such as sys.cpu.user, sys.env.temp
  - **Value:** the value of the metric at the given timestamp. This can be of many types such as integer, float, string, boolean, etc. 
  - **Tag**: key/value pairs that uniquely identify the metric. There can be one or multiples tag. For example, there could be multiple cpu cores and many cpu on a system
 
-Below is an example of metrics collected for a server with two cpus of two cores
+Most of the time in TSDB, metrics are stored in containers called measurement. A measurement name is the description of the data that are stored. A measurement may contain multiples fields. 
 
-```
-2023-07-11T00:00:00Z sys.cpu.user: host=server1,cpu=0,core=0 11
-2023-07-11T00:00:00Z sys.cpu.user: host=server1,cpu=0,core=1 0
-2023-07-11T00:00:00Z sys.cpu.user: host=server1,cpu=1,core=0 21
-2023-07-11T00:00:00Z sys.cpu.user: host=server1,cpu=1,core=1 2
-```
+Below is an example of metrics collected for a server with two cpus of two cores, there are two field values: one for the cpu user utilization and one for the cpu system utilization.
+
+**time**|**measurement**|**host**|**cpu**|**core**|**field**|**value**
+:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:
+2023-07-11T00:00:00Z|sys|server1|0|0|cpu.user|11
+2023-07-11T00:00:00Z|sys|server1|0|0|cpu.system|8
+2023-07-11T00:00:00Z|sys|server1|0|1|cpu.user|11
+2023-07-11T00:00:00Z|sys|server1|0|1|cpu.system|23
+2023-07-11T00:00:00Z|sys|server1|1|0|cpu.user|11
+2023-07-11T00:00:00Z|sys|server1|0|0|cpu.system|8
+...|...|...|...|...|...|...
+
 
 # Docker compose
 Building a telemetry stack with docker containers is a great way to quickly start testing telemetry. It could also be used for a production environment, though it would propably need to be hardened.
