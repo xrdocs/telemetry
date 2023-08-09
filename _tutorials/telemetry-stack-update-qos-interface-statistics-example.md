@@ -82,7 +82,7 @@ Multiples processor plugins will be used in the following examples to sanitize t
 Most telemetry data based on timeseries follows a common format. It is important to know this format to better understand how data is handled between the different components of the stack.
 
 A time serie data point requires the following metadata: 
- - **Timestamp:** the time at which the metric was collected. It is often in the Unix Epoch format which is currently defined as the number of seconds which have passed since 00:00:00 UTC on Thursday, 1 January 1970
+ - **Timestamp:** the time at which the metric was collected
  - **Metric name:** such as sys.cpu.user, env.probe.temp
  - **Value:** the value of the metric at the given timestamp. This can be of many types such as integer, float, string, boolean, etc. 
  - **Tag**: key/value pairs that uniquely identify the metric. There can be one or multiples tag. For example, there could be multiple cpu cores and many cpu on a system
@@ -90,10 +90,10 @@ A time serie data point requires the following metadata:
 Below is an example of metrics collected for a server with two cpus of two cores
 
 ```
-1689448228 sys.cpu.user: host=server1,cpu=0,core=0 11
-1689448228 sys.cpu.user: host=server1,cpu=0,core=1 0
-1689448228 sys.cpu.user: host=server1,cpu=1,core=0 21
-1689448228 sys.cpu.user: host=server1,cpu=1,core=0 24
+2023-07-11T00:00:00Z sys.cpu.user: host=server1,cpu=0,core=0 11
+2023-07-11T00:00:00Z sys.cpu.user: host=server1,cpu=0,core=1 0
+2023-07-11T00:00:00Z sys.cpu.user: host=server1,cpu=1,core=0 21
+2023-07-11T00:00:00Z sys.cpu.user: host=server1,cpu=1,core=1 2
 ```
 
 # Docker compose
