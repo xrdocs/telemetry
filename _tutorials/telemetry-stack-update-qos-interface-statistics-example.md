@@ -79,7 +79,7 @@ For IOS XR routers, the plugin `inputs.cisco_telemetry_mdt` is used for dial-out
 Multiples processor plugins will be used in the following examples to sanitize the data received and ensure that the output format is the same for both the dial-in and dial-out methods.
 
 ## Telemetry metric format
-Most telemetry data based on timeseries follow a common format. It is important to know this format to better understand how data is handled between the different components of the stack.
+Most telemetry data based on timeseries follows a common format. It is important to know this format to better understand how data is handled between the different components of the stack.
 
 A time serie data point requires the following metadata: 
  - **Timestamp:** the time at which the metric was collected
@@ -145,7 +145,7 @@ services:
      - ./embedded_tag.star:/etc/telegraf/embedded_tag.star:ro
 ```
 
-Default tcp ports are used for Grafana (3000) and InfluxDB (8086). The port 57500 is exposed for Telegraf, it is only used in case of dial-out methods as there is a inbound connection to the collector. 
+Default tcp ports are used for Grafana (3000) and InfluxDB (8086). The port 57500 is exposed for Telegraf, it is only used in case of dial-out methods as there is an inbound connection to the collector. 
 Some environment variables are used to define admin user and password as well as an API token for InfluxDB. If those variables are changes, Telegraf configuration files needs to be updated accordingly.
 
 The InfluxDB data is persistent across restart of the stack but stored in /tmp.
@@ -178,7 +178,7 @@ When using the dial-out method, most of the configuration is done on the routers
 
 The configuration on the router must define the address and port of the collector as well as the transport and encoding use. Here for simplicity the grpc no-tls is used, therefore no certificate is required. For production network, it is recommended to use TLS for data encryption.
 
-Two sensor-path are defined for both input and output QOS interface statistics. Finally the sensor group is associated to the destination, telemetry data will be sent every 10 seconds.
+Two sensor-path are defined for both input and output QOS interface statistics. Finally, the sensor group is associated to the destination, telemetry data will be sent every 10 seconds.
 
 ```
 telemetry model-driven
@@ -235,7 +235,7 @@ Aliases are defined to reduce the name of the metric once stored in the database
 
 Two processors are used. The first is to rename the tag `class_stats/class_name` to `class_name`. This tag was created by the output plugin using the embedded_tags attribute. The second is to reduce the metric name by removing the prefix path. For example the field `class_stats/general_stats/total_transmit_rate` becomes `total_transmit_rate` 
 
-Namepass is a Telegraf selector. It filters the metrics that are processed by a plugin. In this example, it is to ensure that only the targeted metric are going through the processors. The names used are the aliases given by the input plugin.
+Namepass is a Telegraf selector. It filters the metrics that are processed by a plugin. In this example, it is to ensure that only the targeted metrics are going through the processors. The names used are the aliases given by the input plugin.
 
 ```
 [[processors.rename]]
@@ -359,7 +359,7 @@ As the `inputs.gnmi` plugin does not offer options like `embedded_tag`, a starla
 When using the Starlark processor, every metric object is sent to a function `apply(metric)` that must be defined. The function will be called with each metric, and can return None, a single metric, or a list of metrics.
 
 When the data is received the metric path will look like this `service_policy_names/service_policy_instance/statistics_class-stats_0_class-name`.
-Because there are multiples metric with the same tags, the path will contains an index to differentiate the metrics. For example `_0_class-name`.
+Because there are multiples metric with the same tags, the path will contain an index to differentiate the metrics. For example `_0_class-name`.
 
 This index is used in the script to build new metrics with the `class-name` as a tag.
 
@@ -378,7 +378,7 @@ The dashboard has been built with variables for interfaces, device and direction
 ![dashboard_filters.png]({{site.baseurl}}/images/dashboard_filters.png)
 
 
-The dashboard can be displayed for one specific device and one or more interface can be selected for this device. The device list and the interface list are queried directly from the database. Finally, the direction can be select to have only input or output statistics or both. Those variables can be found in the variables panel of the dashboard settings. Those settings can be explored to better understand how it has been built.
+The dashboard can be displayed for one specific device and one or more interfaces can be selected for this device. The device list and the interface list are queried directly from the database. Finally, the direction can be select to have only input or output statistics or both. Those variables can be found in the variables panel of the dashboard settings. Those settings can be explored to better understand how it has been built.
 
 ![variables_dashboard_settings.png]({{site.baseurl}}/images/variables_dashboard_settings.png)
 
