@@ -383,4 +383,4 @@ The dashboard can be displayed for one specific device and one or more interface
 ![variables_dashboard_settings.png]({{site.baseurl}}/images/variables_dashboard_settings.png)
 
 
-The variables are then used in the queries to filter the result. For example this is how to filter for a specific device. `|> filter(fn: (r) => r["source"] == "${device}")`
+The variables are then used in the queries to filter the result. For example this is how to filter for a specific device using the value of the *${device}* variable. `|> filter(fn: (r) => r["source"] == "${device}")`
