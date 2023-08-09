@@ -89,9 +89,9 @@ A time serie data point requires the following metadata:
 
 Most of the time in TSDB, metrics are stored in containers called measurement. A measurement name is the description of the data that are stored. A measurement may contain multiples fields. 
 
-Below is an example of metrics collected for a server with two cpus of two cores, there are two field values: one for the cpu user utilization and one for the cpu system utilization.
+Below is an example of metrics collected for a server with two cpus of two cores, there are two field values: one for the cpu user utilization and one for the cpu system utilization. The tags are: host, cpu and core.
 
-**time**|**measurement**|**host**|**cpu**|**core**|**field**|**value**
+**time**|**measurement**|***host***|***cpu***|***core***|**field**|**value**
 :-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:
 2023-07-11T00:00:00Z|sys|server1|0|0|cpu.user|11
 2023-07-11T00:00:00Z|sys|server1|0|0|cpu.system|8
