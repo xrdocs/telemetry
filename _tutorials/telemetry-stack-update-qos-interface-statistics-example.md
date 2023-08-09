@@ -17,13 +17,13 @@ position: hidden
 # Introduction 
 While telemetry has gain more popularity in the last few years, we still see a lof of customers that are hesitant to start using it. Telemetry is still seen for many as a black box.
 
-There are already many great articles that cover the concepts and basics of telemetry. It gives great examples of what can be done and why telemetry should be used and I suggest that you have a [look at them](https://xrdocs.io/telemetry/). However, many times people struggle when they start building their telemetry stack and it is not as easy as we may think. 
+There are already many great articles that cover the concepts and basics of telemetry. It gives great examples of what can be done and why telemetry should be used and I suggest that you have a [look at them](https://xrdocs.io/telemetry/tutorials/). However, many times people struggle when they start building their telemetry stack and it is not as easy as we may think. 
 
 This article is intended to share an up to date telemetry stack that can easily be spinned up using Docker, it provides configuration example for both dial-in and dial-out streaming methods and shares a few tips and tricks to work with telemetry models and collectors.
 
 # Context
 ## QOS Interface Statistics
-Collecting QOS interface statistics has been a recurring demand for our customers. Knowing the bandwith utilization of an interface is often not enough and having the distribution of traffic among QOS classes gives a better view of the traffic profile. 
+Collecting QOS interface statistics is a recurring demand of our customers. Knowing the bandwith utilization of an interface is often not enough and having the distribution of traffic among QOS classes gives a better view of the traffic profile. 
 
 ## Yang Models
 Yang models used for telemetry are not always perfect, sometimes they do not exactly fit our needs. There is so much data with many differents models, it may happen that a particular model has a wrong data type. In the **Cisco-IOS-XR-qos-ma-oper:qos/interface-table** Yang model, which is used to retrieve QOS interface statistics, the **class-name** leaf inside a service-policy is not seen as a key. We are in the situation of an unkeyed list and it often causes issues with collectors.
@@ -43,9 +43,9 @@ A simple telemetry stack is composed of three main elements:
  - **Collector:** It receives, processes and exports telemetry data from various sources
  - **Database:** It stores data. The most suitable databases are Time Series DataBase (TSDB). Indeed, they are specificaly built for handling metrics that are time-stamped.
  - **Visualization tool:** It queries the database to display data. It allows to create graphs and others charts for data visualization. Those charts can often be gathered in dashboards.
-
+<p style="text-align: center;">
 <img src="{{site.baseurl}}/images/telemetry_stack.png" style="max-height: 300px;">
-
+</p>
 An alert manager is often added in the stack to trigger alerts on specific thresholds. Many time, this alert manager is part of the vizualization tool. 
 
 There are multiple options for those elements, proprietary and opensource. Below are popular opensource tools that can be used to build a telemetry stack:
