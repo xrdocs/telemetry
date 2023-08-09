@@ -46,7 +46,7 @@ A simple telemetry stack is composed of three main elements:
 <p style="text-align: center;">
 <img src="{{site.baseurl}}/images/telemetry_stack.png" style="max-height: 300px;">
 </p>
-An alert manager is often added in the stack to trigger alerts on specific thresholds. Many time, this alert manager is part of the visualization tool. 
+An alert manager is often added in the stack to trigger alerts on specific thresholds. Many time, the alert manager is part of the visualization tool. 
 
 There are multiple options for those elements, proprietary and opensource. Below are popular opensource tools that can be used to build a telemetry stack:
  - **Collectors:** Telegraf, gnmic, Fluentd, Logstash
@@ -72,7 +72,7 @@ Telegraf is composed of multiple plugins that can be categorized in four differe
  - **Input plugin:** collect raw metrics from the data sources
  - **Processor plugin:** transform, decorate and filter metrics
  - **Aggregator plugin:** create aggregate metrics such as average mean, min, max, etc. 
- - **Output plugin:** write metrics to datastore.
+ - **Output plugin:** write metrics to datastore
 
 For IOS XR routers, the plugin `inputs.cisco_telemetry_mdt` is used for dial-out and the plugin `inputs.gnmi` is used for dial-in.
 
@@ -82,23 +82,24 @@ Multiples processor plugins will be used in the following examples to sanitize t
 Most telemetry data based on timeseries follows a common format. It is important to know this format to better understand how data is handled between the different components of the stack.
 
 A time serie data point requires the following metadata: 
- - **Timestamp:** the time at which the metric was collected
- - **Metric name:** such as sys.cpu.user , env.probe.temp
- - **Value:** the value of the metric at the given timestamp. This can be of many types such as integer, float, string, boolean, etc. There can be one or multiples tag. For example, there could be multiple cpu cores and many cpu on a system. 
+ - **Timestamp:** the time at which the metric was collected. It is often in the Unix Epoch format which is currently defined as the number of seconds which have passed since 00:00:00 UTC on Thursday, 1 January 1970
+ - **Metric name:** such as sys.cpu.user, env.probe.temp
+ - **Value:** the value of the metric at the given timestamp. This can be of many types such as integer, float, string, boolean, etc. 
+ - **Tag**: key/value pairs that uniquely identify the metric. There can be one or multiples tag. For example, there could be multiple cpu cores and many cpu on a system
 
 Below is an example of metrics collected for a server with two cpus of two cores
 
 ```
-<timestamp> sys.cpu.user: host=server1,cpu=0,core=0 11
-<timestamp> sys.cpu.user: host=server1,cpu=0,core=1 0
-<timestamp> sys.cpu.user: host=server1,cpu=1,core=0 21
-<timestamp> sys.cpu.user: host=server1,cpu=1,core=0 24
+1689448228 sys.cpu.user: host=server1,cpu=0,core=0 11
+1689448228 sys.cpu.user: host=server1,cpu=0,core=1 0
+1689448228 sys.cpu.user: host=server1,cpu=1,core=0 21
+1689448228 sys.cpu.user: host=server1,cpu=1,core=0 24
 ```
 
 # Docker compose
-Building a telemetry stack with docker containers is a great way to quickly start testing telemetry. It could also be used for a production environ, though it would need to be hardened.
+Building a telemetry stack with docker containers is a great way to quickly start testing telemetry. It could also be used for a production environment, though it would propably need to be hardened.
 
-Below is the docker compose used to launch a TIG stack.
+Below is a simple docker compose to launch a TIG stack.
 
 ```
 version: "2"
@@ -172,13 +173,13 @@ For more information, have a look at the [documentation](https://docs.docker.com
  
 ## Dial-out method
 
-When using the dial-out method, most of the configuration is done on the routers. The Telegraf configuration is simpler, although some processor plugins are used to transform and standardize the data.
+When using the dial-out method, more configuration is done on the routers and the telegraf configuration is simpler and more static. Although some processor plugins are used to transform and standardize the data.
 
 ### XR configuration
 
-The configuration on the router must define the address and port of the collector as well as the transport and encoding use. Here for simplicity the grpc no-tls is used, therefore no certificate is required. For production network, it is recommended to use TLS for data encryption.
+The configuration on the router must define the address and port of the collector as well as the transport and encoding used. Here for simplicity the grpc no-tls is used, therefore no certificate is required. For production network, it is recommended to use TLS for data encryption.
 
-Two sensor-path are defined for both input and output QOS interface statistics. Finally, the sensor group is associated to the destination, telemetry data will be sent every 10 seconds.
+Two sensor-paths are defined for both input and output QOS interface statistics. Finally, the sensor group is associated to the destination with telemetry data being sent every 10 seconds.
 
 ```
 telemetry model-driven
@@ -251,10 +252,11 @@ Namepass is a Telegraf selector. It filters the metrics that are processed by a 
     replacement = "${1}"
 ```
 
+The full Telegraf configuration can be found on the Github repository.
 
 ## Dial-in method
 
-When using the dial-in method, there are barely any configuration on the routers and most of it is done on the collector. The list of routers to target, as well as which sensor-paths to collect are defined in the Telegraf configuration. It is much more similar to what we could have done with SNMP. Some processor plugins are also used to transform and standardize the data.
+When using the dial-in method, there are barely any configuration on the routers and most of it is done on the collector. The list of routers to target, as well as which sensor-paths to collect are defined in the Telegraf configuration. It is much more similar to what could have been done with SNMP. Some processor plugins are also used to transform and standardize the data.
 
 ### XR configuration
 
@@ -308,7 +310,7 @@ Several processors are used to ensure that the data collected with the gnmi plug
 
 The first processor is to define the new class-name tag as this is an unkeyed list. It serves the same purpose as the `embedded_tag` attribute. This is done by a custom Starlark script. The processor `processors.starlark` allow you to programatically transform the data. It is very flexible and allows to perform operations that are not natively offered by the plugins. The detail of the Starlark script is presented on the next section.
 
-The other processors used are to standardize the data. They reduce the prefix path name, convert some data returned as string to unsigned integer and ensure that underscores `_` are used in tags and field instead of dashes `-`.
+The other processors used are to standardize the data. They reduce the prefix path name, convert some data returned as string to unsigned integer and ensure that underscores `_` are used in tags and fields instead of dashes `-`.
 
 ```
 [[processors.starlark]]
@@ -351,6 +353,7 @@ The other processors used are to standardize the data. They reduce the prefix pa
     new = "_"
 
 ```
+The full Telegraf configuration can be found on the Github repository.
 
 #### Starlark script for embedded_tag
 
