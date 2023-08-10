@@ -58,7 +58,7 @@ Class class-default
     Total Dropped       :                   0/0                    0
 Policy Bag Stats time: 1691672774954  [Local Time: 08/10/23 13:06:14.954] 
 
-&lt;Output truncated&gt;
+<Output truncated>
 ```
 
 ## YANG Models
@@ -80,8 +80,9 @@ A simple telemetry stack is composed of three main elements:
  - **Database:** It stores data. The most suitable databases are Time Series DataBase (TSDB). Indeed, they are specifically built for handling metrics that are time-stamped.
  - **Visualization tool:** It queries the database to display data. It allows to create graphs and others charts for data visualization. Those charts can often be gathered in dashboards.
 <p style="text-align: center;">
-<img src="{{site.baseurl}}/images/telemetry_stack.png" style="max-height: 300px;">
+<img src="{{site.baseurl}}/images/telemetry_stack_2.png" style="max-height: 300px;">
 </p>
+
 
 An alert manager is often added in the stack to trigger alerts on specific thresholds. Many time, the alert manager is part of the visualization tool. 
 
