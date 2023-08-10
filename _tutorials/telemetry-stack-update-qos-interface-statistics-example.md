@@ -25,7 +25,7 @@ All configuration files presented can be found on the [Github repository](https:
 
 # Context
 ## QOS Interface Statistics
-Collecting QOS interface statistics is a recurring demand of our customers. Knowing the bandwidth utilization of an interface is often not enough and having the distribution of traffic among QOS classes gives a better view of the traffic profile. ![telemetry_stack.png]({{site.baseurl}}/images/telemetry_stack.png)
+Collecting QOS interface statistics is a recurring demand of our customers. Knowing the bandwidth utilization of an interface is often not enough and having the distribution of traffic among QOS classes gives a better view of the traffic profile.
 
 
 In this article, graphs based of the following CLI will be created:
