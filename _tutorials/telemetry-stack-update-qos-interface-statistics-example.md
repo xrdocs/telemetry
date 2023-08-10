@@ -19,7 +19,7 @@ While telemetry has gained more popularity in the last few years, we still see a
 
 There are already many great articles that cover the concepts and basics of telemetry. It gives great examples of what can be done and why telemetry should be used; I suggest that you have a [look at them](https://xrdocs.io/telemetry/tutorials/). However, many times people struggle when they start building their telemetry stack and it is not as easy as we may think. 
 
-This article is intended to share an up-to-date telemetry stack that can easily be spined up using Docker, it provides configuration example for both dial-in and dial-out streaming methods and shares a few tips and tricks to work with telemetry models and collectors.
+This article is intended to share an up-to-date telemetry stack that can easily be spawn using Docker, it provides configuration example for both dial-in and dial-out streaming methods and shares a few tips and tricks to work with telemetry models and collectors.
 
 All configuration files presented can be found on the [Github repository](https://github.com/RomainCyr/tig-stack-qos-interface-statistics)
 
@@ -27,14 +27,46 @@ All configuration files presented can be found on the [Github repository](https:
 ## QOS Interface Statistics
 Collecting QOS interface statistics is a recurring demand of our customers. Knowing the bandwidth utilization of an interface is often not enough and having the distribution of traffic among QOS classes gives a better view of the traffic profile. 
 
-## Yang Models
-Yang models used for telemetry are not always perfect, sometimes they do not exactly fit our needs. There is so much data with many different models, it may happen that a particular model has a wrong data type. In the **Cisco-IOS-XR-qos-ma-oper:qos/interface-table** Yang model, which is used to retrieve QOS interface statistics, the **class-name** leaf inside a service-policy is not seen as a key. We are in the situation of an unkeyed list and it often causes issues with collectors.
+In this article, graphs based of the following CLI will be created:
+
+RP/0/RP0/CPU0:R1#show policy-map interface FourHundredGigE 0/0/0/1 
+Thu Aug 10 13:07:06.245 UTC
+
+FourHundredGigE0/0/0/1 input: CORE-IN
+
+Class NETWORK-IN
+  Classification statistics          (packets/bytes)     (rate - kbps)
+    Matched             :                   0/0                    0
+    Transmitted         :                   0/0                    0
+    Total Dropped       :                   0/0                    0
+Class HIGH-IN
+  Classification statistics          (packets/bytes)     (rate - kbps)
+    Matched             :                  51/53346                0
+    Transmitted         :                  51/53346                0
+    Total Dropped       :                   0/0                    0
+Class LOW-IN
+  Classification statistics          (packets/bytes)     (rate - kbps)
+    Matched             :             2519428/3250686120           13
+    Transmitted         :             2519428/3250686120           13
+    Total Dropped       :                   0/0                    0
+Class class-default
+  Classification statistics          (packets/bytes)     (rate - kbps)
+    Matched             :             7549278/9738561264           41
+    Transmitted         :             7549278/9738561264           41
+    Total Dropped       :                   0/0                    0
+Policy Bag Stats time: 1691672774954  [Local Time: 08/10/23 13:06:14.954] 
+
+&lt;Output truncated&gt;
+```
+
+## YANG Models
+YANG models used for telemetry are not always perfect, sometimes they do not exactly fit our needs. There is so much data with many different models, it may happen that a particular model has a wrong data type. In the **Cisco-IOS-XR-qos-ma-oper:qos/interface-table** YANG model, which is used to retrieve QOS interface statistics, the **class-name** leaf inside a service-policy is not seen as a key. We are in the situation of an unkeyed list and it often causes issues with collectors.
 
 ![qos_ma_oper_yang_model.png]({{site.baseurl}}/images/qos_ma_oper_yang_model.png)
 
 Many times, the model can be updated, but it means installing a SMU (Software Maintenance Upgrade) or a new software version. It is often much simpler to work with the current model available and do some work in the telemetry collector to adapt it to specific needs. 
 
-This article aims to show examples on how to work around Yang models and telemetry collector limitations. It shows an example on how to provides a complete dashboard for monitoring QOS interface statistics.
+This article aims to show examples on how to work around YANG models and telemetry collector limitations. It shows an example on how to provides a complete dashboard for monitoring QOS interface statistics.
 
 ![dashboard_main_view.png]({{site.baseurl}}/images/dashboard_main_view.png)
 
