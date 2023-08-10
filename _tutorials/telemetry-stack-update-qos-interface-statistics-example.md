@@ -155,7 +155,7 @@ services:
 ```
 
 Default tcp ports are used for Grafana (3000) and InfluxDB (8086). The port 57500 is exposed for Telegraf, it is only used in case of dial-out methods as there is an inbound connection to the collector. 
-Some environment variables are used to define admin user and password as well as an API token for InfluxDB. If those variables are changes, Telegraf configuration files needs to be updated accordingly.
+Some environment variables are used to define admin user and password as well as an API token for InfluxDB. If those variables are changed, Telegraf configuration files needs to be updated accordingly.
 
 The InfluxDB data is persistent across restart of the stack but stored in /tmp.
 
