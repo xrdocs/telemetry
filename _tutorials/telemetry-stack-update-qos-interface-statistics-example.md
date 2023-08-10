@@ -21,6 +21,8 @@ There are already many great articles that cover the concepts and basics of tele
 
 This article is intended to share an up-to-date telemetry stack that can easily be spined up using Docker, it provides configuration example for both dial-in and dial-out streaming methods and shares a few tips and tricks to work with telemetry models and collectors.
 
+All configuration files presented can be found on the [Github repository](https://github.com/RomainCyr/tig-stack-qos-interface-statistics)
+
 # Context
 ## QOS Interface Statistics
 Collecting QOS interface statistics is a recurring demand of our customers. Knowing the bandwidth utilization of an interface is often not enough and having the distribution of traffic among QOS classes gives a better view of the traffic profile. 
@@ -258,7 +260,7 @@ Namepass is a Telegraf selector. It filters the metrics that are processed by a 
     replacement = "${1}"
 ```
 
-The full Telegraf configuration can be found on the Github repository.
+The full Telegraf configuration can be found on the [Github repository](https://github.com/RomainCyr/tig-stack-qos-interface-statistics).
 
 ## Dial-in method
 
@@ -359,7 +361,7 @@ The other processors used are to standardize the data. They reduce the prefix pa
     new = "_"
 
 ```
-The full Telegraf configuration can be found on the Github repository.
+The full Telegraf configuration can be found on the [Github repository](https://github.com/RomainCyr/tig-stack-qos-interface-statistics).
 
 #### Starlark script for embedded_tag
 
@@ -372,7 +374,7 @@ Because there are multiples metric with the same tags, the path will contain an 
 
 This index is used in the script to build new metrics with the `class-name` as a tag.
 
-The full script can be found on the Github repository.
+The full script can be found on the [Github repository](https://github.com/RomainCyr/tig-stack-qos-interface-statistics).
 
 ## Grafana
 
