@@ -378,7 +378,6 @@ The full script can be found on the [Github repository](https://github.com/Romai
 
 ## Grafana
 
-
 As InfluxDB v2 is used, all queries are done using the Flux language. More information about Flux queries can be found in the [documentation](https://docs.influxdata.com/influxdb/cloud/query-data/get-started/query-influxdb/). Edit the panels to see how they have been built and which queries are used.
 
 ![panel_edit.png]({{site.baseurl}}/images/panel_edit.png)
@@ -395,3 +394,7 @@ The dashboard can be displayed for one specific device and one or more interface
 
 
 The variables are then used in the queries to filter the result. For example this is how to filter for a specific device using the value of the **${device}** variable. `|> filter(fn: (r) => r["source"] == "${device}")`
+
+# Conclusion
+
+Hopefully, this case was practical enough for you to get started with Telemetry. Retrieving telemetry data does not always work on the first try, but with some understanding of the telemetry stack and with a few tweaks, it can work like a charm.
