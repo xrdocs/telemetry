@@ -83,7 +83,6 @@ A simple telemetry stack is composed of three main elements:
 <img src="{{site.baseurl}}/images/telemetry_stack_2.png" style="max-height: 300px;">
 </p>
 
-
 An alert manager is often added in the stack to trigger alerts on specific thresholds. Many time, the alert manager is part of the visualization tool. 
 
 There are multiple options for those elements, proprietary and opensource. Below are popular opensource tools that can be used to build a telemetry stack:
@@ -223,7 +222,7 @@ When using the dial-out method, more configuration is done on the routers and th
 
 The configuration on the router must define the address and port of the collector as well as the transport and encoding used. Here for simplicity the grpc no-tls is used, therefore no certificate is required. For production network, it is recommended to use TLS for data encryption.
 
-Two sensor-paths are defined for both input and output QOS interface statistics. Finally, the sensor group is associated to the destination with telemetry data being sent every 10 seconds.
+Two sensor-paths are defined for both input and output QOS interface statistics. Finally, the sensor group is associated to the destination with telemetry data being sent every 10 seconds (10000ms).
 
 ```
 telemetry model-driven
