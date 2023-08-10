@@ -25,10 +25,12 @@ All configuration files presented can be found on the [Github repository](https:
 
 # Context
 ## QOS Interface Statistics
-Collecting QOS interface statistics is a recurring demand of our customers. Knowing the bandwidth utilization of an interface is often not enough and having the distribution of traffic among QOS classes gives a better view of the traffic profile. 
+Collecting QOS interface statistics is a recurring demand of our customers. Knowing the bandwidth utilization of an interface is often not enough and having the distribution of traffic among QOS classes gives a better view of the traffic profile. ![telemetry_stack.png]({{site.baseurl}}/images/telemetry_stack.png)
+
 
 In this article, graphs based of the following CLI will be created:
 
+```
 RP/0/RP0/CPU0:R1#show policy-map interface FourHundredGigE 0/0/0/1 
 Thu Aug 10 13:07:06.245 UTC
 
@@ -80,6 +82,7 @@ A simple telemetry stack is composed of three main elements:
 <p style="text-align: center;">
 <img src="{{site.baseurl}}/images/telemetry_stack.png" style="max-height: 300px;">
 </p>
+
 An alert manager is often added in the stack to trigger alerts on specific thresholds. Many time, the alert manager is part of the visualization tool. 
 
 There are multiple options for those elements, proprietary and opensource. Below are popular opensource tools that can be used to build a telemetry stack:
