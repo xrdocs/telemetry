@@ -124,9 +124,352 @@ Enter any key to exit...
  Sub_id 200000001, flag 0, len 0
  Sub_id 200000001, flag 4, len 5209
 --------
-{"node_id_str":"NCS5501-SE-1","subscription_id_str":"app_TEST_200000001","encoding_path":"Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/manager","collection_id":"548867","collection_start_time":"1692118289852","msg_timestamp":"1692118289854","data_json":[{"timestamp":"1692118289853","keys":[],"content":{"sid-mgr-params":{"srv6-enabled":true,"configured-encap-source-address":"fccc:0:211::1","default-encap-source-address":"fccc:0:211::1","encap-hop-limit":{"use-default":true,"do-propagate":false,"value":0},"encap-traffic-class":{"use-default":true,"do-propagate":false,"value":0},"is-sid-holdtime-configured":false,"sid-holdtime-mins-configured":0,"srv6-operational-mode":[{"srv6-operational-mode":{"type":"srv6-base","description":"Base"},"srv6-operational-mode-enabled":false},{"srv6-operational-mode":{"type":"srv6-micro-segment","description":"Micro-segment"},"srv6-operational-mode-enabled":true}],"sid-formats-info":[{"format":{"type":"f3216","description":"f3216"},"usidlib-ranges":{"lib-start":57344,"elib-start":65024,"configured":false},"usidwlib-ranges":{"ewlib-start":65527,"configured":false}}]},"sid-mgr-summary":{<mark>"locators-count":5,"oper-locators-count":5,"sids-count":18,"stale-sids-count":0,"maximum-sids-count":8176</mark>,"sids-out-of-resource-summary":{"identifer-name":"Global","oor-state":"oor-green","oor-maximum-sid-count":8176,"oor-current-free-sid-count":8158,"oor-yellow-free-sid-threshold":246,"oor-green-free-sid-threshold":409,"oor-green-count":0,"oor-yellow-count":0,"oor-red-count":0},"block-local-sid-oor-summary":[{"identifer-name":"Block fccc::/32","oor-state":"oor-green","oor-maximum-sid-count":7680,"oor-current-free-sid-count":7676,"oor-yellow-free-sid-threshold":231,"oor-green-free-sid-threshold":384,"oor-green-count":0,"oor-yellow-count":0,"oor-red-count":0},{"identifer-name":"Block fccc:1::/32","oor-state":"oor-green","oor-maximum-sid-count":7680,"oor-current-free-sid-count":7672,"oor-yellow-free-sid-threshold":231,"oor-green-free-sid-threshold":384,"oor-green-count":0,"oor-yellow-count":0,"oor-red-count":0},{"identifer-name":"Block fccc:2::/32","oor-state":"oor-green","oor-maximum-sid-count":7680,"oor-current-free-sid-count":7674,"oor-yellow-free-sid-threshold":231,"oor-green-free-sid-threshold":384,"oor-green-count":0,"oor-yellow-count":0,"oor-red-count":0},{"identifer-name":"Block fccc:3::/32","oor-state":"oor-green","oor-maximum-sid-count":7680,"oor-current-free-sid-count":7680,"oor-yellow-free-sid-threshold":231,"oor-green-free-sid-threshold":384,"oor-green-count":0,"oor-yellow-count":0,"oor-red-count":0},{"identifer-name":"Block fccc:4::/32","oor-state":"oor-green","oor-maximum-sid-count":7680,"oor-current-free-sid-count":7680,"oor-yellow-free-sid-threshold":231,"oor-green-free-sid-threshold":384,"oor-green-count":0,"oor-yellow-count":0,"oor-red-count":0},{"identifer-name":"Block fccc:ff::/32","oor-state":"oor-green","oor-maximum-sid-count":7680,"oor-current-free-sid-count":7680,"oor-yellow-free-sid-threshold":231,"oor-green-free-sid-threshold":384,"oor-green-count":0,"oor-yellow-count":0,"oor-red-count":0}]},"platform-capabilities":{"cfg-support":{"encap-sa":true,"encap-hop-limit-value":true,"encap-hop-limit-propagate":false,"encap-traffic-class-value":false,"encap-traffic-class-propagate":false,"lib-range":true,"wlib-range":false},"support":{"srv6":true,"tilfa":true,"microloop-avoidance":true,"endpoint-behavior":[{"string":"End.DX6"},{"string":"End.DX4"},{"string":"End.DT6"},{"string":"End.DT4"},{"string":"End.DX2"},{"string":"End.DT2U"},{"string":"End.DT2M"},{"string":"End (PSP/USD)"},{"string":"End.X (PSP/USD)"},{"string":"uN (PSP/USD)"},{"string":"uA (PSP/USD)"},{"string":"uDT6"},{"string":"uDT4"},{"string":"uDX2"},{"string":"uDT2U"},{"string":"uDT2M"},{"string":"uB6 (Insert.Red)"}],"headend-behavior":[{"string":"T"},{"string":"H.Insert.Red"},{"string":"H.Encaps.Red"},{"string":"H.Encaps.L2.Red"}],"security-rule":[{"string":"SEC-1"},{"string":"SEC-2"},{"string":"SEC-3"}],"counter":[{"string":"CNT-3"}],"signaled-parameters":{"max-sl":3,"max-end-pop-srh":3,"max-h-insert":2,"max-h-encap":2,"max-end-d":3},"endpoint-entries":{"local-only":true,"global-local-combo":true,"separate-shift-and-non-shift":true,"shift-only-drop":false}},"max-sids":8176,"sid-holdtime-mins":3,"encap-hop-limit-default":{"do-propagate":false,"value":0},"encap-traffic-class-default":{"do-propagate":false,"value":0},"max-locators":16,"sid-resource-usage":[{"endpoint-behavior":"End.DX6","value":1},{"endpoint-behavior":"End.DX4","value":1},{"endpoint-behavior":"End.DT6","value":1},{"endpoint-behavior":"End.DT4","value":1},{"endpoint-behavior":"End.DX2","value":1},{"endpoint-behavior":"End.DT2U","value":1},{"endpoint-behavior":"End.DT2M","value":1},{"endpoint-behavior":"End (PSP/USD)","value":1},{"endpoint-behavior":"End.X (PSP/USD)","value":1},{"endpoint-behavior":"uN (PSP/USD)","value":1},{"endpoint-behavior":"uA (PSP/USD)","value":1},{"endpoint-behavior":"uDT6","value":1},{"endpoint-behavior":"uDT4","value":1},{"endpoint-behavior":"uDX2","value":1},{"endpoint-behavior":"uDT2U","value":1},{"endpoint-behavior":"uDT2M","value":1},{"endpoint-behavior":"uB6 (Insert.Red)","value":1}]}}}],"collection_end_time":"1692118289854"}
---------
- Sub_id 200000001, flag 8, len 0 ```
+{
+  "node_id_str": "NCS5501-SE-1",
+  "subscription_id_str": "app_TEST_200000001",
+  "encoding_path": "Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/manager",
+  "collection_id": "548867",
+  "collection_start_time": "1692118289852",
+  "msg_timestamp": "1692118289854",
+  "data_json": [
+    {
+      "timestamp": "1692118289853",
+      "keys": [],
+      "content": {
+        "sid-mgr-params": {
+          "srv6-enabled": true,
+          "configured-encap-source-address": "fccc:0:211::1",
+          "default-encap-source-address": "fccc:0:211::1",
+          "encap-hop-limit": {
+            "use-default": true,
+            "do-propagate": false,
+            "value": 0
+          },
+          "encap-traffic-class": {
+            "use-default": true,
+            "do-propagate": false,
+            "value": 0
+          },
+          "is-sid-holdtime-configured": false,
+          "sid-holdtime-mins-configured": 0,
+          "srv6-operational-mode": [
+            {
+              "srv6-operational-mode": {
+                "type": "srv6-base",
+                "description": "Base"
+              },
+              "srv6-operational-mode-enabled": false
+            },
+            {
+              "srv6-operational-mode": {
+                "type": "srv6-micro-segment",
+                "description": "Micro-segment"
+              },
+              "srv6-operational-mode-enabled": true
+            }
+          ],
+          "sid-formats-info": [
+            {
+              "format": {
+                "type": "f3216",
+                "description": "f3216"
+              },
+              "usidlib-ranges": {
+                "lib-start": 57344,
+                "elib-start": 65024,
+                "configured": false
+              },
+              "usidwlib-ranges": {
+                "ewlib-start": 65527,
+                "configured": false
+              }
+            }
+          ]
+        },
+        <mark>"sid-mgr-summary": {
+          "locators-count": 5,
+          "oper-locators-count": 5,
+          "sids-count": 18,
+          "stale-sids-count": 0,
+          "maximum-sids-count": 8176,</mark>
+          "sids-out-of-resource-summary": {
+            "identifer-name": "Global",
+            "oor-state": "oor-green",
+            "oor-maximum-sid-count": 8176,
+            "oor-current-free-sid-count": 8158,
+            "oor-yellow-free-sid-threshold": 246,
+            "oor-green-free-sid-threshold": 409,
+            "oor-green-count": 0,
+            "oor-yellow-count": 0,
+            "oor-red-count": 0
+          },
+          "block-local-sid-oor-summary": [
+            {
+              "identifer-name": "Block fccc::/32",
+              "oor-state": "oor-green",
+              "oor-maximum-sid-count": 7680,
+              "oor-current-free-sid-count": 7676,
+              "oor-yellow-free-sid-threshold": 231,
+              "oor-green-free-sid-threshold": 384,
+              "oor-green-count": 0,
+              "oor-yellow-count": 0,
+              "oor-red-count": 0
+            },
+            {
+              "identifer-name": "Block fccc:1::/32",
+              "oor-state": "oor-green",
+              "oor-maximum-sid-count": 7680,
+              "oor-current-free-sid-count": 7672,
+              "oor-yellow-free-sid-threshold": 231,
+              "oor-green-free-sid-threshold": 384,
+              "oor-green-count": 0,
+              "oor-yellow-count": 0,
+              "oor-red-count": 0
+            },
+            {
+              "identifer-name": "Block fccc:2::/32",
+              "oor-state": "oor-green",
+              "oor-maximum-sid-count": 7680,
+              "oor-current-free-sid-count": 7674,
+              "oor-yellow-free-sid-threshold": 231,
+              "oor-green-free-sid-threshold": 384,
+              "oor-green-count": 0,
+              "oor-yellow-count": 0,
+              "oor-red-count": 0
+            },
+            {
+              "identifer-name": "Block fccc:3::/32",
+              "oor-state": "oor-green",
+              "oor-maximum-sid-count": 7680,
+              "oor-current-free-sid-count": 7680,
+              "oor-yellow-free-sid-threshold": 231,
+              "oor-green-free-sid-threshold": 384,
+              "oor-green-count": 0,
+              "oor-yellow-count": 0,
+              "oor-red-count": 0
+            },
+            {
+              "identifer-name": "Block fccc:4::/32",
+              "oor-state": "oor-green",
+              "oor-maximum-sid-count": 7680,
+              "oor-current-free-sid-count": 7680,
+              "oor-yellow-free-sid-threshold": 231,
+              "oor-green-free-sid-threshold": 384,
+              "oor-green-count": 0,
+              "oor-yellow-count": 0,
+              "oor-red-count": 0
+            },
+            {
+              "identifer-name": "Block fccc:ff::/32",
+              "oor-state": "oor-green",
+              "oor-maximum-sid-count": 7680,
+              "oor-current-free-sid-count": 7680,
+              "oor-yellow-free-sid-threshold": 231,
+              "oor-green-free-sid-threshold": 384,
+              "oor-green-count": 0,
+              "oor-yellow-count": 0,
+              "oor-red-count": 0
+            }
+          ]
+        },
+        "platform-capabilities": {
+          "cfg-support": {
+            "encap-sa": true,
+            "encap-hop-limit-value": true,
+            "encap-hop-limit-propagate": false,
+            "encap-traffic-class-value": false,
+            "encap-traffic-class-propagate": false,
+            "lib-range": true,
+            "wlib-range": false
+          },
+          "support": {
+            "srv6": true,
+            "tilfa": true,
+            "microloop-avoidance": true,
+            "endpoint-behavior": [
+              {
+                "string": "End.DX6"
+              },
+              {
+                "string": "End.DX4"
+              },
+              {
+                "string": "End.DT6"
+              },
+              {
+                "string": "End.DT4"
+              },
+              {
+                "string": "End.DX2"
+              },
+              {
+                "string": "End.DT2U"
+              },
+              {
+                "string": "End.DT2M"
+              },
+              {
+                "string": "End (PSP/USD)"
+              },
+              {
+                "string": "End.X (PSP/USD)"
+              },
+              {
+                "string": "uN (PSP/USD)"
+              },
+              {
+                "string": "uA (PSP/USD)"
+              },
+              {
+                "string": "uDT6"
+              },
+              {
+                "string": "uDT4"
+              },
+              {
+                "string": "uDX2"
+              },
+              {
+                "string": "uDT2U"
+              },
+              {
+                "string": "uDT2M"
+              },
+              {
+                "string": "uB6 (Insert.Red)"
+              }
+            ],
+            "headend-behavior": [
+              {
+                "string": "T"
+              },
+              {
+                "string": "H.Insert.Red"
+              },
+              {
+                "string": "H.Encaps.Red"
+              },
+              {
+                "string": "H.Encaps.L2.Red"
+              }
+            ],
+            "security-rule": [
+              {
+                "string": "SEC-1"
+              },
+              {
+                "string": "SEC-2"
+              },
+              {
+                "string": "SEC-3"
+              }
+            ],
+            "counter": [
+              {
+                "string": "CNT-3"
+              }
+            ],
+            "signaled-parameters": {
+              "max-sl": 3,
+              "max-end-pop-srh": 3,
+              "max-h-insert": 2,
+              "max-h-encap": 2,
+              "max-end-d": 3
+            },
+            "endpoint-entries": {
+              "local-only": true,
+              "global-local-combo": true,
+              "separate-shift-and-non-shift": true,
+              "shift-only-drop": false
+            }
+          },
+          "max-sids": 8176,
+          "sid-holdtime-mins": 3,
+          "encap-hop-limit-default": {
+            "do-propagate": false,
+            "value": 0
+          },
+          "encap-traffic-class-default": {
+            "do-propagate": false,
+            "value": 0
+          },
+          "max-locators": 16,
+          "sid-resource-usage": [
+            {
+              "endpoint-behavior": "End.DX6",
+              "value": 1
+            },
+            {
+              "endpoint-behavior": "End.DX4",
+              "value": 1
+            },
+            {
+              "endpoint-behavior": "End.DT6",
+              "value": 1
+            },
+            {
+              "endpoint-behavior": "End.DT4",
+              "value": 1
+            },
+            {
+              "endpoint-behavior": "End.DX2",
+              "value": 1
+            },
+            {
+              "endpoint-behavior": "End.DT2U",
+              "value": 1
+            },
+            {
+              "endpoint-behavior": "End.DT2M",
+              "value": 1
+            },
+            {
+              "endpoint-behavior": "End (PSP/USD)",
+              "value": 1
+            },
+            {
+              "endpoint-behavior": "End.X (PSP/USD)",
+              "value": 1
+            },
+            {
+              "endpoint-behavior": "uN (PSP/USD)",
+              "value": 1
+            },
+            {
+              "endpoint-behavior": "uA (PSP/USD)",
+              "value": 1
+            },
+            {
+              "endpoint-behavior": "uDT6",
+              "value": 1
+            },
+            {
+              "endpoint-behavior": "uDT4",
+              "value": 1
+            },
+            {
+              "endpoint-behavior": "uDX2",
+              "value": 1
+            },
+            {
+              "endpoint-behavior": "uDT2U",
+              "value": 1
+            },
+            {
+              "endpoint-behavior": "uDT2M",
+              "value": 1
+            },
+            {
+              "endpoint-behavior": "uB6 (Insert.Red)",
+              "value": 1
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "collection_end_time": "1692118289854"
+}
 </code>
 </pre>
 </div>
