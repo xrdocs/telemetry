@@ -258,6 +258,19 @@ The following Network Processor counters were been considered:
 
 Use the CLI command <code>show controllers npu resources X location 0/N/CPU0</code>, where X corresponds to the database and N to the line card location (use RP0 for fixed systems).
 
+The sensor path used to collect hardware statistics is:
+
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+Cisco-IOS-XR-platforms-ofa-oper:ofa/stats/nodes/node/Cisco-IOS-XR-NCS-BDplatforms-npu-resources-oper:hw-resources-datas/hw-resources-data
+</code>
+</pre>
+</div>
+
+There are variations visible in our subsequent graphs:
+
+
 ### Cisco 8000
 
 # Conclusion
