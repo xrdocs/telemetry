@@ -243,7 +243,7 @@ This section will cover Network Processor (NP) SRv6 resources utilization. It wi
 
 A dedicated article written by Deepak covers this topic in details: - insert link-
 
-The following Network Processor counters were been considered: 
+The following Network Processor counters were considered: 
 
 |     Network   Processor Database   |     Purpose                                                          |
 |----------------------------|----------------------------------------------------------------------|
@@ -273,11 +273,30 @@ There are variations visible in our subsequent graphs:
 
 ### Cisco 8000
 
+**Info:** SRv6 is supported on Cisco 8000 powered by Silicon One Q200 ASICs.
+{: .notice--primary}
+
+The following Network Processor counters were considered: 
+
+Use the CLI command <code>show controllers npu resources X location 0/N/CPU0</code>, where X corresponds to the database and N to the line card location (use RP0 for fixed systems).
+
+The sensor path used to collect hardware statistics is:
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+Cisco-IOS-XR-platforms-ofa-oper:ofa/stats/nodes/node/Cisco-IOS-XR-8000-platforms-npu-resources-oper:hw-resources-datas/hw-resources-data
+</code>
+</pre>
+</div>
+
+
+Below, we can see the current hardware statistics of the NP mentioned earlier: 
+
+
 # Conclusion
 
-After a tour through a few sensor paths that are specific to segment routing v6 or related to hardware resources, using telemetry were very helpful during my SRv6 journey. XR native models give us the ability to monitor a huge amount of data allowing us to cover a wide range of a network engineer challenges.
-Stay tuned for more telemetry content on SRv6!
-
+This article started with few sensor paths which are specific to SRv6. It then covered counters and databases utilization which are platform dependent.
+Overall, using telemetry was very helpful during my SRv6 journey. IOS XR native models gives the ability to monitor a huge amount of data. Stay tuned for more telemetry content on SRv6!
 
 # Additional Resources
 
