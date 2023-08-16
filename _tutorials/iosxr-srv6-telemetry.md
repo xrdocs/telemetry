@@ -131,6 +131,8 @@ Enter any key to exit...
 </pre>
 </div>
 
+The output is in JSON format. For having a human-readable format, I suggest using a JSON formatter such [Code Beautify](https://codebeautify.org/jsonviewer/y2375405c)
+
 # Conclusion
 
 # Additional Resources
