@@ -192,6 +192,35 @@ Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/manager/sid_mgr_summary/sids_
 The graphs below shows the active SIDs in my lab:
 ![srv6-telemetry-manager.png]({{site.baseurl}}/images/srv6-telemetry-manager.png)
 
+### Locators
+
+The SRv6 locator is used to identify a node and its specific services. The CLI command is <code>show segment-routing srv6 locator</code>.  
+
+The sensor paths are:
+
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locators/locator/info/interface/programmed_prefix
+Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/manager/sid_mgr_summary/locators_count
+Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/manager/sid_mgr_summary/oper_locators_count
+</code>
+</pre>
+</div>
+
+### SID
+
+The CLI command is <code>show segment-routing srv6 sid</code>.
+To collect Active SIDs and their different behaviors, use following sensor paths:
+
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locator-all-sids/locator-all-sid/sid_behavior/description
+Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locator-all-sids/locator-all-sid/sid
+</code>
+</pre>
+</div>
 
 
 # Conclusion
