@@ -232,8 +232,37 @@ A quick example would be to use this sensor-path: <code>Cisco-IOS-XR-infra-xtc-a
 
 We can see with the graph above the SRv6-TE policy is now enabled. 
 
+## Hardware data
+
+This section will cover Network Processor (NP) SRv6 resources utilization. It will leverage different sensor-paths which are Platform Dependent.
+
+### NCS 5500/5700
+
+**Note:** The sensor paths mentioned in this section can also be used for NCS 500 series.
+{: .notice--primary}
+
+A dedicated article written by Deepak covers this topic in details: - insert link-
+
+The following Network Processor counters were been considered: 
+
+|     Network   Processor Database   |     Purpose                                                          |
+|----------------------------|----------------------------------------------------------------------|
+|     LPM                    |     IPv4/v6 prefixes                                               |
+|     LEM                    |     IPv4 /32 host prefixes, MAC adresses                                                |
+|     Encap                  |     SRv6 remote uSIDs                                                |
+|     FEC                    |     Prefix/label/SID   lookup can point to a FEC entry               |
+|     ECMP-FEC               |     SRv6 Multipath/ECMP   entries pointing to a list of FEC array    |
+
+**Note:** This table applies to Jericho/Jericho+ ASICs. Jericho2 databases might differ.
+{: .notice--primary}
+
+### Cisco 8000
 
 # Conclusion
+
+After a tour through a few sensor paths that are specific to segment routing v6 or related to hardware resources, using telemetry were very helpful during my SRv6 journey. XR native models give us the ability to monitor a huge amount of data allowing us to cover a wide range of a network engineer challenges.
+Stay tuned for more telemetry content on SRv6!
+
 
 # Additional Resources
 
