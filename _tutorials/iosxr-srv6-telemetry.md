@@ -133,6 +133,52 @@ Enter any key to exit...
 
 The output is in JSON format. For having a human-readable format, I suggest using a JSON formatter such [Code Beautify](https://codebeautify.org/jsonviewer/y2375405c)
 
+## SRv6 data
+
+In this part, we will explore the resources that were useful for me to be monitored as part of my SRv6 lab.
+
+### SRv6 Manager
+
+The overall SRv6 state from SRv6 Manager point of view is given by the CLI command <code>show segment-routing srv6 manager</code>. 
+
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+RP/0/RP0/CPU0:NCS5501-SE-1#sh segment-routing srv6 manager
+Tue Aug 15 18:50:37.816 CEST
+Parameters:
+  SRv6 Enabled: Yes
+  SRv6 Operational Mode:
+    Micro-segment:
+      SID Base Block: fccc::/24
+  Encapsulation:
+    Source Address:
+      Configured: fccc:0:211::1
+      Default: fccc:0:211::1
+    Hop-Limit: Default
+    Traffic-class: Default
+  SID Formats:
+    f3216 32B/16NFA (2)
+      uSID LIB Range:
+        LIB Start   : 0xe000
+        ELIB Start  : 0xfe00
+      uSID WLIB Range:
+        EWLIB Start : 0xfff7
+<mark>Summary:
+  Number of Locators: 5 (5 operational)
+  Number of SIDs: 18 (0 stale)
+  Max SID resources: 8176
+  Number of free SID resources: 8158</mark>
+  OOR:
+    Thresholds (resources): Green 409, Warning 246
+    Status: Resource Available
+        History: (0 cleared, 0 warnings, 0 full)
+- output omitted -
+</code>
+</pre>
+</div>
+
+
 # Conclusion
 
 # Additional Resources
