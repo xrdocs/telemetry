@@ -189,6 +189,10 @@ Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/manager/sid_mgr_summary/sids_
 </pre>
 </div>
 
+The graphs below shows the active SIDs in my lab:
+![srv6-telemetry-manager.png]({{site.baseurl}}/images/srv6-telemetry-manager.png)
+
+
 
 # Conclusion
 
