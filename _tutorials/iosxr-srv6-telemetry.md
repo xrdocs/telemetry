@@ -256,6 +256,8 @@ The following Network Processor counters were been considered:
 **Note:** This table applies to Jericho/Jericho+ ASICs. Jericho2 databases might differ.
 {: .notice--primary}
 
+Use the CLI command <code>show controllers npu resources X location 0/N/CPU0</code>, where X corresponds to the database and N to the line card location (use RP0 for fixed systems).
+
 ### Cisco 8000
 
 # Conclusion
