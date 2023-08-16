@@ -63,6 +63,43 @@ The models that will be used in this article are:
 
 Running the pyang command as shown below will allow you to view the tree format model: 
 
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+pyang Cisco-IOS-XR-segment-routing-srv6-oper.yang -f tree --tree-path srv6/active/manager/sid-mgr-summary
+module: Cisco-IOS-XR-segment-routing-srv6-oper
+  +--ro srv6
+     +--ro active
+        +--ro manager
+           +--ro sid-mgr-summary
+              +--ro sids-out-of-resource-summary
+              |  +--ro identifer-name?                  string
+              |  +--ro oor-state?                       Srv6-out-of-resource-state
+              |  +--ro oor-maximum-sid-count?           uint32
+              |  +--ro oor-current-free-sid-count?      uint32
+              |  +--ro oor-yellow-free-sid-thsreshold?   uint32
+              |  +--ro oor-green-free-sid-threshold?    uint32
+              |  +--ro oor-green-count?                 uint32
+              |  +--ro oor-yellow-count?                uint32
+              |  +--ro oor-red-count?                   uint32
+              <mark>+--ro locators-count?                 uint16</mark>
+              <mark>+--ro oper-locators-count?            uint16</mark>
+              <mark>+--ro sids-count?                     uint32</mark>
+              +--ro stale-sids-count?               uint32
+              <mark>+--ro maximum-sids-count?             uint32</mark>
+              +--ro block-local-sid-oor-summary* []
+                 +--ro identifer-name?                  string
+                 +--ro oor-state?                       Srv6-out-of-resource-state
+                 +--ro oor-maximum-sid-count?           uint32
+                 +--ro oor-current-free-sid-count?      uint32
+                 +--ro oor-yellow-free-sid-threshold?   uint32
+                 +--ro oor-green-free-sid-threshold?    uint32
+                 +--ro oor-green-count?                 uint32
+                 +--ro oor-yellow-count?                uint32
+                 +--ro oor-red-count?                   uint32
+</code>
+</pre>
+</div>
 
 # Verifying the streamed data
 
