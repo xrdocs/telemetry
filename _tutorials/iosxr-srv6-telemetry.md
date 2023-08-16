@@ -222,6 +222,16 @@ Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locator-all-sids/locator-all-
 </pre>
 </div>
 
+### SRv6 Traffic Engineering
+
+Shelly wrote an article about the sensor-paths for SR-TE: -to complete-. The sensor paths mentioned in her article are the same for SRv6-TE.
+
+A quick example would be to use this sensor-path: <code>Cisco-IOS-XR-infra-xtc-agent-oper:xtc/policy-summary</code>
+
+![srv6-telemetry-te.png]({{site.baseurl}}/images/srv6-telemetry-te.png)
+
+We can see with the graph above the SRv6-TE policy is now enabled. 
+
 
 # Conclusion
 
