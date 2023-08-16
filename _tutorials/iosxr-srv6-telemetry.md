@@ -51,9 +51,10 @@ Determining the Network Processor resources utilization for a service or the num
 # YANG data modeling
 
 Reading a YANG model from a <code>.yang</code> file is quite complex. There is an alternative to this which is pyang. pyang is a python program which can be used for 3 different use cases:
-1 - YANG module validation
-2 - YANG module transformation into other formats (XML, JSON)
-3 - YANG module visualization (tree view)
+
+1. YANG module validation
+2. YANG module transformation into other formats (XML, JSON)
+3. YANG module visualization (tree view)
 
 The models that will be used in this article are:
 - Cisco-IOS-XR-segment-routing-srv6-oper.yang
