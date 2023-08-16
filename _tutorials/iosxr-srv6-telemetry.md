@@ -300,4 +300,10 @@ Overall, using telemetry was very helpful during my SRv6 journey. IOS XR native 
 
 # Additional Resources
 
+## NCS 5501-SE router configuration
+
+## Cisco 8201-FH router configuration
+
+## Telegraf configuration
+
 
