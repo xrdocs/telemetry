@@ -178,6 +178,17 @@ Parameters:
 </pre>
 </div>
 
+There is a clear similarity between the output of the command and the YANG model mentioned above. For getting summary information about the SRv6 state such as number of SIDs, I used the following sensor-paths:
+
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/manager/sid_mgr_summary/sids_out_of_resource_summary/oor_current_free_sid_count
+Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/manager/sid_mgr_summary/sids_count
+</code>
+</pre>
+</div>
+
 
 # Conclusion
 
