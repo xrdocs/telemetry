@@ -48,9 +48,21 @@ Capacity planning can be a challenging task. One way to achieve this is by track
 
 Determining the Network Processor resources utilization for a service or the number of entries consumed during the setup of a L3VPN service can be difficult. Getting visibility at hardware level is critical to better handle scale constraints.
 
-# XR CLI command to YANG Model
-
 # YANG data modeling
+
+Reading a YANG model from a <code>.yang</code> file is quite complex. There is an alternative to this which is pyang. pyang is a python program which can be used for 3 different use cases:
+1 - YANG module validation
+2 - YANG module transformation into other formats (XML, JSON)
+3 - YANG module visualization (tree view)
+
+The models that will be used in this article are:
+- Cisco-IOS-XR-segment-routing-srv6-oper.yang
+- Cisco-IOS-XR-NCS-BDplatforms-npu-resources-oper.yang
+- Cisco-IOS-XR-8000-platforms-npu-resources-oper.yang
+- Cisco-IOS-XR-infra-xtc-agent-oper.yang
+
+Running the pyang command as shown below will allow you to view the tree format model: 
+
 
 # Verifying the streamed data
 
