@@ -106,6 +106,11 @@ module: Cisco-IOS-XR-segment-routing-srv6-oper
 
 # Verifying the streamed data
 
+The configuration of the TIG stack (Telegraf, InfluxDB, Grafana) won't be covered here, as several tutorials already addressed it on xrdocs. However, we will inspect the data that is being transmitted to the Telegraf collector.
+
+**Info:** Before executing the command, it is necessary to have MDT process running.
+{: .notice}
+
 # Conclusion
 
 # Additional Resources
