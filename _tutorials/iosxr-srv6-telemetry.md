@@ -46,7 +46,7 @@ Capacity planning can be a challenging task. One way to achieve this is by track
 
 ##### Better understanding of hardware resources mapping
 
-Determining the NP utilization for a service or the number of entries consumed during the setup of a L3VPN service can be difficult. Getting visibility at hardware level is critical to better handle scale constraints.
+Determining the Network Processor resources utilization for a service or the number of entries consumed during the setup of a L3VPN service can be difficult. Getting visibility at hardware level is critical to better handle scale constraints.
 
 # XR CLI command to YANG Model
 
