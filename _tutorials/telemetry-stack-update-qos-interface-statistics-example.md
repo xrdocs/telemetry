@@ -326,7 +326,7 @@ Several subscriptions can be described, each correspond to a sensor-path to coll
 
 ```
 [[inputs.gnmi]]
-  addresses = ["R0:57400","R1:57400"]
+  addresses = ["R0.lab:57400","R1.lab:57400"]
   username = "cisco"
   password = "cisco123"
   encoding = "json_ietf"
