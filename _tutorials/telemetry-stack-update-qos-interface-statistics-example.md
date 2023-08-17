@@ -220,7 +220,7 @@ When using the dial-out method, more configuration is done on the routers and th
 
 ### XR configuration
 
-The configuration on the router must define the address and port of the collector as well as the transport and encoding used. Here for simplicity the grpc no-tls is used, therefore no certificate is required. For production network, it is recommended to use TLS for data encryption.
+The configuration on the router must define the address and port of the collector as well as the transport and encoding used. Here for simplicity the gRPC without TLS is used, therefore no certificate is required. For production network, it is recommended to use TLS for data encryption.
 
 Two sensor-paths are defined for both input and output QOS interface statistics. Finally, the sensor group is associated to the destination with telemetry data being sent every 10 seconds (10000ms).
 
@@ -257,7 +257,7 @@ The output plugin `outputs.influxdb_v2` is used to send the collected metrics to
 #### Input
 
 The input plugin `inputs.cisco_telemetry_mdt` is used to create a gRPC server listening for new dial-out telemetry connections.
-The transport used is grpc, simple tcp could also be used. The address and port on which to listen are defined with the service_address attribute.
+The transport used is gRPC, simple tcp could also be used. The address and port on which to listen are defined with the service_address attribute.
 
 The `embedded_tag` attribute is quite important in our case as this helper has been designed specifically to cover the cases of unkeyed list. It will create a new tag from the leaf class-name. Having the class-name as a tag will allow to uniquely identify the metric collected.
 
@@ -303,7 +303,7 @@ When using the dial-in method, there are barely any configuration on the routers
 
 ### XR configuration
 
-The configuration on the router must define the port of the grpc server. Here for simplicity the grpc no-tls is used, therefore no certificate is required. For production network, it is recommended to use TLS for data encryption.
+The configuration on the router must define the port of the gRPC server. Here for simplicity the gRPC without is used, therefore no certificate is required. For production network, it is recommended to use TLS for data encryption.
 
 ```
 grpc
