@@ -173,7 +173,7 @@ Once the root certificate is created. Many devices certificates can be created. 
     <div class="highlighter-rouge">
     <pre class="highlight">
     <code>
-    root@vxr8000:/home/cisco/telemetry_docker/pki# cat telegraf.lab.conf 
+    cisco@server1:/home/cisco# cat telegraf.lab.conf 
     distinguished_name = req_distinguished_name
     req_extensions = req_ext
     prompt = no
@@ -201,9 +201,9 @@ Once the root certificate is created. Many devices certificates can be created. 
     [alt_names]
     IP.1 = 192.168.122.1
     IP.2 = 10.48.82.175
-    root@vxr8000:/home/cisco/telemetry_docker/pki# <span style="background-color: yellow">openssl req -new -key telegraf.lab.key -out telegraf.lab.csr -config telegraf.lab.conf</span>
+    cisco@server1:/home/cisco# <span style="background-color: yellow">openssl req -new -key telegraf.lab.key -out telegraf.lab.csr -config telegraf.lab.conf</span>
     Enter pass phrase for telegraf.lab.key:
-    root@vxr8000:/home/cisco/telemetry_docker/pki#
+    cisco@server1:/home/cisco#
     </code>
     </pre>
     </div>
@@ -267,12 +267,12 @@ Once the root certificate is created. Many devices certificates can be created. 
     <div class="highlighter-rouge">
     <pre class="highlight">
     <code>
-    root@vxr8000:/home/cisco/telemetry_docker/pki# <span style="background-color: yellow">openssl x509 -req -in telegraf.lab.csr -CA CA.pem -CAkey CA.key -CAcreateserial -out telegraf.lab.pem -days 180 -sha256 -extfile telegraf.lab.conf -extensions server_cert</span>
+    cisco@server1:/home/cisco# <span style="background-color: yellow">openssl x509 -req -in telegraf.lab.csr -CA CA.pem -CAkey CA.key -CAcreateserial -out telegraf.lab.pem -days 180 -sha256 -extfile telegraf.lab.conf -extensions server_cert</span>
     Signature ok
     subject=C = FR, ST = Paris, L = Paris, O = Cisco, CN = telegraf.lab
     Getting CA Private Key
     Enter pass phrase for CA.key:
-    root@vxr8000:/home/cisco/telemetry_docker/pki# 
+    cisco@server1:/home/cisco# 
     </code>
     </pre>
     </div>
@@ -280,7 +280,7 @@ Once the root certificate is created. Many devices certificates can be created. 
     <div class="highlighter-rouge">
     <pre class="highlight">
     <code>
-    root@vxr8000:/home/cisco/telemetry_docker/pki#  <span style="background-color: yellow">openssl x509 -text -noout -in telegraf.lab.pem</span>
+    cisco@server1:/home/cisco#  <span style="background-color: yellow">openssl x509 -text -noout -in telegraf.lab.pem</span>
     Certificate:
         Data:
             Version: 3 (0x2)
@@ -351,7 +351,7 @@ Once the root certificate is created. Many devices certificates can be created. 
              0c:a6:e9:9f:7d:b7:2a:be:8e:6b:a3:21:6b:72:bb:d7:ed:15:
              93:4d:97:b8:38:c5:3f:fa:61:cc:77:05:fe:9e:9f:bd:7c:c9:
              75:5f:1b:a9
-    root@vxr8000:/home/cisco/telemetry_docker/pki#
+    cisco@server1:/home/cisco#
     </code>
     </pre>
     </div>
@@ -412,12 +412,12 @@ When using the dial-out method, no router certificate is required. When using th
     <div class="highlighter-rouge">
     <pre class="highlight">
     <code>
-    root@vxr8000:/home/cisco/telemetry_docker/pki# <span style="background-color: yellow">openssl x509 -req -in routers.lab.csr -CA CA.pem -CAkey CA.key -CAcreateserial -out routers.lab.pem -days 180 -sha256 -extfile routers.lab.conf -extensions server_cert</span>
+    cisco@server1:/home/cisco# <span style="background-color: yellow">openssl x509 -req -in routers.lab.csr -CA CA.pem -CAkey CA.key -CAcreateserial -out routers.lab.pem -days 180 -sha256 -extfile routers.lab.conf -extensions server_cert</span>
     Signature ok
     subject=C = FR, ST = Paris, L = Paris, O = Cisco, CN = *.routers.lab
     Getting CA Private Key
     Enter pass phrase for CA.key:
-    root@vxr8000:/home/cisco/telemetry_docker/pki# 
+    cisco@server1:/home/cisco# 
     </code>
     </pre>
     </div>
@@ -425,7 +425,7 @@ When using the dial-out method, no router certificate is required. When using th
     <div class="highlighter-rouge">
     <pre class="highlight">
     <code>
-    root@vxr8000:/home/cisco/telemetry_docker/pki# <span style="background-color: yellow">openssl x509 -text -noout -in routers.lab.pem</span>
+    cisco@server1:/home/cisco# <span style="background-color: yellow">openssl x509 -text -noout -in routers.lab.pem</span>
     Certificate:
         Data:
             Version: 3 (0x2)
@@ -494,7 +494,7 @@ When using the dial-out method, no router certificate is required. When using th
              9b:00:e0:f5:79:e5:0f:67:db:26:47:a0:29:5a:33:24:f6:94:
              19:20:d0:20:2e:f0:58:6d:c1:6f:e9:07:a1:03:a4:9c:f2:0d:
              e8:23:be:db
-    root@vxr8000:/home/cisco/telemetry_docker/pki# 
+    cisco@server1:/home/cisco# 
     </code>
     </pre>
     </div>
