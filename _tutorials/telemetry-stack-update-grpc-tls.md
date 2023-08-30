@@ -18,7 +18,7 @@ For simplicity, Telemetry configuration is often shown without TLS. It is easier
 This article is a follow up to my [previous article](https://xrdocs.io/telemetry/tutorials/telemetry-stack-update-qos-interface-statistics-example/) on the TIG stack. It will reuse the same configuration examples and describe the steps on how to use gRPC dial-out or dial-in methods with TLS for authentication and encryption between a Telemetry collector and IOS XR routers.
 
 There was already a great article on using gRPC with TLS from Shelly [Pipeline with gRPC](https://xrdocs.io/telemetry/tutorials/2017-05-08-pipeline-with-grpc/). 
-This article was greatly inspired by this previous one, though all configuration are now based on the Telegraf collector.
+This article was much inspired by this previous one, though all configuration are now based on the Telegraf collector.
 {: .notice}
 
 
@@ -26,9 +26,9 @@ This article was greatly inspired by this previous one, though all configuration
 
 In order to use TLS, certificates are required. If you already have your own PKI (Public Key Infrastructure), you should be able to generate certificates for the Telegraf collector and routers
 
-In the next section, we will show as an example how to create our own root CA and generates certificates to be used by gRPC.
+In the next section, we will show, as an example, how to create our own root CA and generates certificates to be used by gRPC.
 
-While certificates can work with IP addresses only, many times it can cause issue. Therefore, only FQDN (Fully qualified domain name) will be used. However, Subject Alternative Name can be used to explicitly define all valid IP addresses.
+While certificates can work with IP addresses only, many times it can cause issue. Therefore, FQDN (Fully qualified domain name) will be used. However, Subject Alternative Name can be used to explicitly define all valid IP addresses.
 {: .notice--info}
 
 
@@ -127,7 +127,7 @@ Certificate:
                 keyid:50:5F:91:3E:C9:15:CF:23:CE:39:98:F4:70:73:40:CA:7D:D5:15:91
 
             X509v3 Basic Constraints: critical
-                <span style="background-color: green">CA:TRUE</span>
+                <span style="background-color: #7CFC00;">CA:TRUE</span>
     Signature Algorithm: sha256WithRSAEncryption
          96:52:3d:e6:d3:0e:7a:9d:af:ad:a7:0f:81:f3:cf:f9:4a:3f:
          9e:ed:14:94:bd:d6:73:5d:22:5f:1e:5e:68:f6:6e:bb:2a:4a:
@@ -317,9 +317,9 @@ Certificate:
                 Exponent: 65537 (0x10001)
         X509v3 extensions:
             X509v3 Subject Alternative Name: 
-                <span style="background-color: green">IP Address:192.168.122.1, IP Address:10.48.82.175</span>
+                <span style="background-color: #7CFC00;">IP Address:192.168.122.1, IP Address:10.48.82.175</span>
             X509v3 Basic Constraints: 
-                <span style="background-color: green">CA:FALSE</span>
+                <span style="background-color: #7CFC00;">CA:FALSE</span>
             Netscape Cert Type: 
                 SSL Server
             Netscape Comment: 
@@ -436,7 +436,7 @@ Certificate:
         Validity
             Not Before: Aug 30 09:30:02 2023 GMT
             Not After : Feb 26 09:30:02 2024 GMT
-        Subject: C = FR, ST = Paris, L = Paris, O = Cisco, <span style="background-color: green">CN = *.routers.lab</span>
+        Subject: C = FR, ST = Paris, L = Paris, O = Cisco, <span style="background-color: #7CFC00;">CN = *.routers.lab</span>
         Subject Public Key Info:
             Public Key Algorithm: rsaEncryption
                 RSA Public-Key: (2048 bit)
@@ -462,7 +462,7 @@ Certificate:
                 Exponent: 65537 (0x10001)
         X509v3 extensions:
             X509v3 Basic Constraints: 
-                <span style="background-color: green;">CA:FALSE</span>
+                <span style="background-color: #7CFC00;">CA:FALSE</span>
             Netscape Cert Type: 
                 SSL Server
             Netscape Comment: 
