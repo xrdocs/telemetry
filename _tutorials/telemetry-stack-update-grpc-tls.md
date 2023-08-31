@@ -523,6 +523,8 @@ services:
 
 # Telemetry configuration
 
+Only partial configuration will be shown in the examples below. Refer to my [previous article](https://xrdocs.io/telemetry/tutorials/telemetry-stack-update-qos-interface-statistics-example/) and to the [Github repository](https://github.com/RomainCyr/tig-stack-qos-interface-statistics) for full configuration files. 
+
 ## Dial-out method
 
 In the dial-out scenario, the TLS server is the Telegraf collector and the client is the router. Therefore, the routers must be able to verify the Telegraf certificate.
@@ -650,7 +652,6 @@ When replacing those files ensure that their name are kept identical.
 
 The input plugin `inputs.gnmi` is used for the dial-in method. To enable TLS, the `tls_enabled` attribute must be set to `true` and the root CA certificate, used for verifying the routers certificates, must be provided. Optionnaly, if mutual authentication is enabled, the Telegraf private key and certificate must be provided.
 <div class="highlighter-rouge"><pre class="highlight"><code>
-
 # gNMI telemetry input plugin
 [[inputs.gnmi]]
   ## Address and port of the gNMI GRPC server
