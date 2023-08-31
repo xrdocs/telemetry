@@ -40,9 +40,7 @@ Using the openssl command line, it is very easy to create our own CA.
 The root certificate is the starting point of the trust chain. Once created, it can be deployed on devices to verify the authenticity of device certificates. It is also used to create those device certificates
 
 1. The private key for the root CA must be created. A passphrase is requested for encrypting the key. It will be ask later when creating certificates
-    <div class="highlighter-rouge">
-    <pre class="highlight">
-    <code>
+    <div class="highlighter-rouge"><pre class="highlight"><code>
     openssl genrsa -aes256 -out CA.key 2048
     cisco@server1:/home/cisco# <span style="background-color: yellow">openssl genrsa -aes256 -out CA.key 2048</span>
     Generating RSA private key, 2048 bit long modulus (2 primes)
@@ -52,14 +50,10 @@ The root certificate is the starting point of the trust chain. Once created, it 
     Enter pass phrase for CA.key:
     Verifying - Enter pass phrase for CA.key:
     cisco@server1:/home/cisco# 
-    </code>
-    </pre>
-    </div>
+    </code></pre></div>
 2. The root certificate is created with the private key. Here it will be valid for one year only. If used in production this may be changed.
 Many question will be asked, you can fill the information as you prefer, this is only informational.
-    <div class="highlighter-rouge">
-    <pre class="highlight">
-    <code>
+    <div class="highlighter-rouge"><pre class="highlight"><code>
     cisco@server1:/home/cisco# <span style="background-color:yellow">openssl req -x509 -new -nodes -key CA.key -sha256 -days 365 -out CA.pem</span>
     Enter pass phrase for CA.key:
     You are about to be asked to enter information that will be incorporated
@@ -77,13 +71,9 @@ Many question will be asked, you can fill the information as you prefer, this is
     Common Name (e.g. server FQDN or YOUR name) []:lab
     Email Address []:
     cisco@server1:/home/cisco# 
-    </code>
-    </pre>
-    </div>
+    </code></pre></div>
 3. The content of the new root certificate can be read with the following command. We can see that this certificate is a root certificate
-    <div class="highlighter-rouge">
-    <pre class="highlight">
-    <code>
+    <div class="highlighter-rouge"><pre class="highlight"><code>
     cisco@server1:/home/cisco# <span style="background-color:yellow">openssl x509 -text -noout -in CA.pem</span>
     Certificate:
         Data:
@@ -144,32 +134,24 @@ Many question will be asked, you can fill the information as you prefer, this is
              06:e5:d3:ff:44:1a:3e:6f:9e:7a:7c:ad:5c:1d:9c:a1:68:c8:
              f3:1f:08:62
     cisco@server1:/home/cisco#
-    </code>
-    </pre>
-    </div>
+    </code></pre></div>
 
 ### Telegraf certificate
 
 Once the root certificate is created. Many devices certificates can be created. One certificate is created for the telegraf collector.
 
 1. First, the private key for the Telegraf certificate must be created.
-    <div class="highlighter-rouge">
-    <pre class="highlight">
-    <code>
+    <div class="highlighter-rouge"><pre class="highlight"><code>
     cisco@server1:/home/cisco# <span style="background-color:yellow">openssl genrsa -out telegraf.lab.key 2048</span>
     Generating RSA private key, 2048 bit long modulus (2 primes)
     ............................................................................................................................+++++
     ...............+++++
     e is 65537 (0x010001)
     cisco@server1:/home/cisco# 
-    </code>
-    </pre>
-    </div>
+    </code></pre></div>
 
 2. A certificate signing request (CSR) needs to be created with the private key in order to request the certificate to the CA. A configuration file is used to generate the CSR. In the example below, IP addresses are defined as SAN (Subject Alternative Name). If SAN are used, the Common Name (CN) field is ignored, therefore the FQDN must also appear in the SAN entries.
-    <div class="highlighter-rouge">
-    <pre class="highlight">
-    <code>
+    <div class="highlighter-rouge"><pre class="highlight"><code>
     cisco@server1:/home/cisco# cat telegraf.lab.conf 
     distinguished_name = req_distinguished_name
     req_extensions = req_ext
@@ -201,13 +183,9 @@ Once the root certificate is created. Many devices certificates can be created. 
     IP.2 = 10.48.82.175
     cisco@server1:/home/cisco# <span style="background-color: yellow">openssl req -new -key telegraf.lab.key -out telegraf.lab.csr -config telegraf.lab.conf</span>
     cisco@server1:/home/cisco#
-    </code>
-    </pre>
-    </div>
+    </code></pre></div>
 3. The created CSR can be read with the following command:
-    <div class="highlighter-rouge">
-    <pre class="highlight">
-    <code>
+    <div class="highlighter-rouge"><pre class="highlight"><code>
     cisco@server1:/home/cisco# <span style="background-color: yellow">openssl req -text -noout -in telegraf.lab.csr</span>
     Certificate Request:
         Data:
@@ -257,26 +235,18 @@ Once the root certificate is created. Many devices certificates can be created. 
              17:7b:14:8b:93:7b:94:3f:f7:41:45:9f:86:c3:2d:64:a2:5c:
              83:cf:89:6c
     cisco@server1:/home/cisco# 
-    </code>
-    </pre>
-    </div>
+    </code></pre></div>
 4. From the CSR, the device certificate can be created with the root CA certificate and the CA key. The same config file is  provided.
-    <div class="highlighter-rouge">
-    <pre class="highlight">
-    <code>
+    <div class="highlighter-rouge"><pre class="highlight"><code>
     cisco@server1:/home/cisco# <span style="background-color: yellow">openssl x509 -req -in telegraf.lab.csr -CA CA.pem -CAkey CA.key -CAcreateserial -out telegraf.lab.pem -days 180 -sha256 -extfile telegraf.lab.conf -extensions server_cert</span>
     Signature ok
     subject=C = FR, ST = Paris, L = Paris, O = Cisco, CN = telegraf.lab
     Getting CA Private Key
     Enter pass phrase for CA.key:
     cisco@server1:/home/cisco# 
-    </code>
-    </pre>
-    </div>
+    </code></pre></div>
 5. Finally, we can verify the content of the created certificate:
-    <div class="highlighter-rouge">
-    <pre class="highlight">
-    <code>
+    <div class="highlighter-rouge"><pre class="highlight"><code>
     cisco@server1:/home/cisco#  <span style="background-color: yellow">openssl x509 -text -noout -in telegraf.lab.pem</span>
     Certificate:
         Data:
@@ -349,9 +319,7 @@ Once the root certificate is created. Many devices certificates can be created. 
              93:4d:97:b8:38:c5:3f:fa:61:cc:77:05:fe:9e:9f:bd:7c:c9:
              75:5f:1b:a9
     cisco@server1:/home/cisco#
-    </code>
-    </pre>
-    </div>
+    </code></pre></div>
 
 ### Routers certificates
 
@@ -361,23 +329,17 @@ When using the dial-out method, no router certificate is required. When using th
 {: .notice--info}
 
 1. First, the private key for the routers certificate must be created.
-    <div class="highlighter-rouge">
-    <pre class="highlight">
-    <code>
+    <div class="highlighter-rouge"><pre class="highlight"><code>
     cisco@server1:/home/cisco# <span style="background-color:yellow">openssl genrsa -out routers.lab.key 2048</span>
     Generating RSA private key, 2048 bit long modulus (2 primes)
     ........................+++++
     .............................+++++
     e is 65537 (0x010001)
     root@vxr8000:/home/cisco/telemetry_docker#
-    </code>
-    </pre>
-    </div>
+    </code></pre></div>
 
 2. A certificate signing request (CSR) needs to be created with the private key in order to request the certificate to the CA. A configuration file is used to generate the CSR, notice that a wildcard (\*) is used in the Common Name (CN) field.
-    <div class="highlighter-rouge">
-    <pre class="highlight">
-    <code>
+    <div class="highlighter-rouge"><pre class="highlight"><code>
     root@vxr8000:/home/cisco/telemetry_docker# cat routers.lab.conf 
     distinguished_name = req_distinguished_name
     prompt = no
@@ -399,26 +361,18 @@ When using the dial-out method, no router certificate is required. When using th
     extendedKeyUsage = serverAuth
     root@vxr8000:/home/cisco/telemetry_docker# <span style="background-color:yellow">openssl req -new -key routers.lab.key -out routers.lab.csr -config routers.lab.conf</span>
     root@vxr8000:/home/cisco/telemetry_docker# 
-    </code>
-    </pre>
-    </div>
+    </code></pre></div>
 3. From the CSR, the device certificate can be created with the root CA certificate and the CA key. The same config file is  provided.
-    <div class="highlighter-rouge">
-    <pre class="highlight">
-    <code>
+    <div class="highlighter-rouge"><pre class="highlight"><code>
     cisco@server1:/home/cisco# <span style="background-color: yellow">openssl x509 -req -in routers.lab.csr -CA CA.pem -CAkey CA.key -CAcreateserial -out routers.lab.pem -days 180 -sha256 -extfile routers.lab.conf -extensions server_cert</span>
     Signature ok
     subject=C = FR, ST = Paris, L = Paris, O = Cisco, CN = *.routers.lab
     Getting CA Private Key
     Enter pass phrase for CA.key:
     cisco@server1:/home/cisco# 
-    </code>
-    </pre>
-    </div>
+    </code></pre></div>
 4. Finally, we can verify the content of the created certificate, the wildcard can be verified in the CN field.
-    <div class="highlighter-rouge">
-    <pre class="highlight">
-    <code>
+    <div class="highlighter-rouge"><pre class="highlight"><code>
     cisco@server1:/home/cisco# <span style="background-color: yellow">openssl x509 -text -noout -in routers.lab.pem</span>
     Certificate:
         Data:
@@ -489,9 +443,7 @@ When using the dial-out method, no router certificate is required. When using th
              19:20:d0:20:2e:f0:58:6d:c1:6f:e9:07:a1:03:a4:9c:f2:0d:
              e8:23:be:db
     cisco@server1:/home/cisco# 
-    </code>
-    </pre>
-    </div>
+    </code></pre></div>
 
 ## Required Certificates 
 This section summarizes what certificate files are required for the dial-out and the dial-in methods
@@ -574,47 +526,33 @@ In the dial-out scenario, the server is the Telegraf collector and the client is
 ### XR configuration
 
 1. The first step is to copy the root CA certifate to the router. In the example below, this is done using SCP.
-    <div class="highlighter-rouge">
-    <pre class="highlight">
-    <code>
+    <div class="highlighter-rouge"><pre class="highlight"><code>
     cisco@server1:/home/cisco/pki# scp CA.pem cisco@R1.routers.lab:/harddisk:/
     Password: 
     CA.pem                                                                                                                                                                    100% 1220   425.4KB/s   00:00    
     cisco@server1:/home/cisco/pki#
-    </code>
-    </pre>
-    </div>
-2. The certificate then must be copied to /misc/config/grpc/dialout/dialout.pem. Note that the filename is important, it must be dialout.pem. This root certificate will be used to verify the Telegraf certificate.
-    <div class="highlighter-rouge">
-    <pre class="highlight">
-    <code>
+    </code></pre></div>
+2. Then, the certificate must be copied to `/misc/config/grpc/dialout/dialout.pem`. Note that the filename is important, it must be dialout.pem. This root certificate will be used to verify the Telegraf certificate.
+    <div class="highlighter-rouge"><pre class="highlight"><code>
     RP/0/RP0/CPU0:R1#run cp /harddisk\:/CA.pem /misc/config/grpc/dialout/dialout.pem 
     Thu Aug 31 08:23:32.316 UTC
 
     RP/0/RP0/CPU0:R1#
-    </code>
-    </pre>
-    </div>
+    </code></pre></div>
 3. Below is a configuration example for Telemetry dial-out with TLS. The tls-hostname attribute is important and must correspond to the hostname of the Telegraf certificate.
-    <div class="highlighter-rouge">
-    <pre class="highlight">
-    <code>
+    <div class="highlighter-rouge"><pre class="highlight"><code>
     telemetry model-driven
      destination-group TIG
       vrf MGMT
       address-family ipv4 192.168.122.1 port 57500
        encoding self-describing-gpb
        <span style="background-color:#F0FFFF;">protocol grpc tls-hostname telegraf.lab</span>
-    </code>
-    </pre>
-    </div>
+    </code></pre></div>
 
 ## Telegraf Configuration
 
 The input plugin `inputs.cisco_telemetry_mdt` is used for the dial-out method. To enable TLS, the private key and certificate files to use must be configured.
-    <div class="highlighter-rouge">
-    <pre class="highlight">
-    <code>
+    <div class="highlighter-rouge"><pre class="highlight"><code>
     [[inputs.cisco_telemetry_mdt]]
      ## Telemetry transport can be "tcp" or "grpc".  TLS is only supported when
      ## using the grpc transport.
@@ -630,6 +568,4 @@ The input plugin `inputs.cisco_telemetry_mdt` is used for the dial-out method. T
      ## Enable TLS; grpc transport only.
      <span style="background-color:#F0FFFF;">tls_cert = "/etc/telegraf/cert.pem"</span>
      <span style="background-color:#F0FFFF;">tls_key = "/etc/telegraf/key.pem"</span>
-    </code>
-    </pre>
-    </div>
+    </code></pre></div>
