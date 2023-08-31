@@ -552,20 +552,21 @@ In the dial-out scenario, the server is the Telegraf collector and the client is
 ## Telegraf Configuration
 
 The input plugin `inputs.cisco_telemetry_mdt` is used for the dial-out method. To enable TLS, the private key and certificate files to use must be configured.
-    <div class="highlighter-rouge"><pre class="highlight"><code>
-    [[inputs.cisco_telemetry_mdt]]
-     ## Telemetry transport can be "tcp" or "grpc".  TLS is only supported when
-     ## using the grpc transport.
-     transport = "grpc"
 
-     ## Address and port to host telemetry listener
-     service_address = ":57500"
+<div class="highlighter-rouge"><pre class="highlight"><code>
+[[inputs.cisco_telemetry_mdt]]
+ ## Telemetry transport can be "tcp" or "grpc".  TLS is only supported when
+ ## using the grpc transport.
+ transport = "grpc"
 
-     ## Grpc Maximum Message Size, default is 4MB, increase the size. This is
-     ## stored as a uint32, and limited to 4294967295.
-     max_msg_size = 4000000
+ ## Address and port to host telemetry listener
+ service_address = ":57500"
 
-     ## Enable TLS; grpc transport only.
-     <span style="background-color:#F0FFFF;">tls_cert = "/etc/telegraf/cert.pem"</span>
-     <span style="background-color:#F0FFFF;">tls_key = "/etc/telegraf/key.pem"</span>
-    </code></pre></div>
+ ## Grpc Maximum Message Size, default is 4MB, increase the size. This is
+ ## stored as a uint32, and limited to 4294967295.
+ max_msg_size = 4000000
+
+ ## Enable TLS; grpc transport only.
+ <span style="background-color:#F0FFFF;">tls_cert = "/etc/telegraf/cert.pem"</span>
+ <span style="background-color:#F0FFFF;">tls_key = "/etc/telegraf/key.pem"</span>
+</code></pre></div>
