@@ -239,7 +239,7 @@ Once the root certificate is created. Many devices certificates can be created. 
             Attributes:
             Requested Extensions:
                 X509v3 Subject Alternative Name: 
-                    IP Address:192.168.122.1, IP Address:10.48.82.175
+                    DNS:telegraf.lab, IP Address:192.168.122.1, IP Address:10.48.82.175 
         Signature Algorithm: sha256WithRSAEncryption
              3b:8c:0b:0c:d8:9d:29:a7:6a:bc:44:25:26:9f:92:cd:fa:43:
              3a:c5:0d:b2:bd:ff:58:4e:ec:c6:b4:17:d1:c6:0a:b6:d7:3c:
@@ -314,7 +314,7 @@ Once the root certificate is created. Many devices certificates can be created. 
                     Exponent: 65537 (0x10001)
             X509v3 extensions:
                 X509v3 Subject Alternative Name: 
-                    <span style="background-color: #7CFC00;">IP Address:192.168.122.1, IP Address:10.48.82.175</span>
+                    <span style="background-color: #7CFC00;">DNS:telegraf.lab, IP Address:192.168.122.1, IP Address:10.48.82.175</span>
                 X509v3 Basic Constraints: 
                     <span style="background-color: #7CFC00;">CA:FALSE</span>
                 Netscape Cert Type: 
@@ -584,7 +584,7 @@ In the dial-out scenario, the server is the Telegraf collector and the client is
     </code>
     </pre>
     </div>
-2. The certificate then must be copied to /misc/config/grpc/dialout/dialout.pem. Note that the filename is important, it must be dialout.pem.
+2. The certificate then must be copied to /misc/config/grpc/dialout/dialout.pem. Note that the filename is important, it must be dialout.pem. This root certificate will be used to verify the Telegraf certificate.
     <div class="highlighter-rouge">
     <pre class="highlight">
     <code>
@@ -605,6 +605,31 @@ In the dial-out scenario, the server is the Telegraf collector and the client is
       address-family ipv4 192.168.122.1 port 57500
        encoding self-describing-gpb
        <span style="background-color:#F0FFFF;">protocol grpc tls-hostname telegraf.lab</span>
+    </code>
+    </pre>
+    </div>
+
+## Telegraf Configuration
+
+The input plugin `inputs.cisco_telemetry_mdt` is used for the dial-out method. To enable TLS, the private key and certificate files to use must be configured.
+    <div class="highlighter-rouge">
+    <pre class="highlight">
+    <code>
+    [[inputs.cisco_telemetry_mdt]]
+     ## Telemetry transport can be "tcp" or "grpc".  TLS is only supported when
+     ## using the grpc transport.
+     transport = "grpc"
+
+     ## Address and port to host telemetry listener
+     service_address = ":57500"
+
+     ## Grpc Maximum Message Size, default is 4MB, increase the size. This is
+     ## stored as a uint32, and limited to 4294967295.
+     max_msg_size = 4000000
+
+     ## Enable TLS; grpc transport only.
+     <span style="background-color:#F0FFFF;">tls_cert = "/etc/telegraf/cert.pem"</span>
+     <span style="background-color:#F0FFFF;">tls_key = "/etc/telegraf/key.pem"</span>
     </code>
     </pre>
     </div>
