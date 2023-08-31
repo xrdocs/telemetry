@@ -669,3 +669,6 @@ The input plugin `inputs.gnmi` is used for the dial-in method. To enable TLS, th
   <span style="background-color:#F0FFFF;">tls_key = "/etc/telegraf/key.pem"</span>
 </code></pre></div>
 
+# Verification
+
+# Common issues
