@@ -326,7 +326,7 @@ Several subscriptions can be described, each correspond to a sensor-path to coll
 
 ```
 [[inputs.gnmi]]
-  addresses = ["R0.lab:57400","R1.lab:57400"]
+  addresses = ["R0.routers.lab:57400","R1.routers.lab:57400"]
   username = "cisco"
   password = "cisco123"
   encoding = "json_ietf"
@@ -411,7 +411,134 @@ This index is used in the script to build new metrics with the `class-name` as a
 
 The full script can be found on the [Github repository](https://github.com/RomainCyr/tig-stack-qos-interface-statistics).
 
-## Grafana
+# Verification
+
+Whether the dial-out or the dial-in method is used, the verification is similar. Indeed, in both scenarios, telemetry sensors are sent to the collector.
+
+Below are the three basic commands for telemetry verification:
+ - show telemetry model-driven destination
+ - show telemetry model-driven sensor-group
+ - show telemetry model-driven subscription
+
+The gRPC and telemetry traces can also be looked at for more low-level troubleshooting:
+ - show grpc trace &lt;component&gt;
+ - show telemetry model-driven trace &lt;component&gt;
+
+## Dial-out
+
+To ensure that telemetry is correctly working, we first need to ensure that the gRPC session is correctly established with the collector. The state of the destination group must be `Active`.
+<div class="highlighter-rouge"><pre class="highlight"><code>
+RP/0/RP0/CPU0:R1#<span style="background-color: yellow">show telemetry model-driven destination</span>
+Thu Aug 31 15:02:24.837 UTC
+  Group Id         Sub                          IP                                            Port    Encoding            Transport   State       
+  ------------------------------------------------------------------------------------------------------------------------------------------
+  TIG              TIG                          192.168.122.1                                 57500   self-describing-gpb grpc        <span style="background-color: #7CFC00;">Active</span>      
+      TLS:                  False
+  Collection statistics:
+    Maximum tokens                   : 4000
+    Event tokens                     : 750
+    Cadence tokens                   : 740
+    Token processed at               : 
+    Cadence token advertised at      : 
+    Event token advertised at        : 
+    GNMI initial synchronization time: 
+    Pending queue size               : 0
+    Pending queue memory size (bytes): 0
+    Processed events                 : 0
+    Collection tokens                : 740
+
+RP/0/RP0/CPU0:R1#
+</code></pre></div>
+
+The subscription must also be verified to ensure that all sensor groups are resolved.
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+RP/0/RP0/CPU0:R1#<span style="background-color: yellow">show telemetry model-driven subscription</span>
+Thu Aug 31 15:06:16.882 UTC
+Subscription:  TIG                      State: ACTIVE
+-------------
+  Sensor groups:
+  Id                               Interval(ms)               State     
+  QOS                              10000                      <span style="background-color: #7CFC00;">Resolved</span>
+
+  Destination Groups:
+  Id                 Encoding            Transport   State   Port    Vrf                               IP                                            
+  TIG                self-describing-gpb grpc        Active  57500   MGMT                              192.168.122.1                                 
+    TLS :             False
+
+RP/0/RP0/CPU0:R1#
+</code></pre></div>
+
+If some sensor-groups are in state `Not Resolved`. The details of the sensor-path must be checked. All paths must be in state `Resolved`.
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+RP/0/RP0/CPU0:R1#<span style="background-color: yellow">show telemetry model-driven sensor-group</span>
+Thu Aug 31 15:09:18.051 UTC
+  Sensor Group Id:QOS
+    Sensor Path:        Cisco-IOS-XR-qos-ma-oper:qos/interface-table/interface/input
+    Sensor Path State:  <span style="background-color: #7CFC00;">Resolved</span>
+    Sensor Path:        Cisco-IOS-XR-qos-ma-oper:qos/interface-table/interface/output
+    Sensor Path State:  <span style="background-color: #7CFC00;">Resolved</span>
+
+RP/0/RP0/CPU0:R1#
+</code></pre></div>
+
+## Dial-in
+
+When using the dial-in method, the sensor-paths are dynamically defined by the collector. Nevertheless, from XR standpoint, there are still a sensor-group, a subscription and a destination as for the dial-out method. All groups are prefixed with `GNMI`
+
+The same verification must be done to ensure that telemetry data is correctly sent.
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+RP/0/RP0/CPU0:R1#<span style="background-color: yellow">show telemetry model-driven destination</span> 
+Thu Aug 31 14:50:29.941 UTC
+  Group Id         Sub                          IP                                            Port    Encoding            Transport   State       
+  ------------------------------------------------------------------------------------------------------------------------------------------
+  GNMI_1003        GNMI__5033885546243418454    192.168.122.1                                 33086   gnmi-json           dialin      <span style="background-color: #7CFC00;">Active</span>     
+      TLS:                  False
+  Collection statistics:
+    Maximum tokens                   : 4000
+    Event tokens                     : 750
+    Cadence tokens                   : 714
+    Token processed at               : 
+    Cadence token advertised at      : 
+    Event token advertised at        : 
+    GNMI initial synchronization time: 2023-08-31 14:49:46.537741 +0000
+    Pending queue size               : 0
+    Pending queue memory size (bytes): 0
+    Processed events                 : 0
+    Collection tokens                : 714
+
+RP/0/RP0/CPU0:R1#<span style="background-color: yellow">show telemetry model-driven subscription</span>
+Thu Aug 31 14:50:24.248 UTC
+Subscription:  GNMI__5033885546243418454  State: ACTIVE
+-------------
+  Sensor groups:
+  Id                               Interval(ms)               State     
+  GNMI__5033885546243418454_0      10000                      <span style="background-color: #7CFC00;">Resolved</span>
+  GNMI__5033885546243418454_1      10000                      <span style="background-color: #7CFC00;">Resolved </span>
+
+  Destination Groups:
+  Id                 Encoding            Transport   State   Port    Vrf                               IP                                            
+  GNMI_1003          gnmi-json           dialin      Active  33086                                     192.168.122.1                                 
+    TLS :             False
+ 
+RP/0/RP0/CPU0:R1#<span style="background-color: yellow">show telemetry model-driven sensor-group</span>
+Thu Aug 31 14:50:16.325 UTC
+  Sensor Group Id:GNMI__5033885546243418454_0
+    Sensor Path:        Cisco-IOS-XR-qos-ma-oper:qos/interface-table/interface/output
+    Sensor Path State:  <span style="background-color: #7CFC00;">Resolved</span>
+
+  Sensor Group Id:GNMI__5033885546243418454_1
+    Sensor Path:        Cisco-IOS-XR-qos-ma-oper:qos/interface-table/interface/input
+    Sensor Path State:  <span style="background-color: #7CFC00;">Resolved</span>
+
+
+
+RP/0/RP0/CPU0:R1#
+</code></pre></div>
+
+# Grafana
 
 As InfluxDB v2 is used, all queries are done using the Flux language. More information about Flux queries can be found in the [documentation](https://docs.influxdata.com/influxdb/cloud/query-data/get-started/query-influxdb/). Edit the panels to see how they have been built and which queries are used.
 
