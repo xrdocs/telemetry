@@ -582,7 +582,7 @@ In addition, if client authentication is required, `tls-mutual` must be added.
  <span style="background-color:#F0FFFF;">tls-mutual</span>
 </code></pre></div>
 
-When gRPC with TLS is enabled, XR will automatically generate self-signed certificate with a root CA certificate at the following path `/misc/config/grpc`.
+When gRPC with TLS is enabled, XR will automatically generate a self-signed certificate with a root CA certificate at the following path `/misc/config/grpc`.
 
 <div class="highlighter-rouge"><pre class="highlight"><code>RP/0/RP0/CPU0:R1#run ls /misc/config/grpc
 Thu Aug 31 15:33:08.045 UTC
@@ -591,10 +591,11 @@ ca.cert  dialout  ems.key  ems.pem
 RP/0/RP0/CPU0:R1#
 </code></pre></div>
 
-This self-signed certificate could be used by providing the root certificate (`ca.cert`) to the Telegraf collector for verification. However, in this example, we will replace with the routers certificate created above.
+This self-signed certificate could be used by providing the root certificate (`ca.cert`) to the Telegraf collector for verification. However, in this example, it will be replaced by the routers certificate created above.
 
 If mutual authentication is used the `ca.cert` must also be replaced. Indeed, this is the root certificate used for client certificate verification.
-When replacing those files ensure that their name are kept identical.
+
+When replacing those files ensure that their names are kept identical.
 
 
 1. The private key and the certificate are copied onto the routers. The root CA certificate is also copied for mutual authentication. In the example below, this is done using SCP.
@@ -622,7 +623,7 @@ When replacing those files ensure that their name are kept identical.
 
     RP/0/RP0/CPU0:R1#
     </code></pre></div>
-3. Once all the files are copied, the `emsd` process must be restart to include those changes
+3. Once all the files are copied, the `emsd` process must be restart to include those file changes
     <div class="highlighter-rouge"><pre class="highlight"><code>RP/0/RP0/CPU0:R1#<span style="background-color:yellow;">process restart emsd</span>
     Thu Aug 31 15:45:27.278 UTC
     RP/0/RP0/CPU0:R1#
@@ -630,7 +631,7 @@ When replacing those files ensure that their name are kept identical.
 
 ## Telegraf Configuration
 
-The input plugin `inputs.gnmi` is used for the dial-in method. To enable TLS, the `tls_enabled` attribute must be set to `true` and the root CA certificate, used for verifying the routers certificates, must be provided. Optionnaly, if mutual authentication is enabled, the Telegraf private key and certificate must be provided.
+The input plugin `inputs.gnmi` is used for the dial-in method. To enable TLS, the `tls_enabled` attribute must be set to `true` and the root CA certificate, used for verifying the routers certificates, must be provided. Optionally, if mutual authentication is enabled, the Telegraf private key and certificate must be provided.
 <div class="highlighter-rouge"><pre class="highlight"><code># gNMI telemetry input plugin
 [[inputs.gnmi]]
   ## Address and port of the gNMI GRPC server
@@ -661,7 +662,7 @@ The input plugin `inputs.gnmi` is used for the dial-in method. To enable TLS, th
   ## Minimal TLS version to accept by the client
   # tls_min_version = "TLS12"
   ## Use TLS but skip chain & host verification
-  <span style="background-color:#F0FFFF;">insecure_skip_verify = false</span>
+  # insecure_skip_verify = true
 
   ## define client-side TLS certificate & key to authenticate to the device
   <span style="background-color:#F0FFFF;">tls_cert = "/etc/telegraf/cert.pem"</span>
