@@ -19,7 +19,6 @@ This article is a follow up to my [previous article](https://xrdocs.io/telemetry
 
 There was already a great article on using gRPC with TLS from Shelly [Pipeline with gRPC](https://xrdocs.io/telemetry/tutorials/2017-05-08-pipeline-with-grpc/). 
 This article was much inspired by this previous one, though all configuration are now based on the Telegraf collector.
-{: .notice}
 
 
 # Certificates 
@@ -153,23 +152,21 @@ Many question will be asked, you can fill the information as you prefer, this is
 
 Once the root certificate is created. Many devices certificates can be created. One certificate is created for the telegraf collector.
 
-1. First, the private key for the Telegraf certificate must be created. A passphrase is requested for encrypting the key
+1. First, the private key for the Telegraf certificate must be created.
     <div class="highlighter-rouge">
     <pre class="highlight">
     <code>
-    cisco@server1:/home/cisco# <span style="background-color:yellow">openssl genrsa -aes256 -out telegraf.lab.key 2048</span>
+    cisco@server1:/home/cisco# <span style="background-color:yellow">openssl genrsa -out telegraf.lab.key 2048</span>
     Generating RSA private key, 2048 bit long modulus (2 primes)
     ............................................................................................................................+++++
     ...............+++++
     e is 65537 (0x010001)
-    Enter pass phrase for telegraf.lab.key:
-    Verifying - Enter pass phrase for telegraf.lab.key:
     cisco@server1:/home/cisco# 
     </code>
     </pre>
     </div>
 
-2. A certificate signing request (CSR) needs to be created with the private key in order to request the certificate to the CA. A configuration file is used to generate the CSR. In the example below, IP addresses are defined as SAN (Subject Alternative Name)
+2. A certificate signing request (CSR) needs to be created with the private key in order to request the certificate to the CA. A configuration file is used to generate the CSR. In the example below, IP addresses are defined as SAN (Subject Alternative Name). If SAN are used, the Common Name (CN) field is ignored, therefore the FQDN must also appear in the SAN entries.
     <div class="highlighter-rouge">
     <pre class="highlight">
     <code>
@@ -199,10 +196,10 @@ Once the root certificate is created. Many devices certificates can be created. 
     extendedKeyUsage = serverAuth
 
     [alt_names]
+    DNS.1 = telegraf.lab
     IP.1 = 192.168.122.1
     IP.2 = 10.48.82.175
     cisco@server1:/home/cisco# <span style="background-color: yellow">openssl req -new -key telegraf.lab.key -out telegraf.lab.csr -config telegraf.lab.conf</span>
-    Enter pass phrase for telegraf.lab.key:
     cisco@server1:/home/cisco#
     </code>
     </pre>
@@ -363,23 +360,21 @@ The same procedure as for the Telegraf certificate can be applied for the router
 When using the dial-out method, no router certificate is required. When using the dial-in method, routers are seen as telemetry servers as the collector initiate the TLS session, therefore certificates are required on the routers. The Telegraf certificate may also be required for the dial-in method when mutual authentication is used. It provides authentication of the collector connecting to the routers. It prevents a potential rogue collector that would be able to collect data on the routers.
 {: .notice--info}
 
-1. First, the private key for the routers certificate must be created. A passphrase is requested for encrypting the key
+1. First, the private key for the routers certificate must be created.
     <div class="highlighter-rouge">
     <pre class="highlight">
     <code>
-    cisco@server1:/home/cisco# <span style="background-color:yellow">openssl genrsa -aes256 -out routers.lab.key 2048</span>
+    cisco@server1:/home/cisco# <span style="background-color:yellow">openssl genrsa -out routers.lab.key 2048</span>
     Generating RSA private key, 2048 bit long modulus (2 primes)
     ........................+++++
     .............................+++++
     e is 65537 (0x010001)
-    Enter pass phrase for routers.lab.key:
-    Verifying - Enter pass phrase for routers.lab.key:
     root@vxr8000:/home/cisco/telemetry_docker#
     </code>
     </pre>
     </div>
 
-2. A certificate signing request (CSR) needs to be created with the private key in order to request the certificate to the CA. A configuration file is used to generate the CSR, notice that a wildcard (\*) is used in the common name (CN) field.
+2. A certificate signing request (CSR) needs to be created with the private key in order to request the certificate to the CA. A configuration file is used to generate the CSR, notice that a wildcard (\*) is used in the Common Name (CN) field.
     <div class="highlighter-rouge">
     <pre class="highlight">
     <code>
@@ -392,7 +387,7 @@ When using the dial-out method, no router certificate is required. When using th
     ST  = Paris
     L   = Paris
     O   = Cisco
-    <span style="background-color:grey">CN  = \*.routers.lab</span>
+    <span style="background-color:#F0FFFF;">CN  = \*.routers.lab</span>
 
     [server_cert]
     basicConstraints = CA:FALSE
@@ -403,7 +398,6 @@ When using the dial-out method, no router certificate is required. When using th
     keyUsage = critical, digitalSignature, keyEncipherment
     extendedKeyUsage = serverAuth
     root@vxr8000:/home/cisco/telemetry_docker# <span style="background-color:yellow">openssl req -new -key routers.lab.key -out routers.lab.csr -config routers.lab.conf</span>
-    Enter pass phrase for routers.lab.key:
     root@vxr8000:/home/cisco/telemetry_docker# 
     </code>
     </pre>
@@ -518,3 +512,99 @@ For the dial-in methods, the following three files are required:
 Optionally, if mutual authentication is used, the following files are also required on the Telegraf collector.
  - **telegraf.lab.pem:** the Telegraf certificate that will be used as the server certificate for the Telegraf collector
  - **telegraf.lab.key:** the private key associated with the Telegraf certificate
+
+# Docker compose
+The same docker compose for the TIG stack is reused. Only the root CA certificate and the Telegraf certificate and private key are added to the Telegraf container. Note that if the method used is dial-in with no mutual-authentication, then only the root CA certificate is required.
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+version: "2"
+services:
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./grafana-provisioning/:/etc/grafana/provisioning
+    depends_on:
+      - influxdb
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+      - INFLUX_DB_TOKEN=MYSUPERSECRETTOKEN
+
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    ports:
+      - '8086:8086'
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_BUCKET=telemetry
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=admin123
+      - DOCKER_INFLUXDB_INIT_ORG=lab
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=MYSUPERSECRETTOKEN
+    volumes: 
+      - /tmp/influxdb2_data:/var/lib/influxdb2
+
+  telegraf:
+    image: telegraf:latest
+    container_name: telegraf
+    ports:
+      - '57500:57500'
+    volumes:
+     # - ./telegraf_dial_out.conf:/etc/telegraf/telegraf.conf:ro
+     - ./telegraf_dial_in.conf:/etc/telegraf/telegraf.conf:ro
+     - ./embedded_tag.star:/etc/telegraf/embedded_tag.star:ro
+     <span style="background-color:#F0FFFF;">- ./pki/telegraf.lab.key:/etc/telegraf/key.pem:ro</span>
+     <span style="background-color:#F0FFFF;">- ./pki/telegraf.lab.pem:/etc/telegraf/cert.pem:ro</span>
+     <span style="background-color:#F0FFFF;">- ./pki/CA.pem:/etc/telegraf/CA.pem:ro</span>
+</code>
+</pre>
+</div>
+
+# Telemetry configuration
+
+## Dial-out method
+
+In the dial-out scenario, the server is the Telegraf collector and the client is the router. Therefore, the routers must be able to verify the Telegraf certificate.
+
+### XR configuration
+
+1. The first step is to copy the root CA certifate to the router. In the example below, this is done using SCP.
+    <div class="highlighter-rouge">
+    <pre class="highlight">
+    <code>
+    cisco@server1:/home/cisco/pki# scp CA.pem cisco@R1.routers.lab:/harddisk:/
+    Password: 
+    CA.pem                                                                                                                                                                    100% 1220   425.4KB/s   00:00    
+    cisco@server1:/home/cisco/pki#
+    </code>
+    </pre>
+    </div>
+2. The certificate then must be copied to /misc/config/grpc/dialout/dialout.pem. Note that the filename is important, it must be dialout.pem.
+    <div class="highlighter-rouge">
+    <pre class="highlight">
+    <code>
+    RP/0/RP0/CPU0:R1#run cp /harddisk\:/CA.pem /misc/config/grpc/dialout/dialout.pem 
+    Thu Aug 31 08:23:32.316 UTC
+
+    RP/0/RP0/CPU0:R1#
+    </code>
+    </pre>
+    </div>
+3. Below is a configuration example for Telemetry dial-out with TLS. The tls-hostname attribute is important and must correspond to the hostname of the Telegraf certificate.
+    <div class="highlighter-rouge">
+    <pre class="highlight">
+    <code>
+    telemetry model-driven
+     destination-group TIG
+      vrf MGMT
+      address-family ipv4 192.168.122.1 port 57500
+       encoding self-describing-gpb
+       <span style="background-color:#F0FFFF;">protocol grpc tls-hostname telegraf.lab</span>
+    </code>
+    </pre>
+    </div>
