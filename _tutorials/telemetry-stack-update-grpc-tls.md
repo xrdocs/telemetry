@@ -150,7 +150,7 @@ Once the root certificate is created. Many devices certificates can be created. 
     cisco@server1:/home/cisco# 
     </code></pre></div>
 
-2. A certificate signing request (CSR) needs to be created with the private key in order to request the certificate to the CA. A configuration file is used to generate the CSR. In the example below, IP addresses are defined as SAN (Subject Alternative Name). If SAN are used, the Common Name (CN) field is ignored, therefore the FQDN must also appear in the SAN entries.
+2. A certificate signing request (CSR) needs to be created with the private key in order to request the certificate to the CA. A configuration file is used to generate the CSR. In the example below, IP addresses are also defined in the SAN (Subject Alternative Name).
     <div class="highlighter-rouge"><pre class="highlight"><code>
     cisco@server1:/home/cisco# cat telegraf.lab.conf 
     distinguished_name = req_distinguished_name
@@ -165,20 +165,19 @@ Once the root certificate is created. Many devices certificates can be created. 
     ST  = Paris
     L   = Paris
     O   = Cisco
-    CN  = telegraf.lab
+    <span style="background-color: #7CFC00;">CN  = telegraf.lab</span>
 
     [server_cert]
     subjectAltName = @alt_names
     basicConstraints = CA:FALSE
-    nsCertType = server
     nsComment = "OpenSSL Generated Server Certificate"
     subjectKeyIdentifier = hash
     authorityKeyIdentifier = keyid,issuer:always
     keyUsage = critical, digitalSignature, keyEncipherment
-    extendedKeyUsage = serverAuth
+    extendedKeyUsage = serverAuth, clientAuth
 
     [alt_names]
-    DNS.1 = telegraf.lab
+    <span style="background-color: #7CFC00;">DNS.1 = telegraf.lab</span>
     IP.1 = 192.168.122.1
     IP.2 = 10.48.82.175
     cisco@server1:/home/cisco# <span style="background-color: yellow">openssl req -new -key telegraf.lab.key -out telegraf.lab.csr -config telegraf.lab.conf</span>
@@ -287,8 +286,6 @@ Once the root certificate is created. Many devices certificates can be created. 
                     <span style="background-color: #7CFC00;">DNS:telegraf.lab, IP Address:192.168.122.1, IP Address:10.48.82.175</span>
                 X509v3 Basic Constraints: 
                     <span style="background-color: #7CFC00;">CA:FALSE</span>
-                Netscape Cert Type: 
-                    SSL Server
                 Netscape Comment: 
                     OpenSSL Generated Server Certificate
                 X509v3 Subject Key Identifier: 
@@ -301,7 +298,7 @@ Once the root certificate is created. Many devices certificates can be created. 
                 X509v3 Key Usage: critical
                     Digital Signature, Key Encipherment
                 X509v3 Extended Key Usage: 
-                    TLS Web Server Authentication
+                    TLS Web Server Authentication, TLS Web Client Authentication
         Signature Algorithm: sha256WithRSAEncryption
              1c:20:6e:81:24:70:97:59:bd:89:12:c8:1c:9a:11:1f:0f:88:
              91:84:5a:d9:d9:72:b2:84:87:11:0c:e2:5b:42:d9:6f:26:74:
@@ -335,32 +332,39 @@ When using the dial-out method, no router certificate is required. When using th
     ........................+++++
     .............................+++++
     e is 65537 (0x010001)
-    root@vxr8000:/home/cisco/telemetry_docker#
+    cisco@server1:/home/cisco#
     </code></pre></div>
 
 2. A certificate signing request (CSR) needs to be created with the private key in order to request the certificate to the CA. A configuration file is used to generate the CSR, notice that a wildcard (\*) is used in the Common Name (CN) field.
     <div class="highlighter-rouge"><pre class="highlight"><code>
-    root@vxr8000:/home/cisco/telemetry_docker# cat routers.lab.conf 
+    cisco@server1:/home/cisco# cat routers.lab.conf 
     distinguished_name = req_distinguished_name
+    req_extensions = req_ext
     prompt = no
+
+    [req_ext]
+    subjectAltName = @alt_names
 
     [req_distinguished_name]
     C   = FR
     ST  = Paris
     L   = Paris
     O   = Cisco
-    <span style="background-color:#F0FFFF;">CN  = \*.routers.lab</span>
+    <span style="background-color: #7CFC00;">CN  = \*.routers.lab</span>
 
     [server_cert]
+    subjectAltName = @alt_names
     basicConstraints = CA:FALSE
-    nsCertType = server
     nsComment = "OpenSSL Generated Server Certificate"
     subjectKeyIdentifier = hash
     authorityKeyIdentifier = keyid,issuer:always
     keyUsage = critical, digitalSignature, keyEncipherment
-    extendedKeyUsage = serverAuth
-    root@vxr8000:/home/cisco/telemetry_docker# <span style="background-color:yellow">openssl req -new -key routers.lab.key -out routers.lab.csr -config routers.lab.conf</span>
-    root@vxr8000:/home/cisco/telemetry_docker# 
+    extendedKeyUsage = serverAuth, clientAuth
+
+    [alt_names]
+    <span style="background-color: #7CFC00;">DNS.1 = \*.routers.lab</span>
+    cisco@server1:/home/cisco# <span style="background-color:yellow">openssl req -new -key routers.lab.key -out routers.lab.csr -config routers.lab.conf</span>
+    cisco@server1:/home/cisco# 
     </code></pre></div>
 3. From the CSR, the device certificate can be created with the root CA certificate and the CA key. The same config file is  provided.
     <div class="highlighter-rouge"><pre class="highlight"><code>
@@ -375,73 +379,73 @@ When using the dial-out method, no router certificate is required. When using th
     <div class="highlighter-rouge"><pre class="highlight"><code>
     cisco@server1:/home/cisco# <span style="background-color: yellow">openssl x509 -text -noout -in routers.lab.pem</span>
     Certificate:
-        Data:
-            Version: 3 (0x2)
-            Serial Number:
-                2a:06:27:60:ac:cb:cc:06:88:c8:60:94:d4:11:55:e0:86:0f:10:31
-            Signature Algorithm: sha256WithRSAEncryption
-            Issuer: C = FR, ST = Paris, O = Cisco, CN = lab
-            Validity
-                Not Before: Aug 30 09:30:02 2023 GMT
-                Not After : Feb 26 09:30:02 2024 GMT
-            Subject: C = FR, ST = Paris, L = Paris, O = Cisco, <span style="background-color: #7CFC00;">CN = *.routers.lab</span>
-            Subject Public Key Info:
-                Public Key Algorithm: rsaEncryption
-                    RSA Public-Key: (2048 bit)
-                    Modulus:
-                        00:b1:a4:e7:82:a5:2f:ca:91:71:2e:36:ac:35:64:
-                        e7:0f:92:6d:98:2d:17:0c:49:22:4c:0d:57:a6:a8:
-                        89:81:18:cd:20:65:35:31:6c:c4:a0:d4:8f:48:65:
-                        71:26:30:83:c8:d6:47:47:f4:3c:73:06:37:11:fe:
-                        97:0e:37:55:5b:a5:7a:0a:7b:33:8d:b7:03:fe:63:
-                        f0:f1:2f:2a:88:18:b6:f7:5f:a6:09:b6:e3:1e:59:
-                        2e:2a:0b:d1:ce:14:33:15:4c:47:9e:3e:3b:ef:5e:
-                        07:c6:93:a2:22:31:c1:e1:20:df:2c:64:09:df:e5:
-                        fe:31:d1:b4:d0:e6:17:de:e6:9c:dd:af:70:5e:38:
-                        12:49:76:ac:b7:32:8e:de:96:a2:b5:a7:9c:1f:98:
-                        31:b9:3d:a6:8a:df:a2:b9:96:8d:a0:f5:c7:6c:5d:
-                        18:6d:06:51:48:ce:d1:a2:b2:88:af:97:ae:9c:48:
-                        2a:58:c4:3c:3d:d8:2e:e9:cd:9f:0b:ab:3b:df:11:
-                        1f:dc:33:69:36:09:f2:9c:3f:aa:45:5b:bb:5c:5c:
-                        fe:b7:ed:59:d8:3d:32:b4:89:7a:aa:49:e8:5b:0f:
-                        cb:ac:bf:b3:74:86:6b:64:af:eb:68:1b:60:09:f1:
-                        4a:7b:7e:66:ec:0f:3d:84:74:3e:57:3e:1d:d2:21:
-                        3d:83
-                    Exponent: 65537 (0x10001)
-            X509v3 extensions:
-                X509v3 Basic Constraints: 
-                    <span style="background-color: #7CFC00;">CA:FALSE</span>
-                Netscape Cert Type: 
-                    SSL Server
-                Netscape Comment: 
-                    OpenSSL Generated Server Certificate
-                X509v3 Subject Key Identifier: 
-                    50:E9:E9:15:A5:80:A5:72:B2:FD:40:5D:6A:0F:80:72:BC:42:DE:3A
-                X509v3 Authority Key Identifier: 
-                    keyid:50:5F:91:3E:C9:15:CF:23:CE:39:98:F4:70:73:40:CA:7D:D5:15:91
-                    DirName:/C=FR/ST=Paris/O=Cisco/CN=lab
-                    serial:65:8F:EB:27:12:78:DF:4C:3F:E0:E3:C9:BB:80:38:55:F2:A1:29:6A
-
-                X509v3 Key Usage: critical
-                    Digital Signature, Key Encipherment
-                X509v3 Extended Key Usage: 
-                    TLS Web Server Authentication
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            06:a4:47:be:8e:9a:38:7e:57:a3:ff:e8:3f:4f:f1:19:98:91:50:37
         Signature Algorithm: sha256WithRSAEncryption
-             4e:3d:1c:80:ab:85:c4:8b:9a:a6:ed:ec:34:1a:87:1e:8e:4d:
-             fe:f6:76:bd:39:a2:cd:cf:41:11:e8:91:99:d2:4f:ca:fe:66:
-             e1:d6:38:c8:8e:3a:88:7e:f2:be:50:ca:9c:ce:0e:66:94:1e:
-             09:cc:57:57:b2:4e:df:a3:2e:bb:21:1e:f0:93:ea:b4:dc:3a:
-             d8:49:b7:b5:a6:4c:86:b4:e0:1c:4d:9d:43:2d:84:c4:1a:30:
-             76:67:f1:e3:6b:30:c6:8f:62:a9:da:88:59:87:8e:84:83:a8:
-             b3:0e:57:33:ef:77:13:07:28:ce:f9:30:34:a5:65:74:c8:0d:
-             e9:3f:70:a4:68:00:f0:2c:0c:dd:e0:54:46:46:7e:a0:92:2b:
-             99:6f:39:a3:be:cc:14:a3:07:55:5b:df:a9:1c:96:cc:49:75:
-             d3:ce:e3:93:40:20:ff:6d:6d:90:ff:5f:85:35:57:c8:e3:82:
-             93:d3:2b:0e:b4:a4:79:86:6a:0a:e3:89:d1:fc:96:58:2c:17:
-             02:b5:d3:62:56:43:d8:f4:5a:d9:b2:c1:78:b3:19:f9:ae:b1:
-             9b:00:e0:f5:79:e5:0f:67:db:26:47:a0:29:5a:33:24:f6:94:
-             19:20:d0:20:2e:f0:58:6d:c1:6f:e9:07:a1:03:a4:9c:f2:0d:
-             e8:23:be:db
+        Issuer: C = FR, ST = Paris, O = Cisco, CN = lab
+        Validity
+            Not Before: Aug 31 14:18:42 2023 GMT
+            Not After : Feb 27 14:18:42 2024 GMT
+        Subject: C = FR, ST = Paris, L = Paris, O = Cisco, CN = <span style="background-color: #7CFC00;">*.routers.lab</span>
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                RSA Public-Key: (2048 bit)
+                Modulus:
+                    00:b1:a4:e7:82:a5:2f:ca:91:71:2e:36:ac:35:64:
+                    e7:0f:92:6d:98:2d:17:0c:49:22:4c:0d:57:a6:a8:
+                    89:81:18:cd:20:65:35:31:6c:c4:a0:d4:8f:48:65:
+                    71:26:30:83:c8:d6:47:47:f4:3c:73:06:37:11:fe:
+                    97:0e:37:55:5b:a5:7a:0a:7b:33:8d:b7:03:fe:63:
+                    f0:f1:2f:2a:88:18:b6:f7:5f:a6:09:b6:e3:1e:59:
+                    2e:2a:0b:d1:ce:14:33:15:4c:47:9e:3e:3b:ef:5e:
+                    07:c6:93:a2:22:31:c1:e1:20:df:2c:64:09:df:e5:
+                    fe:31:d1:b4:d0:e6:17:de:e6:9c:dd:af:70:5e:38:
+                    12:49:76:ac:b7:32:8e:de:96:a2:b5:a7:9c:1f:98:
+                    31:b9:3d:a6:8a:df:a2:b9:96:8d:a0:f5:c7:6c:5d:
+                    18:6d:06:51:48:ce:d1:a2:b2:88:af:97:ae:9c:48:
+                    2a:58:c4:3c:3d:d8:2e:e9:cd:9f:0b:ab:3b:df:11:
+                    1f:dc:33:69:36:09:f2:9c:3f:aa:45:5b:bb:5c:5c:
+                    fe:b7:ed:59:d8:3d:32:b4:89:7a:aa:49:e8:5b:0f:
+                    cb:ac:bf:b3:74:86:6b:64:af:eb:68:1b:60:09:f1:
+                    4a:7b:7e:66:ec:0f:3d:84:74:3e:57:3e:1d:d2:21:
+                    3d:83
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Subject Alternative Name: 
+                DNS:<span style="background-color: #7CFC00;">*.routers.lab</span>
+            X509v3 Basic Constraints: 
+                <span style="background-color: #7CFC00;">CA:FALSE</span>
+            Netscape Comment: 
+                OpenSSL Generated Server Certificate
+            X509v3 Subject Key Identifier: 
+                50:E9:E9:15:A5:80:A5:72:B2:FD:40:5D:6A:0F:80:72:BC:42:DE:3A
+            X509v3 Authority Key Identifier: 
+                keyid:50:5F:91:3E:C9:15:CF:23:CE:39:98:F4:70:73:40:CA:7D:D5:15:91
+                DirName:/C=FR/ST=Paris/O=Cisco/CN=lab
+                serial:65:8F:EB:27:12:78:DF:4C:3F:E0:E3:C9:BB:80:38:55:F2:A1:29:6A
+
+            X509v3 Key Usage: critical
+                Digital Signature, Key Encipherment
+            X509v3 Extended Key Usage: 
+                TLS Web Server Authentication, TLS Web Client Authentication
+    Signature Algorithm: sha256WithRSAEncryption
+         7b:a4:f3:84:d2:d1:4e:38:e5:85:af:f7:32:f1:86:f7:d3:68:
+         d6:c5:0b:9a:75:89:67:7d:b3:a1:83:bf:6f:f3:df:1c:ad:1a:
+         52:bf:be:7d:48:2a:c4:27:6f:19:cc:01:ee:35:3e:40:aa:2e:
+         98:70:08:bb:9f:cd:ed:3a:ed:49:b5:c8:30:55:4e:ac:87:2e:
+         4d:f3:b5:e4:b7:47:4f:29:09:5f:ca:db:64:60:56:07:77:6a:
+         aa:7e:42:63:53:32:30:03:30:58:33:ed:81:b4:74:9c:2f:3e:
+         24:39:47:91:4d:af:b8:aa:8e:64:9e:cf:f6:77:43:7c:d7:54:
+         6e:4d:10:b3:26:fe:95:60:6b:81:ee:91:85:77:5e:2a:b1:53:
+         af:1f:56:19:de:5e:b3:c2:6a:8c:f3:e1:57:f8:b4:a5:f3:05:
+         1d:40:57:09:1c:b1:d1:e8:4c:3e:54:9a:8a:b8:64:a5:a5:7f:
+         c9:4a:14:55:b4:9a:ae:b5:7b:64:40:30:80:dc:79:06:4d:68:
+         2a:8a:c1:71:64:08:b0:2c:be:62:3e:3f:88:e5:c3:fe:5e:37:
+         96:ae:8f:00:7f:a9:4d:1c:39:28:14:4f:dc:ed:9d:2e:6c:39:
+         6e:36:64:6b:7b:36:b5:05:87:3f:69:39:e5:1b:87:f8:85:b3:
+         7b:82:cc:2e
     cisco@server1:/home/cisco# 
     </code></pre></div>
 
@@ -521,13 +525,13 @@ services:
 
 ## Dial-out method
 
-In the dial-out scenario, the server is the Telegraf collector and the client is the router. Therefore, the routers must be able to verify the Telegraf certificate.
+In the dial-out scenario, the TLS server is the Telegraf collector and the client is the router. Therefore, the routers must be able to verify the Telegraf certificate.
 
 ### XR configuration
 
 1. The first step is to copy the root CA certifate to the router. In the example below, this is done using SCP.
     <div class="highlighter-rouge"><pre class="highlight"><code>
-    cisco@server1:/home/cisco/pki# scp CA.pem cisco@R1.routers.lab:/harddisk:/
+    cisco@server1:/home/cisco/pki# <span style="background-color:yellow;">scp CA.pem cisco@R1.routers.lab:/harddisk:/</span>
     Password: 
     CA.pem                                                                                                                                                                    100% 1220   425.4KB/s   00:00    
     cisco@server1:/home/cisco/pki#
@@ -569,4 +573,117 @@ The input plugin `inputs.cisco_telemetry_mdt` is used for the dial-out method. T
  ## Enable TLS; grpc transport only.
  <span style="background-color:#F0FFFF;">tls_cert = "/etc/telegraf/cert.pem"</span>
  <span style="background-color:#F0FFFF;">tls_key = "/etc/telegraf/key.pem"</span>
+</code></pre></div>
+
+## Dial-in method
+
+In the dial-in scenario, the routers are acting as TLS servers and the Telegraf collector is the client. Therefore, the Telegraf collector must be able to verify the routers certificates. If mutual authentication is used, the client certificate will also be verified. This means that the Telegraf collector will send its certificate that must be verified by the routers.
+
+### XR configuration
+
+TLS is enabled by default when gRPC is configured. One must ensure that `no-tls` is not configured.
+<div class="highlighter-rouge"><pre class="highlight"><code>
+grpc
+ vrf MGMT
+ port 57400
+</code></pre></div>
+
+In addition, if client authentication is required, `tls-mutual` must be added.
+<div class="highlighter-rouge"><pre class="highlight"><code>
+grpc
+ vrf MGMT
+ port 57400
+ <span style="background-color:#F0FFFF;">tls-mutual</span>
+</code></pre></div>
+
+When gRPC with TLS is enabled, XR will automatically generate self-signed certificate with a root CA certificate at the following path `/misc/config/grpc`.
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+RP/0/RP0/CPU0:R1#run ls /misc/config/grpc
+Thu Aug 31 15:33:08.045 UTC
+ca.cert  dialout  ems.key  ems.pem
+
+RP/0/RP0/CPU0:R1#
+</code></pre></div>
+
+This self-signed certificate could be used by providing the root certificate (`ca.cert`) to the Telegraf collector for verification. However, in this example, we will replace with the routers certificate created above.
+
+If mutual authentication is used the `ca.cert` must also be replaced. Indeed, this is the root certificate used for client certificate verification.
+When replacing those files ensure that their name are kept identical.
+
+
+1. The private key and the certificate are copied onto the routers. The root CA certificate is also copied for mutual authentication. In the example below, this is done using SCP.
+    <div class="highlighter-rouge"><pre class="highlight"><code>
+    cisco@server1:/home/cisco/pki# <span style="background-color:yellow;">scp routers.lab.key cisco@R1.routers.lab:/harddisk:/</span>
+    Password: 
+    routers.lab.key                                                                                                                                                           100% 1679   315.9KB/s   00:00    
+    cisco@server1:/home/cisco/pki# <span style="background-color:yellow;">scp routers.lab.pem cisco@R1.routers.lab:/harddisk:/</span>
+    Password: 
+    routers.lab.pem                                                                                                                                                           100% 1554   609.5KB/s   00:00    
+    cisco@server1:/home/cisco/pki# <span style="background-color:yellow;">scp CA.pem cisco@R1.routers.lab:/harddisk:/</span>
+    Password: 
+    CA.pem                                                                                                                                                                    100% 1220   415.9KB/s   00:00    
+    cisco@server1:/home/cisco/pki# 
+    </code></pre></div>
+
+2. Then, those files must be copied to the directory `/misc/config/grpc/`.
+    <div class="highlighter-rouge"><pre class="highlight"><code>
+    RP/0/RP0/CPU0:R1#<span style="background-color:yellow;">run cp /harddisk:/routers.lab.key /misc/config/grpc/ems.key</span>
+    Thu Aug 31 15:43:48.106 UTC
+
+    RP/0/RP0/CPU0:R1#<span style="background-color:yellow;">run cp /harddisk:/routers.lab.pem /misc/config/grpc/ems.pem</span>
+    Thu Aug 31 15:44:01.619 UTC
+
+    RP/0/RP0/CPU0:R1#<span style="background-color:yellow;">run cp /harddisk:/CA.pem /misc/config/grpc/ca.cert</span>
+    Thu Aug 31 15:44:13.242 UTC
+
+    RP/0/RP0/CPU0:R1#
+    </code></pre></div>
+3. Once all the files are copied, the `emsd` process must be restart to include those changes
+    <div class="highlighter-rouge"><pre class="highlight"><code>
+    RP/0/RP0/CPU0:R1#<span style="background-color:yellow;">process restart emsd</span>
+    Thu Aug 31 15:45:27.278 UTC
+    RP/0/RP0/CPU0:R1#
+    </code></pre></div>
+
+## Telegraf Configuration
+
+The input plugin `inputs.gnmi` is used for the dial-in method. To enable TLS, the `tls_enabled` attribute must to set to `true` and the root CA certificate, used for verifying the routers certificates, must be provided. Optionnaly, if mutual authentication is enabled, the Telegraf private key and certificate must be provided.
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+# gNMI telemetry input plugin
+[[inputs.gnmi]]
+  ## Address and port of the gNMI GRPC server
+  addresses = ["R0.routers.lab:57400","R1.routers.lab:57400"]
+
+  ## define credentials
+  username = "cisco"
+  password = "cisco123"
+
+  ## gNMI encoding requested (one of: "proto", "json", "json_ietf", "bytes")
+  encoding = "json_ietf"
+
+  ## redial in case of failures after
+  redial = "10s"
+
+  ## gRPC Maximum Message Size
+  # max_msg_size = "4MB"
+
+  ## Enable to get the canonical path as field-name
+  # canonical_field_names = false
+
+  ## Remove leading slashes and dots in field-name
+  # trim_field_names = false
+
+  ## enable client-side TLS and define CA to authenticate the device
+  <span style="background-color:#F0FFFF;">enable_tls = true</span>
+  <span style="background-color:#F0FFFF;">tls_ca = "/etc/telegraf/CA.pem"</span>
+  ## Minimal TLS version to accept by the client
+  # tls_min_version = "TLS12"
+  ## Use TLS but skip chain & host verification
+  <span style="background-color:#F0FFFF;">insecure_skip_verify = false</span>
+
+  ## define client-side TLS certificate & key to authenticate to the device
+  <span style="background-color:#F0FFFF;">tls_cert = "/etc/telegraf/cert.pem"</span>
+  <span style="background-color:#F0FFFF;">tls_key = "/etc/telegraf/key.pem"</span>
 </code></pre></div>
