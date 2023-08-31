@@ -13,17 +13,17 @@ position: hidden
 
 # Introduction 
 
-For simplicity, Telemetry configuration is often shown without TLS. It is easier as no certificate management is required. However, a important benefit of gRPC is lost: encryption. While it can still be used, it is not recommended for production.  
+For simplicity, Telemetry configuration is often shown without TLS. It is easier as no certificate management is required. However, an important benefit of gRPC is lost: encryption. While it can still be used, it is not recommended for production.  
 
 This article is a follow up to my [previous article](https://xrdocs.io/telemetry/tutorials/telemetry-stack-update-qos-interface-statistics-example/) on the TIG stack. It will reuse the same configuration examples and describe the steps on how to use gRPC dial-out or dial-in methods with TLS for authentication and encryption between a Telemetry collector and IOS XR routers.
 
 There was already a great article on using gRPC with TLS from Shelly [Pipeline with gRPC](https://xrdocs.io/telemetry/tutorials/2017-05-08-pipeline-with-grpc/). 
-This article was much inspired by this previous one, though all configuration are now based on the Telegraf collector.
+This article was much inspired by this previous one, though all configurations are now based on the Telegraf collector.
 
 
 # Certificates 
 
-In order to use TLS, certificates are required. If you already have your own PKI (Public Key Infrastructure), you should be able to generate certificates for the Telegraf collector and routers
+In order to use TLS, certificates are required. If you already have your own PKI (Public Key Infrastructure), you should be able to generate certificates for the Telegraf collector and routers.
 
 In the next section, we will show, as an example, how to create our own root CA and generates certificates to be used by gRPC.
 
@@ -37,9 +37,9 @@ Using the openssl command line, it is very easy to create our own CA.
 
 ### Root CA certificate
 
-The root certificate is the starting point of the trust chain. Once created, it can be deployed on devices to verify the authenticity of device certificates. It is also used to create those device certificates
+The root certificate is the starting point of the trust chain. Once created, it can be deployed on devices to verify the authenticity of device certificates. It is also used to create those device certificates.
 
-1. The private key for the root CA must be created. A passphrase is requested for encrypting the key. It will be ask later when creating certificates
+1. The private key for the root CA must be created. A passphrase is requested for encrypting the key. It will be asked later when creating certificates
     <div class="highlighter-rouge"><pre class="highlight"><code>
     openssl genrsa -aes256 -out CA.key 2048
     cisco@server1:/home/cisco# <span style="background-color: yellow">openssl genrsa -aes256 -out CA.key 2048</span>
@@ -52,7 +52,7 @@ The root certificate is the starting point of the trust chain. Once created, it 
     cisco@server1:/home/cisco# 
     </code></pre></div>
 2. The root certificate is created with the private key. Here it will be valid for one year only. If used in production this may be changed.
-Many question will be asked, you can fill the information as you prefer, this is only informational.
+Many questions will be asked, you can fill the information as you prefer, this is only informational.
     <div class="highlighter-rouge"><pre class="highlight"><code>
     cisco@server1:/home/cisco# <span style="background-color:yellow">openssl req -x509 -new -nodes -key CA.key -sha256 -days 365 -out CA.pem</span>
     Enter pass phrase for CA.key:
@@ -320,7 +320,7 @@ Once the root certificate is created. Many devices certificates can be created. 
 
 ### Routers certificates
 
-The same procedure as for the Telegraf certificate can be applied for the routers certificates. To ease generation and deployment, a wildcard certificate will be used. It allows a single certificate to be used on multiples devices using a single wildcard character (\*). Doing this as pro and cons, as I am not a security expert I will not comment whether this should be used in production. 
+The same procedure as for the Telegraf certificate can be applied for the routers certificates. To ease generation and deployment, a wildcard certificate will be used. It allows a single certificate to be used on multiples devices using a single wildcard character (\*). Doing this as pro and cons, and, as I am not a security expert, I will not comment whether this should be used in production. 
 
 When using the dial-out method, no router certificate is required. When using the dial-in method, routers are seen as telemetry servers as the collector initiate the TLS session, therefore certificates are required on the routers. The Telegraf certificate may also be required for the dial-in method when mutual authentication is used. It provides authentication of the collector connecting to the routers. It prevents a potential rogue collector that would be able to collect data on the routers.
 {: .notice--info}
@@ -450,7 +450,7 @@ When using the dial-out method, no router certificate is required. When using th
     </code></pre></div>
 
 ## Required Certificates 
-This section summarizes what certificate files are required for the dial-out and the dial-in methods
+This section summarizes what certificate files are required for the dial-out and the dial-in methods.
 
 ### Dial-out method
 
@@ -648,7 +648,7 @@ When replacing those files ensure that their name are kept identical.
 
 ## Telegraf Configuration
 
-The input plugin `inputs.gnmi` is used for the dial-in method. To enable TLS, the `tls_enabled` attribute must to set to `true` and the root CA certificate, used for verifying the routers certificates, must be provided. Optionnaly, if mutual authentication is enabled, the Telegraf private key and certificate must be provided.
+The input plugin `inputs.gnmi` is used for the dial-in method. To enable TLS, the `tls_enabled` attribute must be set to `true` and the root CA certificate, used for verifying the routers certificates, must be provided. Optionnaly, if mutual authentication is enabled, the Telegraf private key and certificate must be provided.
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
 # gNMI telemetry input plugin
@@ -687,3 +687,4 @@ The input plugin `inputs.gnmi` is used for the dial-in method. To enable TLS, th
   <span style="background-color:#F0FFFF;">tls_cert = "/etc/telegraf/cert.pem"</span>
   <span style="background-color:#F0FFFF;">tls_key = "/etc/telegraf/key.pem"</span>
 </code></pre></div>
+
