@@ -277,7 +277,7 @@ Aliases are defined to reduce the name of the metric once stored in the database
 
 #### Processor
 
-Two processors are used. The first is to rename the tag `class_stats/class_name` to `class_name`. This tag was created by the output plugin using the embedded_tags attribute. The second is to reduce the metric name by removing the prefix path. For example the field `class_stats/general_stats/total_transmit_rate` becomes `total_transmit_rate` 
+Three processors are used. The first is to rename the tag `class_stats/class_name` to `class_name`. This tag was created by the output plugin using the embedded_tags attribute. The second is to reduce the metric name by removing the prefix path. For example the field `class_stats/general_stats/total_transmit_rate` becomes `total_transmit_rate`. The last one is to ensure that all data is correctly typed.
 
 Namepass is a Telegraf selector. It filters the metrics that are processed by a plugin. In this example, it is to ensure that only the targeted metrics are going through the processors. The names used are the aliases given by the input plugin.
 
@@ -293,6 +293,11 @@ Namepass is a Telegraf selector. It filters the metrics that are processed by a 
   [[processors.regex.field_rename]]
     pattern = "^class_stats\\/general_stats\\/(.*)$"
     replacement = "${1}"
+
+[[processors.converter]]
+  namepass = ["StatsQosIn","StatsQosOut"]
+  [processors.converter.fields]
+   unsigned = ["*bytes","*packets","*rate"]
 ```
 
 The full Telegraf configuration can be found on the [Github repository](https://github.com/RomainCyr/tig-stack-qos-interface-statistics).
@@ -369,7 +374,7 @@ The other processors used are to standardize the data. They reduce the prefix pa
   order = 2
   namepass = ["StatsQosIn","StatsQosOut"]
   [processors.converter.fields]
-   unsigned = ["*bytes","*packets"]
+   unsigned = ["*bytes","*packets","*rate"]
 
 [[processors.regex]]
   order = 3
