@@ -671,4 +671,103 @@ The input plugin `inputs.gnmi` is used for the dial-in method. To enable TLS, th
 
 # Verification
 
+The command `show telemetry model-driven destination` displays the current status of TLS.
+
+When TLS is not enabled, the TLS state is shown as `False`.
+<div class="highlighter-rouge"><pre class="highlight"><code>
+RP/0/RP0/CPU0:R1#<span style="background-color: yellow">show telemetry model-driven destination</span>
+Thu Aug 31 15:02:24.837 UTC
+  Group Id         Sub                          IP                                            Port    Encoding            Transport   State       
+  ------------------------------------------------------------------------------------------------------------------------------------------
+  TIG              TIG                          192.168.122.1                                 57500   self-describing-gpb grpc        Active      
+      <span style="background-color: #7CFC00;">TLS:                  False</span>
+  Collection statistics:
+    Maximum tokens                   : 4000
+    Event tokens                     : 750
+    Cadence tokens                   : 740
+    Token processed at               : 
+    Cadence token advertised at      : 
+    Event token advertised at        : 
+    GNMI initial synchronization time: 
+    Pending queue size               : 0
+    Pending queue memory size (bytes): 0
+    Processed events                 : 0
+    Collection tokens                : 740
+
+RP/0/RP0/CPU0:R1#
+</code></pre></div>
+
+For the dial-out method, when TLS is enabled the collector hostname is displayed.
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+RP/0/RP0/CPU0:R1#<span style="background-color: yellow">show telemetry model-driven destination</span>
+Fri Sep  1 15:28:45.796 UTC
+  Group Id         Sub                          IP                                            Port    Encoding            Transport   State       
+  ------------------------------------------------------------------------------------------------------------------------------------------
+  TIG              TIG                          192.168.122.1                                 57500   self-describing-gpb grpc        Active      
+    <span style="background-color: #7CFC00;">TLS :                 telegraf.lab</span>
+  Collection statistics:
+    Maximum tokens                   : 4000
+    Event tokens                     : 750
+    Cadence tokens                   : 748
+    Token processed at               : 
+    Cadence token advertised at      : 
+    Event token advertised at        : 
+    GNMI initial synchronization time: 
+    Pending queue size               : 0
+    Pending queue memory size (bytes): 0
+    Processed events                 : 0
+    Collection tokens                : 748
+
+RP/0/RP0/CPU0:R1#
+</code></pre></div>
+
+When the dial-in method is used with TLS, it displays `True`. 
+<div class="highlighter-rouge"><pre class="highlight"><code>
+RP/0/RP0/CPU0:R1#show telemetry model-driven destination 
+Fri Sep  1 15:24:09.491 UTC
+  Group Id         Sub                          IP                                            Port    Encoding            Transport   State       
+  ------------------------------------------------------------------------------------------------------------------------------------------
+  GNMI_1003        GNMI__5033885546243418454    192.168.122.1                                 55110   gnmi-json           dialin      Active      
+    <span style="background-color: #7CFC00;">TLS :                 True</span>
+  Collection statistics:
+    Maximum tokens                   : 4000
+    Event tokens                     : 750
+    Cadence tokens                   : 735
+    Token processed at               : 
+    Cadence token advertised at      : 
+    Event token advertised at        : 
+    GNMI initial synchronization time: 2023-09-01 15:23:59.284059 +0000
+    Pending queue size               : 0
+    Pending queue memory size (bytes): 0
+    Processed events                 : 0
+    Collection tokens                : 735
+
+RP/0/RP0/CPU0:R1#
+</code></pre></div>
+
+If mutual authentication is used, the output varies slightly.
+<div class="highlighter-rouge"><pre class="highlight"><code>
+RP/0/RP0/CPU0:R1#show telemetry model-driven destination 
+Fri Sep  1 15:25:01.714 UTC
+  Group Id         Sub                          IP                                            Port    Encoding            Transport   State       
+  ------------------------------------------------------------------------------------------------------------------------------------------
+  GNMI_1005        GNMI__5033885546243418454    192.168.122.1                                 46122   gnmi-json           dialin      Active      
+    <span style="background-color: #7CFC00;">TLS-mutual:           True</span>
+  Collection statistics:
+    Maximum tokens                   : 4000
+    Event tokens                     : 750
+    Cadence tokens                   : 742
+    Token processed at               : 
+    Cadence token advertised at      : 
+    Event token advertised at        : 
+    GNMI initial synchronization time: 2023-09-01 15:25:01.524059 +0000
+    Pending queue size               : 0
+    Pending queue memory size (bytes): 0
+    Processed events                 : 0
+    Collection tokens                : 742
+
+RP/0/RP0/CPU0:R1#
+</code></pre></div>
+
 # Common issues
