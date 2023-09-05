@@ -825,7 +825,7 @@ RP/0/RP0/CPU0:R1#
 
 **Symptoms:** The Telegraf collector cannot verify the router certificate. The following error can be found in the Telegraf logs: 
 <div class="highlighter-rouge"><pre class="highlight"><code>
-cisco@server1:/home/cisco# <span style="background-color: #7CFC00;">docker logs telegraf</span>
+cisco@server1:/home/cisco# <span style="background-color: yellow;">docker logs telegraf</span>
 2023-09-05T15:05:54Z I! Loading config: /etc/telegraf/telegraf.conf
 2023-09-05T15:05:54Z W! DeprecationWarning: Option "enable_tls" of plugin "inputs.gnmi" deprecated since version 1.27.0 and will be removed in 2.0.0: use 'tls_enable' instead
 2023-09-05T15:05:54Z I! Starting Telegraf 1.27.3
@@ -847,7 +847,7 @@ cisco@server1:/home/cisco# <span style="background-color: #7CFC00;">docker logs 
 
 **Symptoms:** TLS mutual authentication is enabled and the Telegraf collector certificate cannot be verified by the router. The following error can be found in the gRPC traces:
 <div class="highlighter-rouge"><pre class="highlight"><code>
-RP/0/RP0/CPU0:R1#<span style="background-color: #7CFC00;">show grpc trace ems</span>
+RP/0/RP0/CPU0:R1#<span style="background-color: yellow;">show grpc trace ems</span>
 Tue Sep  5 15:17:18.121 UTC
 Sep  5 15:16:59.700 ems/grpc 0/RP0/CPU0 t1449 EMS-GRPC: [core] grpc: Server.Serve failed to complete security handshake from "192.168.122.1:45394": tls: client didn't provide a certificate
 Sep  5 15:17:09.706 ems/info 0/RP0/CPU0 t1449 EMS_INFO: Accept:237 Client connected [tcp]
@@ -857,7 +857,7 @@ RP/0/RP0/CPU0:R1#
 
 The following error can also be found in the Telegraf logs: 
 <div class="highlighter-rouge"><pre class="highlight"><code>
-cisco@server1:/home/cisco# <span style="background-color: #7CFC00;">docker logs telegraf</span>
+cisco@server1:/home/cisco# <span style="background-color: yellow;">docker logs telegraf</span>
 2023-09-05T15:05:54Z I! Loading config: /etc/telegraf/telegraf.conf
 2023-09-05T15:05:54Z W! DeprecationWarning: Option "enable_tls" of plugin "inputs.gnmi" deprecated since version 1.27.0 and will be removed in 2.0.0: use 'tls_enable' instead
 2023-09-05T15:05:54Z I! Starting Telegraf 1.27.3
