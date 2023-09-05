@@ -792,10 +792,86 @@ And those traces can be cleared with the following:
 
 ### No certificate found
 
-**Symptoms:** When XR has an issue finding the root certificate to verify the Telegraf collector certificate, the following error can be found in the Telemetry traces:
+**Symptoms:** The Telemetry connection never established because the root certificate to verify the Telegraf collector certificate is not found. The following error can be found in the Telemetry traces:
 <div class="highlighter-rouge"><pre class="highlight"><code>
+RP/0/RP0/CPU0:R1#<span style="background-color: yellow;">show telemetry model-driven trace go-info</span>
 Sep  5 13:58:37.868 m2m/mdt/go-info 0/RP0/CPU0 t25679  1410 [mdt_go_trace_info]: mdtConnEstablish:164 1: Dialing out to MGMT#192.168.122.1:57500, req 501
-Sep  5 13:58:37.868 m2m/mdt/go-info 0/RP0/CPU0 t25679  1411 [mdt_go_trace_error]: mdtConnEstablish:213 Configured TLS, but no certificate exists for 192.168.122.1:57500
+Sep  5 13:58:37.868 m2m/mdt/go-info 0/RP0/CPU0 t25679  1411 [mdt_go_trace_error]: mdtConnEstablish:213 <span style="background-color: #7CFC00;">Configured TLS, but no certificate exists for 192.168.122.1:57500</span>
+RP/0/RP0/CPU0:R1#
 </code></pre></div>
 
-**Solution:** Verify that the root certificate was correctly copied to `/misc/config/grpc/dialout/dialout.pem`. The filename is important it MUST be `dialout.pem`.
+**Solution:** Verify that the root certificate was correctly copied to `/misc/config/grpc/dialout/dialout.pem`. The filename is important it MUST be `dialout.pem`. Do not forget to restart the emsd process once the certificate is changed.
+
+### Certificate signed by unknown authority
+
+**Symptoms:** The Telegraf collector certificate cannot be verified and the connection fails at TLS handshake. The following error can be found in the Telemetry traces: 
+<div class="highlighter-rouge"><pre class="highlight"><code>
+RP/0/RP0/CPU0:R1#<span style="background-color: yellow;">show telemetry model-driven trace go-info</span>
+Sep  5 14:42:25.428 m2m/mdt/go-info 0/RP0/CPU0 t27179  2679 [mdt_go_trace_info]: mdtConnEstablish:164 1: Dialing out to MGMT#192.168.122.1:57500, req 501
+Sep  5 14:42:25.428 m2m/mdt/go-info 0/RP0/CPU0 t27179  2680 [mdt_go_trace_info]: mdtConnEstablish:228 1: req 501, TLS is true, cert /misc/config/grpc/dialout/dialout.pem, host telegraf.lab, compression .
+Sep  5 14:42:25.443 m2m/mdt/go-info 0/RP0/CPU0 t27220  2681 [mdt_go_trace_info]: mdtConnEstablish:267 dial: target 192.168.122.1:57500
+Sep  5 14:42:25.451 m2m/mdt/go-info 0/RP0/CPU0 t27179  2682 [mdt_go_trace_info]: mdtDialer:271 1: namespace MGMT, args MGMT#192.168.122.1:57500
+Sep  5 14:42:25.451 m2m/mdt/go-info 0/RP0/CPU0 t27179  2683 [mdt_go_trace_info]: getAddDialerChanWithLock:164 1: Start a dialer for namespace MGMT
+Sep  5 14:42:25.453 m2m/mdt/go-info 0/RP0/CPU0 t27179  2684 [mdt_go_trace_info]: mdtDialer:284 1: Create dialerChan 0xc000010028 for MGMT
+Sep  5 14:42:25.737 m2m/mdt/go-info 0/RP0/CPU0 t27220  2685 [mdt_go_trace_error]: mdtConnEstablish:294 1: grpc service call failed, ReqId 501, MGMT#192.168.122.1:57500, rpc error: code = Unavailable desc = connection error: <span style="background-color: #7CFC00;">desc = "transport: authentication handshake failed: x509: certificate signed by unknown authority"</span>
+RP/0/RP0/CPU0:R1#
+</code></pre></div>
+
+**Solution:** Verify the root certificate copied on the routers as well as the Telegraf certificate on the collector. The root certificate must be able to verify that the Telegraf certificate is valid. This can be verified with the following openssl command: `openssl verify -CAfile CA.pem telegraf.lab.pem `
+
+## Dial-in
+
+### Failed to verify certificate
+
+**Symptoms:** The Telegraf collector cannot verify the router certificate. The following error can be found in the Telegraf logs: 
+<div class="highlighter-rouge"><pre class="highlight"><code>
+cisco@server1:/home/cisco# <span style="background-color: #7CFC00;">docker logs telegraf</span>
+2023-09-05T15:05:54Z I! Loading config: /etc/telegraf/telegraf.conf
+2023-09-05T15:05:54Z W! DeprecationWarning: Option "enable_tls" of plugin "inputs.gnmi" deprecated since version 1.27.0 and will be removed in 2.0.0: use 'tls_enable' instead
+2023-09-05T15:05:54Z I! Starting Telegraf 1.27.3
+2023-09-05T15:05:54Z I! Available plugins: 237 inputs, 9 aggregators, 28 processors, 23 parsers, 59 outputs, 4 secret-stores
+2023-09-05T15:05:54Z I! Loaded inputs: gnmi
+2023-09-05T15:05:54Z I! Loaded aggregators: 
+2023-09-05T15:05:54Z I! Loaded processors: converter regex starlark strings (2x)
+2023-09-05T15:05:54Z I! Loaded secretstores: 
+2023-09-05T15:05:54Z I! Loaded outputs: influxdb_v2
+2023-09-05T15:05:54Z I! Tags enabled: host=85d46ba177ba
+2023-09-05T15:05:54Z W! Deprecated inputs: 0 and 1 options
+2023-09-05T15:05:54Z I! [agent] Config: Interval:10s, Quiet:false, Hostname:"85d46ba177ba", Flush Interval:10s
+2023-09-05T15:05:54Z E! [inputs.gnmi] Error in plugin: failed to setup subscription: rpc error: code = Unavailable desc = connection error: <span style="background-color: #7CFC00;">desc = "transport: authentication handshake failed: tls: failed to verify certificate: x509: certificate is valid for ems.cisco.com, not R1.routers.lab"</span>
+</code></pre></div>
+
+**Solution:** Verify that the router certificate and private key were correctly copied to `/misc/config/grpc/`. The filename are important it MUST be `ems.pem` and `ems.key`. Do not forget to restart the emsd process once the certificate is changed.
+
+### Client didn't provide a certificate
+
+**Symptoms:** TLS mutual authentication is enabled and the Telegraf collector certificate cannot be verified by the router. The following error can be found in the gRPC traces:
+<div class="highlighter-rouge"><pre class="highlight"><code>
+RP/0/RP0/CPU0:R1#<span style="background-color: #7CFC00;">show grpc trace ems</span>
+Tue Sep  5 15:17:18.121 UTC
+Sep  5 15:16:59.700 ems/grpc 0/RP0/CPU0 t1449 EMS-GRPC: [core] grpc: Server.Serve failed to complete security handshake from "192.168.122.1:45394": tls: client didn't provide a certificate
+Sep  5 15:17:09.706 ems/info 0/RP0/CPU0 t1449 EMS_INFO: Accept:237 Client connected [tcp]
+Sep  5 15:17:09.714 ems/grpc 0/RP0/CPU0 t1420 EMS-GRPC: [core] grpc: Server.Serve failed to complete security handshake from "192.168.122.1:48360": <span style="background-color: #7CFC00;">tls: client didn't provide a certificate</span>
+RP/0/RP0/CPU0:R1#
+</code></pre></div>
+
+The following error can also be found in the Telegraf logs: 
+<div class="highlighter-rouge"><pre class="highlight"><code>
+cisco@server1:/home/cisco# <span style="background-color: #7CFC00;">docker logs telegraf</span>
+2023-09-05T15:05:54Z I! Loading config: /etc/telegraf/telegraf.conf
+2023-09-05T15:05:54Z W! DeprecationWarning: Option "enable_tls" of plugin "inputs.gnmi" deprecated since version 1.27.0 and will be removed in 2.0.0: use 'tls_enable' instead
+2023-09-05T15:05:54Z I! Starting Telegraf 1.27.3
+2023-09-05T15:05:54Z I! Available plugins: 237 inputs, 9 aggregators, 28 processors, 23 parsers, 59 outputs, 4 secret-stores
+2023-09-05T15:05:54Z I! Loaded inputs: gnmi
+2023-09-05T15:05:54Z I! Loaded aggregators: 
+2023-09-05T15:05:54Z I! Loaded processors: converter regex starlark strings (2x)
+2023-09-05T15:05:54Z I! Loaded secretstores: 
+2023-09-05T15:05:54Z I! Loaded outputs: influxdb_v2
+2023-09-05T15:05:54Z I! Tags enabled: host=85d46ba177ba
+2023-09-05T15:05:54Z W! Deprecated inputs: 0 and 1 options
+2023-09-05T15:05:54Z I! [agent] Config: Interval:10s, Quiet:false, Hostname:"85d46ba177ba", Flush Interval:10s
+2023-09-05T15:06:11Z E! [inputs.gnmi] Error in plugin: failed to setup subscription: rpc error: code = Unavailable <span style="background-color: #7CFC00;">desc = connection error: desc = "transport: authentication handshake failed: remote error: tls: bad certificate"</span>
+</code></pre></div>
+
+**Solution:** Verify that the Telegraf collector certificate can be verified by the root certificate on the router. The root certificate must be present at the following path `/misc/config/grpc/ca.cert`. The filename are important it MUST be `ca.cert`
+
