@@ -1,6 +1,6 @@
 ---
 published: true
-date: '2023-08-10 07:18 +0200'
+date: '2023-09-04 07:18 +0200'
 title: 'Telemetry Stack Update: QOS interface statistics example'
 author: Romain Cyrille
 excerpt: >-
