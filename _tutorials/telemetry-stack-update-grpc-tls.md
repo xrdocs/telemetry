@@ -15,7 +15,7 @@ position: hidden
 
 For simplicity, Telemetry configuration is often shown without TLS. It is easier as no certificate management is required. However, an important benefit of gRPC is lost: encryption. While it can still be used, it is not recommended for production.  
 
-This article is a follow up to my [previous article](https://xrdocs.io/telemetry/tutorials/telemetry-stack-update-qos-interface-statistics-example/) on the TIG stack. It will reuse the same configuration examples and describe the steps on how to use gRPC dial-out or dial-in methods with TLS, for authentication and encryption between a Telemetry collector and IOS XR routers.
+This article is a follow up to my [previous article](https://xrdocs.io/telemetry/tutorials/telemetry-stack-update-qos-interface-statistics-example/) on the TIG stack. It will reuse the same configuration examples and describe the steps on how to use gRPC dial-out or dial-in methods with TLS, for authentication and encryption between a Telemetry collector and IOS XR routers. All configuration files presented can be found on the [Github repository](https://github.com/RomainCyr/tig-stack-qos-interface-statistics/tree/main/tls)
 
 There was already a great article on using gRPC with TLS from Shelly [Pipeline with gRPC](https://xrdocs.io/telemetry/tutorials/2017-05-08-pipeline-with-grpc/). 
 This article was much inspired by this previous one, though all configurations are now based on the Telegraf collector.
