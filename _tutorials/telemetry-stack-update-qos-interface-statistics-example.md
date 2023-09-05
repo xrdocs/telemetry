@@ -427,7 +427,7 @@ Below are the three basic commands for telemetry verification:
 
 The gRPC and telemetry traces can also be looked at for more low-level troubleshooting:
  - show grpc trace {all|ems|yfed|yfw}
- - show telemetry model-driven trace {all|backend-enc|backend-err|backend-sub|backend-sysdb|backend-timer|config|error|event|go-info|mdt-yfw|misc|startup|subdb|timer}
+ - show telemetry model-driven trace {all|backend-err|backend-sub|backend-timer|config|error|event|go-info|startup|subdb|timer}
 
 ## Dial-out
 
