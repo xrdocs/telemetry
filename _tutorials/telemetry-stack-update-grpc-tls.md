@@ -135,7 +135,7 @@ Many questions will be asked, you can fill the information as you prefer, this i
 
 ### Telegraf certificate
 
-Once the root certificate is created. Many devices certificates can be created. One certificate is created for the telegraf collector.
+Once the root certificate is created. Many devices certificates can be created. One certificate is created for the Telegraf collector.
 
 1. First, the private key for the Telegraf certificate must be created.
     <div class="highlighter-rouge"><pre class="highlight"><code>cisco@server1:/home/cisco# <span style="background-color:yellow">openssl genrsa -out telegraf.lab.key 2048</span>
@@ -774,7 +774,7 @@ RP/0/RP0/CPU0:R1#
 
 TLS issues are often related to configuration mistakes or certificates problems. Most of the errors can be found either in the Telegraf logs or in the gRPC or Telemetry traces.
 
-The logs of the Telegraf container can be read with the following command `docker logs telegraf`. Debug can be activate in telegraf with the following config attribute `debug = true`.
+The logs of the Telegraf container can be read with the following command `docker logs telegraf`. Debugs can be activated in Telegraf with the following config attribute `debug = true`.
 
 On XR, most certificates errors can be found in the following traces:
  - `show grpc trace ems`
@@ -841,7 +841,7 @@ cisco@server1:/home/cisco# <span style="background-color: yellow;">docker logs t
 2023-09-05T15:05:54Z E! [inputs.gnmi] Error in plugin: failed to setup subscription: rpc error: code = Unavailable desc = connection error: <span style="background-color: #7CFC00;">desc = "transport: authentication handshake failed: tls: failed to verify certificate: x509: certificate is valid for ems.cisco.com, not R1.routers.lab"</span>
 </code></pre></div>
 
-**Solution:** Verify that the router certificate and private key were correctly copied to `/misc/config/grpc/`. The filename are important it MUST be `ems.pem` and `ems.key`. Do not forget to restart the emsd process once the certificate is changed.
+**Solution:** Verify that the router certificate and private key were correctly copied to `/misc/config/grpc/`. The filenames are important, it MUST be `ems.pem` and `ems.key`. Do not forget to restart the emsd process once the certificate is changed.
 
 ### Client didn't provide a certificate
 
@@ -873,5 +873,5 @@ cisco@server1:/home/cisco# <span style="background-color: yellow;">docker logs t
 2023-09-05T15:06:11Z E! [inputs.gnmi] Error in plugin: failed to setup subscription: rpc error: code = Unavailable <span style="background-color: #7CFC00;">desc = connection error: desc = "transport: authentication handshake failed: remote error: tls: bad certificate"</span>
 </code></pre></div>
 
-**Solution:** Verify that the Telegraf collector certificate can be verified by the root certificate on the router. The root certificate must be present at the following path `/misc/config/grpc/ca.cert`. The filename are important it MUST be `ca.cert`
+**Solution:** Verify that the Telegraf collector certificate can be verified by the root certificate on the router. The root certificate must be present at the following path `/misc/config/grpc/ca.cert`. The filename is important it MUST be `ca.cert`
 
