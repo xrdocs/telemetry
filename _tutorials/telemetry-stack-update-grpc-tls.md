@@ -789,6 +789,7 @@ And those traces can be cleared with the following:
  - `clear telemetry model-driven trace {all|backend-err|backend-sub|backend-timer|config|error|event|go-info|startup|subdb|timer}`
 
 ## Dial-out
+
 ### No certificate found
 
 **Symptoms:** When XR has an issue finding the root certificate to verify the Telegraf collector certificate, the following error can be found in the Telemetry traces:
