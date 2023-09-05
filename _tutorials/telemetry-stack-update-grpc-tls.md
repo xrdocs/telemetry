@@ -539,6 +539,11 @@ In the dial-out scenario, the TLS server is the Telegraf collector and the clien
        encoding self-describing-gpb
        <span style="background-color:#F0FFFF;">protocol grpc tls-hostname telegraf.lab</span>
     </code></pre></div>
+4. The `emsd` process may need to be restarted to include the `dialout.pem` certificate
+    <div class="highlighter-rouge"><pre class="highlight"><code>RP/0/RP0/CPU0:R1#<span style="background-color:yellow;">process restart emsd</span>
+    Thu Aug 31 15:45:27.278 UTC
+    RP/0/RP0/CPU0:R1#
+    </code></pre></div>
 
 ## Telegraf Configuration
 
