@@ -771,3 +771,30 @@ RP/0/RP0/CPU0:R1#
 </code></pre></div>
 
 # Common issues
+
+TLS issues are often related to configuration mistakes or certificates problems. Most of the errors can be found either in the Telegraf logs or in the gRPC or Telemetry traces.
+
+The logs of the Telegraf container can be read with the following command `docker logs telegraf`. Debug can be activate in telegraf with the following config attribute `debug = true`.
+
+On XR, most certificates errors can be found in the following traces:
+ - `show grpc trace ems`
+ - `show telemetry model-driven trace go-info`
+ 
+More traces can be found with the following commands:
+ - `show grpc trace {all|ems|yfed|yfw}`
+ - `show telemetry model-driven trace {all|backend-err|backend-sub|backend-timer|config|error|event|go-info|startup|subdb|timer}`
+
+And those traces can be cleared with the following:
+ - `clear grpc trace {all|ems|yfed|yfw}`
+ - `clear telemetry model-driven trace {all|backend-err|backend-sub|backend-timer|config|error|event|go-info|startup|subdb|timer}`
+
+## Dial-out
+### No certificate found
+
+**Symptoms:** When XR has an issue finding the root certificate to verify the Telegraf collector certificate, the following error can be found in the Telemetry traces:
+<div class="highlighter-rouge"><pre class="highlight"><code>
+Sep  5 13:58:37.868 m2m/mdt/go-info 0/RP0/CPU0 t25679  1410 [mdt_go_trace_info]: mdtConnEstablish:164 1: Dialing out to MGMT#192.168.122.1:57500, req 501
+Sep  5 13:58:37.868 m2m/mdt/go-info 0/RP0/CPU0 t25679  1411 [mdt_go_trace_error]: mdtConnEstablish:213 Configured TLS, but no certificate exists for 192.168.122.1:57500
+</code></pre></div>
+
+**Solution:** Verify that the root certificate was correctly copied to `/misc/config/grpc/dialout/dialout.pem`. The filename is important it MUST be `dialout.pem`.
