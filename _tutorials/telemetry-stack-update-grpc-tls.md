@@ -784,7 +784,7 @@ More traces can be found with the following commands:
  - `show grpc trace {all|ems|yfed|yfw}`
  - `show telemetry model-driven trace {all|backend-err|backend-sub|backend-timer|config|error|event|go-info|startup|subdb|timer}`
 
-And those traces can be cleared with the following:
+Those traces can be cleared with the following:
  - `clear grpc trace {all|ems|yfed|yfw}`
  - `clear telemetry model-driven trace {all|backend-err|backend-sub|backend-timer|config|error|event|go-info|startup|subdb|timer}`
 
