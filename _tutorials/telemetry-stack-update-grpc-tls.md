@@ -1,6 +1,6 @@
 ---
 published: true
-date: '2023-08-30 11:35 +0200'
+date: '2023-09-11 11:35 +0200'
 title: 'Telemetry Stack Update: gRPC TLS'
 author: Romain Cyrille
 excerpt: gRPC dial-out or dial-in methods with TLS
