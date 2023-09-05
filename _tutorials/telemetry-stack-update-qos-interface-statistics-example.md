@@ -421,13 +421,13 @@ The full script can be found on the [Github repository](https://github.com/Romai
 Whether the dial-out or the dial-in method is used, the verification is similar. Indeed, in both scenarios, telemetry sensors are sent to the collector.
 
 Below are the three basic commands for telemetry verification:
- - show telemetry model-driven destination
- - show telemetry model-driven sensor-group
- - show telemetry model-driven subscription
+ - `show telemetry model-driven destination`
+ - `show telemetry model-driven sensor-group`
+ - `show telemetry model-driven subscription`
 
 The gRPC and telemetry traces can also be looked at for more low-level troubleshooting:
- - show grpc trace {all|ems|yfed|yfw}
- - show telemetry model-driven trace {all|backend-err|backend-sub|backend-timer|config|error|event|go-info|startup|subdb|timer}
+ - `show grpc trace {all|ems|yfed|yfw}`
+ - `show telemetry model-driven trace {all|backend-err|backend-sub|backend-timer|config|error|event|go-info|startup|subdb|timer}`
 
 ## Dial-out
 
