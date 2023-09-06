@@ -308,7 +308,7 @@ When using the dial-in method, there are barely any configuration on the routers
 
 ### XR configuration
 
-The configuration on the router must define the port of the gRPC server. Here for simplicity the gRPC without is used, therefore no certificate is required. For production network, it is recommended to use TLS for data encryption.
+The configuration on the router must define the port of the gRPC server. Here for simplicity the gRPC without TLS is used, therefore no certificate is required. For production network, it is recommended to use TLS for data encryption.
 
 ```
 grpc
