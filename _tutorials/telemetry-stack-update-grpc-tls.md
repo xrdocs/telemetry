@@ -526,7 +526,7 @@ In the dial-out scenario, the TLS server is the Telegraf collector and the clien
     cisco@server1:/home/cisco/pki#
     </code></pre></div>
 2. Then, the certificate must be copied to `/misc/config/grpc/dialout/dialout.pem`. Note that the filename is important, it must be `dialout.pem`. This root certificate will be used to verify the Telegraf certificate.
-    <div class="highlighter-rouge"><pre class="highlight"><code>RP/0/RP0/CPU0:R1#run cp /harddisk\:/CA.pem /misc/config/grpc/dialout/dialout.pem 
+    <div class="highlighter-rouge"><pre class="highlight"><code>RP/0/RP0/CPU0:R1#<span style="background-color:yellow;">run cp /harddisk\:/CA.pem /misc/config/grpc/dialout/dialout.pem</span> 
     Thu Aug 31 08:23:32.316 UTC
 
     RP/0/RP0/CPU0:R1#
@@ -879,4 +879,3 @@ cisco@server1:/home/cisco# <span style="background-color: yellow;">docker logs t
 </code></pre></div>
 
 **Solution:** Verify that the Telegraf collector certificate can be verified by the root certificate on the router. The root certificate must be present at the following path `/misc/config/grpc/ca.cert`. The filename is important it MUST be `ca.cert`
-
