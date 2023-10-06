@@ -7,7 +7,7 @@ excerpt: gRPC dial-out or dial-in methods with TLS
 tags:
   - iosxr
   - Telemetry
-position: hidden
+position: top
 ---
 {% include toc icon="table" title="Table of Contents" %}
 
