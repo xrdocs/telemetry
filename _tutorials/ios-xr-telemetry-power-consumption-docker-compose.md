@@ -408,6 +408,21 @@ usable_power_capacity              integer
 Chassis power consumption is located in system_power_input and system_power_used. 
 For each location, IOS-XR will allocate a power budget stored in power_allocated. Last, current power utilization per location can be found in power_consumed/value.  
 
+As seen above, some of the reported values are stored as 'string'. Extra processing might be required to transform those keys as integer. On telegraf, this can be achieved using a convertor processor. Here is a sample example for ASR 9000:
+
+<div class="highlighter-rouge">
+<pre class="highlight">
+<code>
+[[processors.converter]]
+  #apply only to specified measurement
+  namepass = ["Cisco-IOS-XR-sysadmin-asr9k-envmon-ui:environment/oper/power/location/pem_attributes"]
+  #convert value from string to int for grafana to be happy :)
+  [processors.converter.fields]
+    <mark>integer = ["power_consumed/value"]</mark>
+</code>
+</pre>
+</div>
+
 Visualization has been tested on device located in Brussels IOS-XR TAC lab. 
 A first simple overall power consumption dashboard has been built for an ASR 9000 and a NCS 5500:
 
